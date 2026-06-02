@@ -131,14 +131,35 @@ async function smFetch(path){
 }
 
 /* convenience calls */
+/* World Cup 2026 group_id → group letter (from fixtures data) */
+const GROUP_IDS = {
+ 253019:"A",253020:"B",253021:"C",253022:"D",253023:"E",253024:"F",
+ 253025:"G",253026:"H",253027:"I",253028:"J",253029:"K",253030:"L",
+};
+function groupLetter(id){return GROUP_IDS[id]||"?";}
+
+/* fetch ALL group-stage fixtures across pages (104 matches, 25/page) */
+async function fetchAllGroupFixtures(){
+ const all=[]; let page=1;
+ while(page<=8){
+   const resp=await smFetch(`fixtures?filters=fixtureStages:${WC_GROUP_STAGE_ID}&include=scores;state&per_page=50&page=${page}`);
+   if(!resp||!resp.data||!resp.data.length) break;
+   all.push(...resp.data);
+   if(!resp.pagination||!resp.pagination.has_more) break;
+   page++;
+ }
+ return all;
+}
+
 const wcrApi = {
-  fixtures: () => smFetch(`fixtures?filters=fixtureSeasons:${WC_SEASON_ID}&include=participants;scores;state;venue&per_page=50`),
-  standings: () => smFetch(`standings/seasons/${WC_SEASON_ID}?include=participant`),
-  liveScores: () => smFetch(`livescores/inplay?filters=fixtureSeasons:${WC_SEASON_ID}&include=participants;scores;state`),
-  fixtureDetail: (id) => smFetch(`fixtures/${id}?include=participants;scores;state;events.player;statistics.type;lineups.player;venue`),
-  teamSquad: (teamId) => smFetch(`squads/teams/${teamId}?include=player.position`),
-  seasonTeams: () => smFetch(`teams/seasons/${WC_SEASON_ID}?include=players.player`),
+  groupFixtures: () => fetchAllGroupFixtures(),
+  fixtures: () => smFetch(`fixtures?filters=fixtureStages:${WC_GROUP_STAGE_ID}&include=scores;state&per_page=50`),
+  standings: () => smFetch(`standings/seasons/${WC_SEASON_ID}`),
+  liveScores: () => smFetch(`livescores/inplay?include=scores;state;participants`),
+  fixtureDetail: (id) => smFetch(`fixtures/${id}?include=scores;state;events.player;statistics.type;lineups.player;venue;participants`),
+  teamSquad: (teamId) => smFetch(`teams/${teamId}?include=players.player`),
+  seasonTeams: () => smFetch(`teams/seasons/${WC_SEASON_ID}`),
 };
 
 /* expose globally for the section files / iframes */
-window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_IDS, teamNameById };
+window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_IDS, teamNameById, GROUP_IDS, groupLetter, fetchAllGroupFixtures };

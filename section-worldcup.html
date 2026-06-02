@@ -169,8 +169,9 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 <!-- TEAM PAGE -->
 <div class="teampage" id="teampage"><div id="teamInner" style="display:flex;flex-direction:column;height:100%;min-height:0"></div></div>
 
+<script src="wcr-data.js"></script>
 <script>
-const DAYS=[{lbl:"Sat 13 Jun",k:"s13"},{lbl:"Sun 14 Jun",k:"s14"},{lbl:"Fri 19 Jun",k:"f19"},{lbl:"Thu 25 Jun",k:"t25"}];
+let DAYS=[{lbl:"Sat 13 Jun",k:"s13"},{lbl:"Sun 14 Jun",k:"s14"},{lbl:"Fri 19 Jun",k:"f19"},{lbl:"Thu 25 Jun",k:"t25"}];
 const TEAM={
  TUR:{n:"Türkiye",fl:"🇹🇷",rank:22,coach:"Vincenzo Montella",stadium:"Atatürk Olimpiyat Stadı",
    form:[["W","2-0","Bulgaria","🇧🇬"],["D","2-2","Spain","🇪🇸"],["W","1-0","Romania","🇷🇴"],["W","0-1","Kosovo","🇽🇰"],["W","4-0","N. Macedonia","🇲🇰"]],
@@ -186,8 +187,8 @@ const TEAM={
  CIV:{n:"Ivory Coast",fl:"🇨🇮",rank:40},ECU:{n:"Ecuador",fl:"🇪🇨",rank:23},
  NED:{n:"Netherlands",fl:"🇳🇱",rank:7},JPN:{n:"Japan",fl:"🇯🇵",rank:17},
 };
-const GROUP_D=[["AUS",0],["PAR",0],["TUR",0],["USA",0]];
-const MATCHES={
+let GROUP_D=[["AUS",0],["PAR",0],["TUR",0],["USA",0]];
+let MATCHES={
  s13:[{id:1,grp:"GROUP A",h:"MEX",a:"RSA",status:"final",sc:[3,0]}],
  s14:[
   {id:2,grp:"GROUP D",ours:true,h:"AUS",a:"TUR",status:"up",time:"12:00 AM",dd:"13 days",stadium:"BC Place Vancouver"},
@@ -200,18 +201,76 @@ const MATCHES={
 };
 let day="s14";
 
-const dtabs=document.getElementById('datetabs');
-DAYS.forEach(d=>{const el=document.createElement('div');el.className='dtab'+(d.k===day?' on':'');el.textContent=d.lbl;el.onclick=()=>{day=d.k;document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderList();};dtabs.appendChild(el);});
+/* ---- LIVE FIXTURES LOADER ---- */
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const OURS_TEAMS=["Türkiye","Turkey"];
+// SportMonks state_id → our status. 1=NS(not started),3..=live-ish, 5=FT
+function stateToStatus(sid){ if(sid===5||sid===7||sid===8)return "final"; if(sid>=2&&sid<=4||sid===22)return "live"; return "up"; }
+function fmtTime(iso){ const d=new Date(iso.replace(' ','T')+'Z'); let h=d.getHours(),m=d.getMinutes(); const ap=h>=12?'PM':'AM'; h=h%12||12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; }
+function dayKeyFromISO(iso){ const d=new Date(iso.replace(' ','T')+'Z'); return 'd'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0'); }
+function dayLabelFromISO(iso){ const d=new Date(iso.replace(' ','T')+'Z'); return `${DOW[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+
+async function loadLiveFixtures(){
+ if(!window.WCR || WCR.SM_PROXY.startsWith("REPLACE")) return;
+ try{
+   const fixtures = await WCR.fetchAllGroupFixtures();
+   if(!fixtures || !fixtures.length) return;
+   const byDay={}; const dayMeta={};
+   fixtures.forEach(fx=>{
+     if(!fx.name || !fx.name.includes(' vs ')) return;
+     const [hName,aName]=fx.name.split(' vs ');
+     const hc=WCR.colorsFor(hName.trim()), ac=WCR.colorsFor(aName.trim());
+     const k=dayKeyFromISO(fx.starting_at);
+     dayMeta[k]={lbl:dayLabelFromISO(fx.starting_at), ts:fx.starting_at_timestamp};
+     const sc=extractScore(fx);
+     const m={
+       id:fx.id, grp:"GROUP "+WCR.groupLetter(fx.group_id),
+       hName:hName.trim(), aName:aName.trim(),
+       hFl:hc.fl, aFl:ac.fl, hC:hc.c1, aC:ac.c1,
+       ours: OURS_TEAMS.includes(hName.trim())||OURS_TEAMS.includes(aName.trim()),
+       status: stateToStatus(fx.state_id),
+       sc: sc, time: fmtTime(fx.starting_at), dd: dayLabelFromISO(fx.starting_at),
+       venue: fx.venue_id, matchNo: fx.details
+     };
+     (byDay[k]=byDay[k]||[]).push(m);
+   });
+   // build sorted DAYS + MATCHES
+   const keys=Object.keys(dayMeta).sort((a,b)=>dayMeta[a].ts-dayMeta[b].ts);
+   DAYS = keys.map(k=>({lbl:dayMeta[k].lbl,k}));
+   MATCHES={}; keys.forEach(k=>{ MATCHES[k]=byDay[k].sort((a,b)=>a.matchNo&&b.matchNo?0:0); });
+   // default to first day that has our match, else first day
+   const ourDay=keys.find(k=>byDay[k].some(m=>m.ours));
+   day = ourDay || keys[0];
+   rebuildDayTabs();
+   renderList();
+ }catch(e){ console.error("[wc] fixtures load failed",e); }
+}
+function extractScore(fx){
+ // scores live in fx.scores array when played; null pre-match
+ if(!fx.scores||!fx.scores.length) return [null,null];
+ let h=null,a=null;
+ fx.scores.forEach(s=>{ if(s.description==='CURRENT'||s.description==='FT'||s.type_id){ if(s.score&&s.score.participant==='home')h=s.score.goals; if(s.score&&s.score.participant==='away')a=s.score.goals; } });
+ return [h,a];
+}
+function rebuildDayTabs(){
+ const dtabs=document.getElementById('datetabs'); dtabs.innerHTML="";
+ DAYS.forEach(d=>{const el=document.createElement('div');el.className='dtab'+(d.k===day?' on':'');el.textContent=d.lbl;el.onclick=()=>{day=d.k;document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderList();};dtabs.appendChild(el);});
+}
+
 
 function teamName(c){return TEAM[c]?.n||c;}function teamFl(c){return TEAM[c]?.fl||"⚪";}
+function mName(m,side){return side==='h'?(m.hName||teamName(m.h)):(m.aName||teamName(m.a));}
+function mFl(m,side){return side==='h'?(m.hFl||teamFl(m.h)):(m.aFl||teamFl(m.a));}
 function mrow(m){const live=m.status==="live",fin=m.status==="final";
- const mid=live?`<div class="sc">${m.sc[0]}-${m.sc[1]}</div><div class="live">● ${m.min||"LIVE"}</div>`
-  :fin?`<div class="sc">${m.sc[0]}-${m.sc[1]}</div><div class="ft">FT</div>`
+ const hasScore=m.sc&&m.sc[0]!=null;
+ const mid=live?`<div class="sc">${hasScore?m.sc[0]+'-'+m.sc[1]:'0-0'}</div><div class="live">● ${m.min||"LIVE"}</div>`
+  :fin&&hasScore?`<div class="sc">${m.sc[0]}-${m.sc[1]}</div><div class="ft">FT</div>`
   :`<div class="time">${(m.time||"").replace(' ','<br>')}</div>`;
  return `<div class="mrow ${m.ours?'ours':''}" onclick="openDetail(${m.id})">
-  <div class="side home"><span>${teamName(m.h)}</span><span class="fl">${teamFl(m.h)}</span></div>
+  <div class="side home"><span>${mName(m,'h')}</span><span class="fl">${mFl(m,'h')}</span></div>
   <div class="mid">${mid}</div>
-  <div class="side away"><span class="fl">${teamFl(m.a)}</span><span>${teamName(m.a)}</span></div></div>`;}
+  <div class="side away"><span class="fl">${mFl(m,'a')}</span><span>${mName(m,'a')}</span></div></div>`;}
 function renderList(){const list=MATCHES[day]||[];
  // group by grp
  const groups={};list.forEach(m=>{(groups[m.grp]=groups[m.grp]||[]).push(m);});
@@ -219,7 +278,6 @@ function renderList(){const list=MATCHES[day]||[];
  Object.keys(groups).forEach(g=>{html+=`<div class="gtag">${g}</div>`+groups[g].map(mrow).join("");});
  document.getElementById('matchlist').innerHTML=html;
 }
-renderList();
 
 // flatten lookup
 function findMatch(id){for(const k in MATCHES){const m=MATCHES[k].find(x=>x.id===id);if(m)return m;}return null;}
@@ -229,15 +287,15 @@ function openDetail(id){curMatch=findMatch(id);detailTab="preview";drawDetail();
 function closeDetail(){document.getElementById('detail').classList.remove('on');}
 window.openDetail=openDetail;window.closeDetail=closeDetail;
 
-function drawDetail(){const m=curMatch;const H=TEAM[m.h],A=TEAM[m.a];const live=m.status==="live",fin=m.status==="final";
- const midScore=live?`<div class="sc">${m.sc[0]} - ${m.sc[1]}</div><div class="st">● ${m.min||'LIVE'}</div>`:fin?`<div class="sc">${m.sc[0]} - ${m.sc[1]}</div><div class="st" style="color:#888">FULL TIME</div>`:`<div class="big">${m.time||''}</div><div class="dd">${m.dd||''}</div>`;
+function drawDetail(){const m=curMatch;const live=m.status==="live",fin=m.status==="final";const hasScore=m.sc&&m.sc[0]!=null;
+ const midScore=live?`<div class="sc">${hasScore?m.sc[0]+' - '+m.sc[1]:'0 - 0'}</div><div class="st">● ${m.min||'LIVE'}</div>`:fin&&hasScore?`<div class="sc">${m.sc[0]} - ${m.sc[1]}</div><div class="st" style="color:#888">FULL TIME</div>`:`<div class="big">${m.time||''}</div><div class="dd">${m.dd||''}</div>`;
  const tabs=["Preview","Table","Lineups","Stats"];
  let inner=`<div class="dtop ${m.ours?'ours':''}">
    <div class="dnav"><div class="back" onclick="closeDetail()">‹</div><div class="more">⋯</div></div>
    <div class="dscore">
-     <div class="t" onclick="openTeam('${m.h}')"><div class="fl">${teamFl(m.h)}</div><div class="tn">${teamName(m.h)}</div>${H?.rank?`<div class="rk">FIFA #${H.rank}</div>`:''}</div>
+     <div class="t"><div class="fl">${mFl(m,'h')}</div><div class="tn">${mName(m,'h')}</div></div>
      <div class="mid">${midScore}</div>
-     <div class="t" onclick="openTeam('${m.a}')"><div class="fl">${teamFl(m.a)}</div><div class="tn">${teamName(m.a)}</div>${A?.rank?`<div class="rk">FIFA #${A.rank}</div>`:''}</div>
+     <div class="t"><div class="fl">${mFl(m,'a')}</div><div class="tn">${mName(m,'a')}</div></div>
    </div>
    <div class="dtabs">${tabs.map(t=>`<div class="dtab2 ${t.toLowerCase()===detailTab?'on':''}" onclick="setDetailTab('${t.toLowerCase()}')">${t}</div>`).join("")}</div>
  </div><div class="dbody" id="dbody"></div>`;
@@ -247,16 +305,13 @@ function setDetailTab(t){detailTab=t;document.querySelectorAll('.dtab2').forEach
 window.setDetailTab=setDetailTab;
 function drawDetailBody(){const m=curMatch;const b=document.getElementById('dbody');let h="";
  if(detailTab==="preview"){
-  // who will win vote (demo percentages)
-  h+=`<div class="card"><div class="vote"><div class="vh"><b>Who will win?</b><small>6,431 votes</small></div><div class="voptions">
-   <button class="vopt" style="--p:34%"><span class="fl">${teamFl(m.h)}</span><span class="lbl">${teamName(m.h)}</span><span class="pct">34%</span><div class="barbg"></div></button>
+  h+=`<div class="card"><div class="vote"><div class="vh"><b>Who will win?</b><small>Tap to vote</small></div><div class="voptions">
+   <button class="vopt" style="--p:34%"><span class="fl">${mFl(m,'h')}</span><span class="lbl">${mName(m,'h')}</span><span class="pct">34%</span><div class="barbg"></div></button>
    <button class="vopt" style="--p:28%"><span class="lbl">Draw</span><span class="pct">28%</span><div class="barbg"></div></button>
-   <button class="vopt" style="--p:38%"><span class="fl">${teamFl(m.a)}</span><span class="lbl">${teamName(m.a)}</span><span class="pct">38%</span><div class="barbg"></div></button>
+   <button class="vopt" style="--p:38%"><span class="fl">${mFl(m,'a')}</span><span class="lbl">${mName(m,'a')}</span><span class="pct">38%</span><div class="barbg"></div></button>
   </div></div></div>`;
-  // stadium
-  if(m.stadium)h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${m.stadium}</div><div class="saddr">FIFA World Cup 2026 · Round 1</div><div class="srow"><span class="k">Capacity</span><span>54,000</span></div><div class="srow"><span class="k">Surface</span><span>Grass</span></div><div class="weather">⛅ 18°C · Partly Cloudy</div></div></div>`;
-  // both teams' recent form (use home if available)
-  const F=TEAM[m.h]?.form;if(F)h+=`<div class="card"><div class="form"><div class="sectit">${teamName(m.h)} · recent form</div>${F.map(f=>`<div class="frow"><span class="res ${f[0].toLowerCase()}">${f[1]}</span><span class="opp">${f[3]} ${f[2]}</span></div>`).join("")}</div></div>`;
+  h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${m.matchNo||'World Cup 2026'}</div><div class="saddr">FIFA World Cup 2026 · Group Stage</div><div class="srow"><span class="k">Kickoff</span><span>${m.time||'TBD'}</span></div><div class="srow"><span class="k">Group</span><span>${m.grp||''}</span></div></div></div>`;
+  const F=TEAM[m.h]?.form||(OURS_TEAMS.includes(m.hName)?TEAM.TUR.form:null);if(F)h+=`<div class="card"><div class="form"><div class="sectit">${mName(m,'h')} · recent form</div>${F.map(f=>`<div class="frow"><span class="res ${f[0].toLowerCase()}">${f[1]}</span><span class="opp">${f[3]} ${f[2]}</span></div>`).join("")}</div></div>`;
  }
  else if(detailTab==="table"){
   h+=`<div class="card"><div class="grouphdr" style="padding:14px 16px 4px"><span class="ico">🏆</span>${m.grp}</div><div class="tbl"><div class="thead"><span></span><span>Team</span><span>PL</span><span>W</span><span>D</span><span>L</span><span>PTS</span></div>${GROUP_D.map((t,i)=>`<div class="trow ${t[0]===m.h||t[0]===m.a?'us':''}"><span class="pos">${i+1}</span><span class="tm"><span class="bar" style="background:${i<2?'#16e06a':'#444'}"></span><span class="fl">${teamFl(t[0])}</span>${teamName(t[0])}</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>`).join("")}</div></div>`;
@@ -301,4 +356,9 @@ function drawTeamBody(){const T=TEAM[curTeam];const b=document.getElementById('t
  else h+=`<div class="card"><div style="padding:30px 16px;text-align:center;color:#888;font-size:14px">${teamTab.charAt(0).toUpperCase()+teamTab.slice(1)} — coming with live data.</div></div>`;
  b.innerHTML=h;
 }
+
+/* initial demo render, then load live fixtures */
+rebuildDayTabs();
+renderList();
+loadLiveFixtures();
 </script>
