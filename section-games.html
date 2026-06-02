@@ -167,26 +167,87 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
   </div>
 </div>
 
+<script src="wcr-data.js"></script>
 <script>
-const TEAMS=[
+/* ---- TEAMS: built from API, with demo fallback so the book never looks empty ---- */
+let TEAMS=[
  {code:"TUR",name:"TÜRKIYE",flag:"🇹🇷",fed:"Türkiye Futbol Federasyonu",group:"GROUP D",
   c1:"#e30a17",c2:"#b00712",c3:"#ff5a4f",
-  players:["Crest","Çakır","Akaydın","Demiral","Çelik","Ayhan","Kökçü","Çalhanoğlu","Yıldız","Aktürkoğlu","Güler","Yılmaz"],legends:[7,10]},
+  players:["Crest","Çakır","Akaydın","Demiral","Çelik","Ayhan","Kökçü","Çalhanoğlu","Yıldız","Aktürkoğlu","Güler","Yılmaz"],photos:[],legends:[7,10]},
  {code:"MEX",name:"MEXICO",flag:"🇲🇽",fed:"Federación Mexicana de Fútbol",group:"GROUP A",
   c1:"#0a7d3b",c2:"#075c2c",c3:"#e0202c",
-  players:["Crest","Malagón","Vásquez","Montes","Gallardo","Reyes","Álvarez","Ruiz","Lozano","Jiménez","Vega","Alvarado"],legends:[8,9]},
+  players:["Crest","Malagón","Vásquez","Montes","Gallardo","Reyes","Álvarez","Ruiz","Lozano","Jiménez","Vega","Alvarado"],photos:[],legends:[8,9]},
  {code:"PAR",name:"PARAGUAY",flag:"🇵🇾",fed:"Asociación Paraguaya de Fútbol",group:"GROUP D",
   c1:"#d52b1e",c2:"#1a3a8c",c3:"#ff5a4f",
-  players:["Crest","Coronel","Gómez","Alonso","Espínola","Balbuena","Cubas","Almirón","Sanabria","Enciso","Almirón M.","Sosa"],legends:[7]},
+  players:["Crest","Coronel","Gómez","Alonso","Espínola","Balbuena","Cubas","Almirón","Sanabria","Enciso","Almirón M.","Sosa"],photos:[],legends:[7]},
 ];
 let owned={};TEAMS.forEach(t=>owned[t.code]={});
 owned["TUR"]={0:1,1:1,7:1,10:1};owned["MEX"]={2:1,9:1};
-const PAGES=[];TEAMS.forEach((t,i)=>{PAGES.push({i,k:0});PAGES.push({i,k:1});});
+const PAGES=[];function buildPages(){PAGES.length=0;TEAMS.forEach((t,i)=>{PAGES.push({i,k:0});PAGES.push({i,k:1});});}
+buildPages();
 let pi=0;
 const pv=document.getElementById('pageView');
-const has=(t,i)=>(owned[t.code][i]||0)>0;
+const has=(t,i)=>(owned[t.code]&&owned[t.code][i]||0)>0;
+
+/* ---- LOAD REAL 48 TEAMS + SQUADS + PHOTOS FROM API ---- */
+async function loadRealTeams(){
+ if(!window.WCR || WCR.SM_PROXY.startsWith("REPLACE")) return; // not configured, keep demo
+ try{
+  // 1) get the season's teams (ids + names + crests)
+  const teamsResp = await WCR.smFetch(`teams/seasons/${WCR.WC_SEASON_ID}`);
+  if(!teamsResp || !teamsResp.data) return;
+  const apiTeams = teamsResp.data;
+  // order: Türkiye + Paraguay first (our group), then the rest alphabetically
+  apiTeams.sort((a,b)=>{
+    const pri = n => n==='Türkiye'?0 : n==='Paraguay'?1 : 2;
+    const an=a.name, bn=b.name;
+    return pri(an)-pri(bn) || an.localeCompare(bn);
+  });
+  const built=[];
+  for(const at of apiTeams){
+    const name=at.name;
+    const col=WCR.colorsFor(name);
+    // crest from API if present, else flag emoji
+    built.push({
+      code:at.short_code||name.slice(0,3).toUpperCase(),
+      id:at.id, name:name.toUpperCase(), flag:col.fl, crest:at.image_path||null,
+      fed:name, group:"", c1:col.c1, c2:darken(col.c1,0.78), c3:col.c2,
+      accent:col.c1, accent2:col.c2,
+      players:["Crest"], photos:[null], ids:[null], legends:[], loaded:false
+    });
+  }
+  if(built.length){ TEAMS=built; owned={}; TEAMS.forEach(t=>owned[t.code]={});
+    // seed a few owned on the first team so the book shows faces immediately
+    if(TEAMS[0]) owned[TEAMS[0].code]={1:1,2:1,4:1,7:1};
+    buildPages(); pi=0; render(); }
+  // 2) lazily load the first few squads (Türkiye, Paraguay, then more) so faces appear fast
+  for(let i=0;i<Math.min(TEAMS.length,8);i++){ await loadSquad(i); }
+ }catch(e){ console.error("[panini] team load failed",e); }
+}
+function darken(hex,f){const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;r=Math.round(r*f);g=Math.round(g*f);b=Math.round(b*f);return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);}
+async function loadSquad(idx){
+ const t=TEAMS[idx]; if(!t||t.loaded||!t.id) return;
+ const resp=await WCR.smFetch(`teams/${t.id}?include=players.player`);
+ if(!resp||!resp.data||!resp.data.players) return;
+ // dedupe + sort by position then jersey
+ const seen=new Set(); const ps=[];
+ resp.data.players.forEach(row=>{const p=row.player; if(!p||seen.has(p.id))return; seen.add(p.id);
+   ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||99, captain:row.captain});});
+ ps.sort((a,b)=>(a.pos-b.pos)||(a.jersey-b.jersey));
+ const top=ps.slice(0,11);
+ t.players=["Crest",...top.map(p=>p.name)];
+ t.photos=[null,...top.map(p=>p.photo)];
+ t.ids=[null,...top.map(p=>p.jersey)];
+ t.legends=[]; top.forEach((p,i)=>{if(p.captain)t.legends.push(i+1);});
+ t.loaded=true;
+ owned[t.code]=owned[t.code]||{};
+ render();
+}
+
 function slot(t,i){const isL=t.legends.includes(i);const name=t.players[i];const code=`${t.code} ${i}`;
- if(has(t,i))return `<div class="slot ${isL?'legend':''}"><div class="filled"><div class="fhead"></div><div class="fn">${name}</div></div></div>`;
+ const photo=t.photos&&t.photos[i];
+ const headHTML = photo ? `<div class="fhead" style="background-image:url('${photo}');background-size:cover;background-position:center top;border-radius:46% 46% 40% 40%"></div>` : `<div class="fhead"></div>`;
+ if(has(t,i))return `<div class="slot ${isL?'legend':''}"><div class="filled">${headHTML}<div class="fn">${name}</div></div></div>`;
  return `<div class="slot"><div class="empty"><div class="code">${code}</div><div class="silho"></div><div class="pname">${name!=='Crest'?name:''}</div></div></div>`;}
 function chip(label,bg){return `<span style="display:inline-flex;align-items:center;gap:4px;background:${bg||'#0006'};backdrop-filter:blur(6px);border-radius:6px;padding:5px 9px;font-size:11px;font-weight:800;color:#fff">${label}</span>`;}
 function render(){const pg=PAGES[pi];const t=TEAMS[pg.i];pv.style.setProperty('--c1',t.c1);pv.style.setProperty('--c2',t.c2);pv.style.setProperty('--c3',t.c3);
@@ -213,9 +274,12 @@ let packCards=[];           // {team, idx, isNew}
 let revealStep=0;
 const scrim=document.getElementById('scrim'),pack=document.getElementById('pack'),packStage=document.getElementById('packStage'),preveal=document.getElementById('preveal');
 
-function genPack(){const cards=[];const pool=[];
- TEAMS.forEach(t=>t.players.forEach((p,i)=>pool.push({t,i})));
- // weight legends slightly rarer; 5 random picks
+function genPack(){const pool=[];
+ TEAMS.forEach(t=>{if(!t.loaded&&t.players.length<=1)return; // skip teams whose squad hasn't loaded
+   t.players.forEach((p,i)=>{if(i===0)return; // skip the Crest slot
+     pool.push({t,i});});});
+ if(!pool.length){TEAMS.forEach(t=>t.players.forEach((p,i)=>{if(i>0)pool.push({t,i});}));}
+ const cards=[];
  for(let n=0;n<5;n++){let pick;for(let tries=0;tries<6;tries++){pick=pool[Math.floor(Math.random()*pool.length)];const isLeg=pick.t.legends.includes(pick.i);if(isLeg&&Math.random()>0.4)continue;break;}
   cards.push({t:pick.t,i:pick.i});}
  return cards;}
@@ -227,9 +291,11 @@ document.getElementById('openBtn').onclick=openPack;
 pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.display='none';buildRevealStack();preveal.classList.add('on');showCard(0);},500);};
 
 function miniHTML(c,tag){const t=c.t;const p=t.players[c.i];const isL=t.legends.includes(c.i);
- return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.c1};--c2:${t.c2}"><div class="sheen"></div>${tag}<div class="inr"><div class="n26">${c.i||'26'}</div><div class="hd2"></div><div class="nm">${p}</div><div class="meta">${t.code} · #${c.i} · ${t.flag}</div></div></div>`;}
+ const photo=t.photos&&t.photos[c.i];
+ const headHTML = photo ? `<div class="hd2" style="background-image:url('${photo}');background-size:cover;background-position:center top"></div>` : `<div class="hd2"></div>`;
+ return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.c1};--c2:${t.c2}"><div class="sheen"></div>${tag}<div class="inr"><div class="n26">${c.i||'26'}</div>${headHTML}<div class="nm">${p}</div><div class="meta">${t.code} · #${c.i} · ${t.flag}</div></div></div>`;}
 function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";
- packCards.forEach((c,n)=>{const already=(owned[c.t.code][c.i]||0)>0;c.isNew=!already;
+ packCards.forEach((c,n)=>{const already=(owned[c.t.code]&&owned[c.t.code][c.i]||0)>0;c.isNew=!already;
   const tag=c.isNew?'<div class="newtag">NEW!</div>':'<div class="duptag">DOUBLE</div>';
   const wrap=document.createElement('div');wrap.innerHTML=miniHTML(c,tag);
   const el=wrap.firstElementChild;el.style.zIndex=packCards.length-n;host.appendChild(el);});
@@ -242,10 +308,13 @@ function showCard(n){const cards=document.querySelectorAll('#pcards .pcardmini')
 }
 preveal.onclick=(e)=>{if(e.target.id==='pdone')return;if(revealStep<packCards.length-1){revealStep++;showCard(revealStep);}};
 document.getElementById('pdone').onclick=()=>{
- packCards.forEach(c=>{owned[c.t.code][c.i]=(owned[c.t.code][c.i]||0)+1;});
+ packCards.forEach(c=>{owned[c.t.code]=owned[c.t.code]||{};owned[c.t.code][c.i]=(owned[c.t.code][c.i]||0)+1;});
  packReady--;scrim.classList.remove('on');
  document.getElementById('openPill').textContent=packReady>0?packReady+" ready":"";
  if(packReady<=0){const b=document.getElementById('openBtn');b.classList.add('done');b.innerHTML="Come back tomorrow ✦";}
  render();
 };
+
+/* ---- start loading real 48 teams + photos from the API ---- */
+loadRealTeams();
 </script>
