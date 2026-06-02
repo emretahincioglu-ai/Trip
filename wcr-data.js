@@ -16,20 +16,64 @@ const SM_ANON  = ""; // JWT verification is OFF on the function, so no key neede
 const POS_MAP = {24:"Keepers",25:"Defenders",26:"Midfielders",27:"Forwards"};
 function posBucket(id){return POS_MAP[id]||"Forwards";}
 
-/* World Cup 2026 team IDs (participant_id) → country name */
-const TEAM_IDS = {
- 18660:"Germany",18704:"Argentina",18645:"England",18710:"Spain",18716:"Brazil",
- 18743:"Portugal",18718:"Netherlands",18644:"France",18600:"Belgium",18552:"Croatia",
- 18625:"Uruguay",18564:"Switzerland",18694:"USA",18571:"Mexico",18620:"Canada",
- 18701:"Colombia",18588:"Japan",18823:"Korea Republic",18546:"Morocco",18910:"Senegal",
- 18647:"Türkiye",18572:"Austria",18576:"Norway",18551:"Sweden",18804:"Ecuador",
- 18553:"Paraguay",18558:"Australia",18544:"Iran",18597:"Czechia",18562:"Scotland",
- 18652:"Tunisia",18745:"Egypt",18555:"Nigeria",18643:"Algeria",18723:"Ghana",
- 18560:"Ivory Coast",18578:"Panama",18708:"Curaçao",18554:"Haiti",18720:"Qatar",
- 18730:"Saudi Arabia",18613:"Uzbekistan",18559:"Jordan",18567:"South Africa",
- 15251:"New Zealand",18573:"DR Congo",18717:"Cape Verde",18706:"Bosnia and Herzegovina",
+/* REAL team data from teams/seasons/26618 — name → {id, crest, code} */
+const TEAM_DATA = {
+ "Brazil":{id:18704,code:"BRA",crest:"https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"},
+ "New Zealand":{id:18613,code:"NZL",crest:"https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"},
+ "Bosnia and Herzegovina":{id:18625,code:"BIH",crest:"https://cdn.sportmonks.com/images/soccer/teams/1/18625.png"},
+ "Côte d'Ivoire":{id:18560,code:"CIV",crest:"https://cdn.sportmonks.com/images/soccer/teams/0/18560.png"},
+ "Haiti":{id:18804,code:"HTI",crest:"https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"},
+ "Qatar":{id:18544,code:"QAT",crest:"https://cdn.sportmonks.com/images/soccer/teams/16/18544.png"},
+ "South Africa":{id:18555,code:"ZAF",crest:"https://cdn.sportmonks.com/images/soccer/teams/27/18555.png"},
+ "Curacao":{id:18910,code:"CUW",crest:"https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"},
+ "Türkiye":{id:18716,code:"TUR",crest:"https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"},
+ "Saudi Arabia":{id:18562,code:"KSA",crest:"https://cdn.sportmonks.com/images/soccer/teams/2/18562.png"},
+ "Australia":{id:18730,code:"AUS",crest:"https://cdn.sportmonks.com/images/soccer/teams/10/18730.png"},
+ "Uruguay":{id:15251,code:"URU",crest:"https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"},
+ "France":{id:18647,code:"FRA",crest:"https://cdn.sportmonks.com/images/soccer/teams/23/18647.png"},
+ "Spain":{id:18710,code:"ESP",crest:"https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"},
+ "Belgium":{id:18743,code:"BEL",crest:"https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"},
+ "Canada":{id:18572,code:"CAN",crest:"https://cdn.sportmonks.com/images/soccer/teams/12/18572.png"},
+ "Korea Republic":{id:18567,code:"KOR",crest:"https://cdn.sportmonks.com/images/soccer/teams/7/18567.png"},
+ "Ghana":{id:18553,code:"GHA",crest:"https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"},
+ "Colombia":{id:18720,code:"COL",crest:"https://cdn.sportmonks.com/images/soccer/teams/0/18720.png"},
+ "Scotland":{id:18706,code:"SCO",crest:"https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"},
+ "Sweden":{id:18564,code:"SWE",crest:"https://cdn.sportmonks.com/images/soccer/teams/4/18564.png"},
+ "United States":{id:18571,code:"USA",crest:"https://cdn.sportmonks.com/images/soccer/teams/11/18571.png"},
+ "Croatia":{id:18588,code:"CRO",crest:"https://cdn.sportmonks.com/images/soccer/teams/28/18588.png"},
+ "Jordan":{id:18559,code:"JOR",crest:"https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"},
+ "Panama":{id:18717,code:"PAN",crest:"https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"},
+ "Iraq":{id:18600,code:"IRQ",crest:"https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"},
+ "Ecuador":{id:18573,code:"ECU",crest:"https://cdn.sportmonks.com/images/soccer/teams/13/18573.png"},
+ "Tunisia":{id:18554,code:"TUN",crest:"https://cdn.sportmonks.com/images/soccer/teams/26/18554.png"},
+ "Uzbekistan":{id:18745,code:"UZB",crest:"https://cdn.sportmonks.com/images/soccer/teams/25/18745.png"},
+ "Argentina":{id:18644,code:"ARG",crest:"https://cdn.sportmonks.com/images/soccer/teams/20/18644.png"},
+ "Congo DR":{id:18552,code:"COD",crest:"https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"},
+ "Austria":{id:18643,code:"AUT",crest:"https://cdn.sportmonks.com/images/soccer/teams/19/18643.png"},
+ "Egypt":{id:18546,code:"EGY",crest:"https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"},
+ "Cape Verde Islands":{id:18823,code:"CPV",crest:"https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"},
+ "Netherlands":{id:18694,code:"NED",crest:"https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"},
+ "Switzerland":{id:18708,code:"SUI",crest:"https://cdn.sportmonks.com/images/soccer/teams/20/18708.png"},
+ "England":{id:18645,code:"ENG",crest:"https://cdn.sportmonks.com/images/soccer/teams/21/18645.png"},
+ "Germany":{id:18660,code:"GER",crest:"https://cdn.sportmonks.com/images/soccer/teams/4/18660.png"},
+ "Portugal":{id:18701,code:"POR",crest:"https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"},
+ "Senegal":{id:18558,code:"SEN",crest:"https://cdn.sportmonks.com/images/soccer/teams/30/18558.png"},
+ "Norway":{id:18578,code:"NOR",crest:"https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"},
+ "Iran":{id:18652,code:"IRN",crest:"https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"},
+ "Morocco":{id:18551,code:"MAR",crest:"https://cdn.sportmonks.com/images/soccer/teams/23/18551.png"},
+ "Czech Republic":{id:18718,code:"CZE",crest:"https://cdn.sportmonks.com/images/soccer/teams/30/18718.png"},
+ "Mexico":{id:18576,code:"MEX",crest:"https://cdn.sportmonks.com/images/soccer/teams/16/18576.png"},
+ "Japan":{id:18597,code:"JPN",crest:"https://cdn.sportmonks.com/images/soccer/teams/5/18597.png"},
+ "Algeria":{id:18620,code:"DZA",crest:"https://cdn.sportmonks.com/images/soccer/teams/28/18620.png"},
+ "Paraguay":{id:18723,code:"PRY",crest:"https://cdn.sportmonks.com/images/soccer/teams/3/18723.png"},
 };
-function teamNameById(id){return TEAM_IDS[id]||("Team "+id);}
+function teamInfo(name){
+ if(!name) return null;
+ if(TEAM_DATA[name]) return TEAM_DATA[name];
+ const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ const key=Object.keys(TEAM_DATA).find(k=>norm(k)===norm(name));
+ return key?TEAM_DATA[key]:null;
+}
 
 /* World Cup 2026 season + group stage IDs (from SportMonks docs) */
 const WC_SEASON_ID = 26618;
@@ -162,4 +206,4 @@ const wcrApi = {
 };
 
 /* expose globally for the section files / iframes */
-window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_IDS, teamNameById, GROUP_IDS, groupLetter, fetchAllGroupFixtures };
+window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_DATA, teamInfo, GROUP_IDS, groupLetter, fetchAllGroupFixtures };

@@ -35,7 +35,9 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 .mrow.ours{background:linear-gradient(90deg,#16e06a14,transparent);}
 .mrow .side{flex:1;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;}
 .mrow .side.home{justify-content:flex-end;text-align:right;}
-.mrow .fl{width:30px;height:30px;border-radius:50%;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2c2c2e;flex:none;}
+.mrow .fl{width:30px;height:30px;border-radius:50%;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2c2c2e;flex:none;overflow:hidden;}
+.mrow .fl .crestimg{width:100%;height:100%;object-fit:cover;}
+.crestimg{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .mrow .mid{width:74px;text-align:center;flex:none;}
 .mrow .mid .time{font-size:15px;font-weight:700;line-height:1.15;}
 .mrow .mid .sc{font-size:20px;font-weight:800;font-family:'Space Mono',monospace;}
@@ -220,6 +222,7 @@ async function loadLiveFixtures(){
    fixtures.forEach(fx=>{
      if(!fx.name || !fx.name.includes(' vs ')) return;
      const [hName,aName]=fx.name.split(' vs ');
+     const hi=WCR.teamInfo(hName.trim()), ai=WCR.teamInfo(aName.trim());
      const hc=WCR.colorsFor(hName.trim()), ac=WCR.colorsFor(aName.trim());
      const k=dayKeyFromISO(fx.starting_at);
      dayMeta[k]={lbl:dayLabelFromISO(fx.starting_at), ts:fx.starting_at_timestamp};
@@ -227,6 +230,8 @@ async function loadLiveFixtures(){
      const m={
        id:fx.id, grp:"GROUP "+WCR.groupLetter(fx.group_id),
        hName:hName.trim(), aName:aName.trim(),
+       hId:hi?.id||null, aId:ai?.id||null,
+       hCrest:hi?.crest||null, aCrest:ai?.crest||null,
        hFl:hc.fl, aFl:ac.fl, hC:hc.c1, aC:ac.c1,
        ours: OURS_TEAMS.includes(hName.trim())||OURS_TEAMS.includes(aName.trim()),
        status: stateToStatus(fx.state_id),
@@ -261,16 +266,18 @@ function rebuildDayTabs(){
 
 function teamName(c){return TEAM[c]?.n||c;}function teamFl(c){return TEAM[c]?.fl||"⚪";}
 function mName(m,side){return side==='h'?(m.hName||teamName(m.h)):(m.aName||teamName(m.a));}
-function mFl(m,side){return side==='h'?(m.hFl||teamFl(m.h)):(m.aFl||teamFl(m.a));}
+function mFl(m,side){const crest=side==='h'?m.hCrest:m.aCrest;const emoji=side==='h'?(m.hFl||teamFl(m.h)):(m.aFl||teamFl(m.a));
+ return crest?`<img class="crestimg" src="${crest}" onerror="this.replaceWith(document.createTextNode('${emoji}'))">`:emoji;}
+function mId(m,side){return side==='h'?m.hId:m.aId;}
 function mrow(m){const live=m.status==="live",fin=m.status==="final";
  const hasScore=m.sc&&m.sc[0]!=null;
  const mid=live?`<div class="sc">${hasScore?m.sc[0]+'-'+m.sc[1]:'0-0'}</div><div class="live">● ${m.min||"LIVE"}</div>`
   :fin&&hasScore?`<div class="sc">${m.sc[0]}-${m.sc[1]}</div><div class="ft">FT</div>`
   :`<div class="time">${(m.time||"").replace(' ','<br>')}</div>`;
  return `<div class="mrow ${m.ours?'ours':''}" onclick="openDetail(${m.id})">
-  <div class="side home"><span>${mName(m,'h')}</span><span class="fl">${mFl(m,'h')}</span></div>
+  <div class="side home" onclick="event.stopPropagation();openTeamLive('${m.hName}',${m.hId||'null'})"><span>${mName(m,'h')}</span><span class="fl">${mFl(m,'h')}</span></div>
   <div class="mid">${mid}</div>
-  <div class="side away"><span class="fl">${mFl(m,'a')}</span><span>${mName(m,'a')}</span></div></div>`;}
+  <div class="side away" onclick="event.stopPropagation();openTeamLive('${m.aName}',${m.aId||'null'})"><span class="fl">${mFl(m,'a')}</span><span>${mName(m,'a')}</span></div></div>`;}
 function renderList(){const list=MATCHES[day]||[];
  // group by grp
  const groups={};list.forEach(m=>{(groups[m.grp]=groups[m.grp]||[]).push(m);});
@@ -293,9 +300,9 @@ function drawDetail(){const m=curMatch;const live=m.status==="live",fin=m.status
  let inner=`<div class="dtop ${m.ours?'ours':''}">
    <div class="dnav"><div class="back" onclick="closeDetail()">‹</div><div class="more">⋯</div></div>
    <div class="dscore">
-     <div class="t"><div class="fl">${mFl(m,'h')}</div><div class="tn">${mName(m,'h')}</div></div>
+     <div class="t" onclick="openTeamLive('${m.hName}',${m.hId||'null'})"><div class="fl">${mFl(m,'h')}</div><div class="tn">${mName(m,'h')}</div></div>
      <div class="mid">${midScore}</div>
-     <div class="t"><div class="fl">${mFl(m,'a')}</div><div class="tn">${mName(m,'a')}</div></div>
+     <div class="t" onclick="openTeamLive('${m.aName}',${m.aId||'null'})"><div class="fl">${mFl(m,'a')}</div><div class="tn">${mName(m,'a')}</div></div>
    </div>
    <div class="dtabs">${tabs.map(t=>`<div class="dtab2 ${t.toLowerCase()===detailTab?'on':''}" onclick="setDetailTab('${t.toLowerCase()}')">${t}</div>`).join("")}</div>
  </div><div class="dbody" id="dbody"></div>`;
@@ -311,6 +318,11 @@ function drawDetailBody(){const m=curMatch;const b=document.getElementById('dbod
    <button class="vopt" style="--p:38%"><span class="fl">${mFl(m,'a')}</span><span class="lbl">${mName(m,'a')}</span><span class="pct">38%</span><div class="barbg"></div></button>
   </div></div></div>`;
   h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${m.matchNo||'World Cup 2026'}</div><div class="saddr">FIFA World Cup 2026 · Group Stage</div><div class="srow"><span class="k">Kickoff</span><span>${m.time||'TBD'}</span></div><div class="srow"><span class="k">Group</span><span>${m.grp||''}</span></div></div></div>`;
+  // both teams quick-access cards
+  h+=`<div class="card"><div class="form"><div class="sectit">Teams</div>
+    <div class="frow" style="cursor:pointer" onclick="openTeamLive('${m.hName}',${m.hId||'null'})"><span class="fl" style="width:30px;height:30px;border-radius:50%;overflow:hidden;display:inline-flex">${mFl(m,'h')}</span><span class="opp">${mName(m,'h')} ›</span></div>
+    <div class="frow" style="cursor:pointer" onclick="openTeamLive('${m.aName}',${m.aId||'null'})"><span class="fl" style="width:30px;height:30px;border-radius:50%;overflow:hidden;display:inline-flex">${mFl(m,'a')}</span><span class="opp">${mName(m,'a')} ›</span></div>
+  </div></div>`;
   const F=TEAM[m.h]?.form||(OURS_TEAMS.includes(m.hName)?TEAM.TUR.form:null);if(F)h+=`<div class="card"><div class="form"><div class="sectit">${mName(m,'h')} · recent form</div>${F.map(f=>`<div class="frow"><span class="res ${f[0].toLowerCase()}">${f[1]}</span><span class="opp">${f[3]} ${f[2]}</span></div>`).join("")}</div></div>`;
  }
  else if(detailTab==="table"){
@@ -331,6 +343,55 @@ let teamTab="overview",curTeam=null;
 function openTeam(c){if(!TEAM[c])return;curTeam=c;teamTab="overview";drawTeam();document.getElementById('teampage').classList.add('on');}
 function closeTeam(){document.getElementById('teampage').classList.remove('on');}
 window.openTeam=openTeam;window.closeTeam=closeTeam;
+
+/* ---- LIVE team page: fetch real squad + crest ---- */
+let liveTeam=null;
+async function openTeamLive(name,id){
+ const info=WCR.teamInfo(name)||{};const col=WCR.colorsFor(name);
+ liveTeam={n:name,fl:col.fl,crest:info.crest||null,id:id||info.id||null,c1:col.c1,squad:null,loading:true};
+ curTeam='__live__';teamTab="overview";
+ document.getElementById('teampage').classList.add('on');
+ drawLiveTeam();
+ if(liveTeam.id){
+   try{
+     const resp=await WCR.smFetch(`teams/${liveTeam.id}?include=players.player`);
+     if(resp&&resp.data&&resp.data.players){
+       const seen=new Set();const buckets={Keepers:[],Defenders:[],Midfielders:[],Forwards:[]};
+       resp.data.players.forEach(row=>{const p=row.player;if(!p||seen.has(p.id))return;seen.add(p.id);
+         const b=WCR.posBucket(row.position_id);
+         buckets[b].push([row.jersey_number||"",p.display_name||p.name,p.image_path||"",p.date_of_birth?age(p.date_of_birth):""]);});
+       liveTeam.squad=buckets;
+     }
+   }catch(e){console.error("[wc] squad load",e);}
+ }
+ liveTeam.loading=false;drawLiveTeam();
+}
+function age(dob){const d=new Date(dob);return Math.floor((Date.now()-d)/3.156e10);}
+window.openTeamLive=openTeamLive;
+function drawLiveTeam(){const T=liveTeam;const hasSquad=T.squad&&Object.values(T.squad).some(a=>a.length);
+ const tabs=hasSquad?["Overview","Squad"]:["Overview"];
+ const crestHTML=T.crest?`<div class="fl"><img class="crestimg" src="${T.crest}" onerror="this.replaceWith(document.createTextNode('${T.fl}'))"></div>`:`<div class="fl">${T.fl}</div>`;
+ let inner=`<div class="tphead"><div class="dnav"><div class="back" onclick="closeTeam()">‹</div><div class="more" onclick="closeTeam()">✕</div></div>
+   <div class="tphero">${crestHTML}<div><div class="tn">${T.n}</div></div></div>
+   <div class="tptabs">${tabs.map(t=>`<div class="tpt ${t.toLowerCase()===teamTab?'on':''}" onclick="setLiveTeamTab('${t.toLowerCase()}')">${t}</div>`).join("")}</div></div>
+  <div class="tpbody" id="tpbody"></div>`;
+ document.getElementById('teamInner').innerHTML=inner;drawLiveTeamBody();
+}
+function setLiveTeamTab(t){teamTab=t;document.querySelectorAll('.tpt').forEach(x=>x.classList.toggle('on',x.textContent.toLowerCase()===t));drawLiveTeamBody();}
+window.setLiveTeamTab=setLiveTeamTab;
+function drawLiveTeamBody(){const T=liveTeam;const b=document.getElementById('tpbody');let h="";
+ if(teamTab==="overview"){
+   h+=`<div class="card"><div class="stad"><div class="sname">${T.fl} ${T.n}</div><div class="saddr">FIFA World Cup 2026</div></div></div>`;
+   if(T.loading)h+=`<div class="card"><div style="padding:24px;text-align:center;color:#888">Loading squad…</div></div>`;
+   else if(!T.squad)h+=`<div class="card"><div style="padding:24px;text-align:center;color:#888">Squad data not available yet.</div></div>`;
+   else h+=`<div class="card"><div style="padding:18px;text-align:center;color:#aaa">Tap the <b>Squad</b> tab to see the full roster with photos.</div></div>`;
+ } else if(teamTab==="squad"&&T.squad){
+   h+=`<div class="card squad">`;Object.keys(T.squad).forEach(pos=>{if(!T.squad[pos].length)return;
+     h+=`<div class="pos-h">${pos}</div>`+T.squad[pos].map(p=>`<div class="pl-row"><span class="no">${p[0]||'–'}</span><div class="ph" style="${p[2]?`background-image:url('${p[2]}');background-size:cover;background-position:center top`:''}"></div><div class="nm"><b>${p[1]}</b></div><div class="ag">${p[3]||''}</div></div>`).join("");});
+   h+=`</div>`;
+ }
+ b.innerHTML=h;
+}
 function drawTeam(){const T=TEAM[curTeam];const tabs=T.squad?["Overview","Matches","Table","Squad"]:["Overview","Matches","Table"];
  let inner=`<div class="tphead"><div class="dnav"><div class="back" onclick="closeTeam()">‹</div><div class="more" onclick="closeTeam()">✕</div></div>
    <div class="tphero"><div class="fl">${T.fl}</div><div><div class="tn">${T.n}</div><div class="rk">FIFA #${T.rank}</div></div></div>
