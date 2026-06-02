@@ -117,19 +117,28 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .preveal{display:none;flex-direction:column;align-items:center;}
 .preveal.on{display:flex;}
 .preveal .pcards{position:relative;width:240px;height:336px;}
-.pcardmini{position:absolute;inset:0;border-radius:13px;padding:9px;background:linear-gradient(150deg,var(--c1),var(--c2));box-shadow:0 18px 44px #000a;
+.pcardmini{position:absolute;inset:0;border-radius:14px;padding:0;overflow:hidden;box-shadow:0 18px 44px #000a;background:var(--c1);
  transform:translateY(40px) scale(.9);opacity:0;transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .4s;}
-.pcardmini::before{content:'';position:absolute;inset:5px;border-radius:9px;border:2px solid #fff;z-index:3;}
+.pcardmini::before{content:'';position:absolute;inset:6px;border-radius:9px;border:2px solid #ffffffcc;z-index:6;pointer-events:none;}
 .pcardmini.show{transform:none;opacity:1;}
 .pcardmini.gone{transform:translateX(-120%) rotate(-12deg);opacity:0;}
-.pcardmini .sheen{position:absolute;inset:0;border-radius:13px;background:linear-gradient(115deg,transparent 40%,#ffffffaa 50%,transparent 60%);background-size:300% 300%;animation:sheen 3.2s linear infinite;mix-blend-mode:overlay;pointer-events:none;}
+.pcardmini .art2{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.pcardmini .art2 .ab1{position:absolute;width:160%;height:55%;left:-30%;top:-15%;background:var(--c2);border-radius:0 0 60% 40%/0 0 80% 90%;}
+.pcardmini .art2 .ab2{position:absolute;width:150%;height:50%;right:-30%;bottom:-12%;background:var(--c1);filter:brightness(.7);border-radius:55% 45% 0 0/90% 80% 0 0;}
+.pcardmini .art2 .stripe2{position:absolute;left:-10%;right:-10%;height:8px;top:54%;background:#ffffff44;transform:rotate(-7deg);}
+.pcardmini .art2 .dots{position:absolute;inset:0;opacity:.12;background-image:radial-gradient(circle at 50% 50%,#fff 0 2px,transparent 2px);background-size:20px 20px;mix-blend-mode:overlay;}
+.pcardmini .bignum2{position:absolute;right:-6%;bottom:6%;z-index:1;font-family:'Archivo Black',sans-serif;font-size:150px;line-height:.7;color:#ffffff26;letter-spacing:-.04em;}
+.pcardmini .crestb{position:absolute;top:12px;left:12px;z-index:5;width:38px;height:38px;border-radius:50%;background:#ffffffee;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px #0006;overflow:hidden;}
+.pcardmini .crestb img{width:100%;height:100%;object-fit:cover;}
+.pcardmini .hd2{position:absolute;left:0;right:0;top:0;height:74%;z-index:2;background-size:cover;background-position:center top;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent);filter:drop-shadow(0 6px 14px #0007);}
+.pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:62%;left:19%;height:60%;border-radius:46% 46% 40% 40%;top:8%;-webkit-mask-image:none;mask-image:none;border:2px solid #fff7;}
+.pcardmini .plate2{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:10px 12px 14px;background:linear-gradient(180deg,transparent,#00000077 30%,#000000bb);}
+.pcardmini .nm{text-align:center;font-family:'Anton',sans-serif;font-size:19px;color:#fff;text-shadow:0 2px 8px #000a;line-height:1;}
+.pcardmini .meta{text-align:center;font-family:'Space Mono',monospace;font-size:9px;opacity:.92;margin-top:5px;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;}
+.pcardmini .meta .jersey{background:#ffffff22;border-radius:5px;padding:1px 6px;font-weight:700;}
+.pcardmini .sheen{position:absolute;inset:0;border-radius:14px;z-index:3;background:linear-gradient(115deg,transparent 42%,#ffffff66 50%,transparent 58%);background-size:300% 300%;animation:sheen 3.6s linear infinite;mix-blend-mode:overlay;pointer-events:none;}
 @keyframes sheen{0%{background-position:130% 0}100%{background-position:-130% 0}}
-.pcardmini.legend::after{content:'';position:absolute;inset:0;border-radius:13px;z-index:4;background:linear-gradient(125deg,transparent 32%,#fff8 48%,#ffe9a8 50%,#fff8 52%,transparent 68%);mix-blend-mode:overlay;box-shadow:inset 0 0 0 3px #ffd75e;}
-.pcardmini .inr{position:absolute;inset:9px;top:20px;border-radius:9px;overflow:hidden;background:linear-gradient(170deg,var(--c1),#0c1a26 95%);display:flex;flex-direction:column;}
-.pcardmini .inr .n26{position:absolute;right:-8%;top:-2%;font-family:'Archivo Black',sans-serif;font-size:120px;color:#ffffff1e;line-height:.8;}
-.pcardmini .inr .hd2{width:58%;aspect-ratio:.9;border-radius:46% 46% 40% 40%;background:linear-gradient(180deg,#e8b58c,#c98f68);border:2px solid #fff7;margin:15% auto 5%;position:relative;z-index:1;}
-.pcardmini .inr .nm{position:relative;z-index:1;text-align:center;font-family:'Anton',sans-serif;font-size:17px;}
-.pcardmini .inr .meta{position:relative;z-index:1;text-align:center;font-family:'Space Mono',monospace;font-size:9px;opacity:.9;margin-top:3px;}
+.pcardmini.legend::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:5;background:linear-gradient(125deg,transparent 32%,#fff8 48%,#ffe9a8 50%,#fff8 52%,transparent 68%);mix-blend-mode:overlay;box-shadow:inset 0 0 0 3px #ffd75e;pointer-events:none;}
 .pcardmini .newtag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:5;background:#ffd000;color:#10202a;font-size:9px;font-weight:800;padding:2px 9px;border-radius:999px;}
 .pcardmini .duptag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:5;background:#7c8cff;color:#10202a;font-size:9px;font-weight:800;padding:2px 9px;border-radius:999px;}
 .ptap{margin-top:20px;font-size:12px;letter-spacing:.14em;color:#ffffffcc;animation:bob 1.6s infinite;}
@@ -234,11 +243,11 @@ async function loadSquad(idx){
  resp.data.players.forEach(row=>{const p=row.player; if(!p||seen.has(p.id))return; seen.add(p.id);
    ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||99, captain:row.captain});});
  ps.sort((a,b)=>(a.pos-b.pos)||(a.jersey-b.jersey));
- const top=ps.slice(0,11);
- t.players=["Crest",...top.map(p=>p.name)];
- t.photos=[null,...top.map(p=>p.photo)];
- t.ids=[null,...top.map(p=>p.jersey)];
- t.legends=[]; top.forEach((p,i)=>{if(p.captain)t.legends.push(i+1);});
+ const top=ps.slice(0,12);
+ t.players=top.map(p=>p.name);
+ t.photos=top.map(p=>p.photo);
+ t.ids=top.map(p=>p.jersey);
+ t.legends=[]; top.forEach((p,i)=>{if(p.captain)t.legends.push(i);});
  t.loaded=true;
  owned[t.code]=owned[t.code]||{};
  render();
@@ -292,8 +301,17 @@ pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.
 
 function miniHTML(c,tag){const t=c.t;const p=t.players[c.i];const isL=t.legends.includes(c.i);
  const photo=t.photos&&t.photos[c.i];
- const headHTML = photo ? `<div class="hd2" style="background-image:url('${photo}');background-size:cover;background-position:center top"></div>` : `<div class="hd2"></div>`;
- return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.c1};--c2:${t.c2}"><div class="sheen"></div>${tag}<div class="inr"><div class="n26">${c.i||'26'}</div>${headHTML}<div class="nm">${p}</div><div class="meta">${t.code} · #${c.i} · ${t.flag}</div></div></div>`;}
+ const jersey=(t.ids&&t.ids[c.i])||c.i;
+ const photoHTML = photo ? `<div class="hd2" style="background-image:url('${photo}')"></div>` : `<div class="hd2 placeholder"></div>`;
+ const crestHTML = t.crest ? `<div class="crestb"><img src="${t.crest}" alt=""></div>` : `<div class="crestb">${t.flag}</div>`;
+ return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.accent||t.c1};--c2:${t.accent2||t.c3||t.c2}">
+   <div class="art2"><div class="ab1"></div><div class="ab2"></div><div class="stripe2"></div><div class="dots"></div></div>
+   <div class="bignum2">${jersey}</div>
+   ${crestHTML}
+   ${photoHTML}
+   <div class="sheen"></div>${tag}
+   <div class="plate2"><div class="nm">${p}</div><div class="meta">${t.flag} ${t.code} <span class="jersey">#${jersey}</span></div></div>
+ </div>`;}
 function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";
  packCards.forEach((c,n)=>{const already=(owned[c.t.code]&&owned[c.t.code][c.i]||0)>0;c.isNew=!already;
   const tag=c.isNew?'<div class="newtag">NEW!</div>':'<div class="duptag">DOUBLE</div>';
