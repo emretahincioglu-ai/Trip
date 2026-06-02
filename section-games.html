@@ -130,8 +130,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .bignum2{position:absolute;right:-6%;bottom:6%;z-index:1;font-family:'Archivo Black',sans-serif;font-size:150px;line-height:.7;color:#ffffff26;letter-spacing:-.04em;}
 .pcardmini .crestb{position:absolute;top:12px;left:12px;z-index:5;width:38px;height:38px;border-radius:50%;background:#ffffffee;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px #0006;overflow:hidden;}
 .pcardmini .crestb img{width:100%;height:100%;object-fit:cover;}
-.pcardmini .hd2{position:absolute;left:0;right:0;top:0;height:74%;z-index:2;background-size:cover;background-position:center top;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent);filter:drop-shadow(0 6px 14px #0007);}
-.pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:62%;left:19%;height:60%;border-radius:46% 46% 40% 40%;top:8%;-webkit-mask-image:none;mask-image:none;border:2px solid #fff7;}
+.pcardmini .hd2{position:absolute;left:0;right:0;top:4%;height:62%;z-index:2;background-size:contain;background-repeat:no-repeat;background-position:center top;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);mask-image:linear-gradient(180deg,#000 80%,transparent);filter:drop-shadow(0 6px 14px #0007);}
+.pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:50%;left:25%;height:48%;border-radius:46% 46% 40% 40%;top:10%;-webkit-mask-image:none;mask-image:none;border:2px solid #fff7;}
 .pcardmini .plate2{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:10px 12px 14px;background:linear-gradient(180deg,transparent,#00000077 30%,#000000bb);}
 .pcardmini .nm{text-align:center;font-family:'Anton',sans-serif;font-size:19px;color:#fff;text-shadow:0 2px 8px #000a;line-height:1;}
 .pcardmini .meta{text-align:center;font-family:'Space Mono',monospace;font-size:9px;opacity:.92;margin-top:5px;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -241,8 +241,8 @@ async function loadSquad(idx){
  // dedupe + sort by position then jersey
  const seen=new Set(); const ps=[];
  resp.data.players.forEach(row=>{const p=row.player; if(!p||seen.has(p.id))return; seen.add(p.id);
-   ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||99, captain:row.captain});});
- ps.sort((a,b)=>(a.pos-b.pos)||(a.jersey-b.jersey));
+   ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||null, captain:row.captain});});
+ ps.sort((a,b)=>(a.pos-b.pos)||((a.jersey||999)-(b.jersey||999)));
  const top=ps.slice(0,12);
  t.players=top.map(p=>p.name);
  t.photos=top.map(p=>p.photo);
@@ -301,16 +301,16 @@ pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.
 
 function miniHTML(c,tag){const t=c.t;const p=t.players[c.i];const isL=t.legends.includes(c.i);
  const photo=t.photos&&t.photos[c.i];
- const jersey=(t.ids&&t.ids[c.i])||c.i;
+ const jersey=(t.ids&&t.ids[c.i])||null;
  const photoHTML = photo ? `<div class="hd2" style="background-image:url('${photo}')"></div>` : `<div class="hd2 placeholder"></div>`;
- const crestHTML = t.crest ? `<div class="crestb"><img src="${t.crest}" alt=""></div>` : `<div class="crestb">${t.flag}</div>`;
+ const country = (t.name||t.code||'').replace(/\b\w/g,m=>m).split(' ').map(w=>w[0]+w.slice(1).toLowerCase()).join(' ');
+ const jerseyHTML = jersey ? `<span class="jersey">#${jersey}</span>` : '';
  return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.accent||t.c1};--c2:${t.accent2||t.c3||t.c2}">
    <div class="art2"><div class="ab1"></div><div class="ab2"></div><div class="stripe2"></div><div class="dots"></div></div>
-   <div class="bignum2">${jersey}</div>
-   ${crestHTML}
+   ${jersey?`<div class="bignum2">${jersey}</div>`:''}
    ${photoHTML}
    <div class="sheen"></div>${tag}
-   <div class="plate2"><div class="nm">${p}</div><div class="meta">${t.flag} ${t.code} <span class="jersey">#${jersey}</span></div></div>
+   <div class="plate2"><div class="nm">${p}</div><div class="meta">${t.flag} ${country} ${jerseyHTML}</div></div>
  </div>`;}
 function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";
  packCards.forEach((c,n)=>{const already=(owned[c.t.code]&&owned[c.t.code][c.i]||0)>0;c.isNew=!already;
