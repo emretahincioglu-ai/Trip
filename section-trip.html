@@ -1,0 +1,467 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>West Coast Run</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hidden;}
+#bg{position:fixed;inset:0;z-index:0;background:radial-gradient(130% 80% at 70% -5%,#ff5e3a22,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f;transition:background 1s ease;}
+.frame{position:relative;z-index:1;height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;}
+
+/* PICKER */
+.picker{position:absolute;inset:0;z-index:30;background:radial-gradient(120% 60% at 50% 0%,#2a1c3a,#07080f 60%);display:flex;flex-direction:column;justify-content:center;padding:40px 22px;transition:opacity .4s,transform .4s;}
+.picker.gone{opacity:0;transform:scale(1.04);pointer-events:none;}
+.picker .sub{text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffff99;text-transform:uppercase;}
+.picker h1{text-align:center;font-family:'Anton',sans-serif;font-size:50px;line-height:.92;margin:10px 0 6px;background:linear-gradient(95deg,#ffd447,#ff6b4a 45%,#ff4d8d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.picker .dates{text-align:center;font-family:'Space Mono',monospace;color:#ffffffaa;font-size:12px;margin-bottom:34px;}
+.picker .who{text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffff99;margin-bottom:16px;}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.pbtn{display:flex;align-items:center;gap:11px;background:#15172a;border:1px solid #ffffff14;border-radius:15px;padding:13px;cursor:pointer;color:#fff;text-align:left;transition:.16s;}
+.pbtn:hover{transform:translateY(-2px);border-color:var(--c);}
+.pbtn .pa{width:40px;height:40px;border-radius:50%;background:var(--c);color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;flex:none;}
+.pbtn b{font-size:14px;font-weight:600;}
+
+/* tab panels */
+.panels{position:relative;flex:1;min-height:0;}
+.panel{position:absolute;inset:0;display:none;flex-direction:column;}
+.panel.on{display:flex;}
+.scrollarea{flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
+.scrollarea::-webkit-scrollbar{display:none;}
+
+.topbar{position:sticky;top:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;transition:background .25s;}
+.topbar.solid{backdrop-filter:blur(12px);background:rgba(10,11,20,.8);}
+.rider{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.av{width:30px;height:30px;border-radius:50%;color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;}
+.rider small{display:block;font-size:8px;letter-spacing:.16em;color:#ffffff99;}.rider b{font-family:'Anton',sans-serif;font-size:14px;font-weight:400;}
+.flags{font-size:16px;}
+
+/* shatter */
+.photo{position:absolute;inset:0;background-image:radial-gradient(circle at 50% 30%,#fff0c0 0 7%,#ffd166 15%,transparent 42%),linear-gradient(180deg,#ff8a3a,#ff5e6a 40%,#9a3a7a 66%,#1c2e5a 100%);}
+.puzzle{position:absolute;inset:0;}
+.pc{position:absolute;background-image:radial-gradient(circle at 25% 18%,#9fb2c8 0 3%,transparent 14%),linear-gradient(180deg,#2a3a52,#3d5571 48%,#536b88 74%,#101a2c 100%);background-repeat:no-repeat;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .9s,filter .9s;outline:.5px solid #00000022;}
+.pc.gone{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.55);opacity:0;filter:blur(1px);}
+.hero{height:calc(100dvh - 120px);position:relative;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;}
+.hero .photo .tag{position:absolute;left:0;right:0;bottom:64px;text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;color:#fff;opacity:.7;}
+.tov{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-shadow:0 3px 24px #000c;}
+.tov .kick{font-size:12px;letter-spacing:.24em;font-weight:700;}
+.tov .row{display:flex;gap:16px;margin-top:10px;}.tov .u{text-align:center;}.tov .n{font-family:'Anton',sans-serif;font-size:50px;line-height:1;}.tov .l{font-size:10px;letter-spacing:.14em;opacity:.85;}
+.tov .ttl{font-family:'Anton',sans-serif;font-size:24px;margin-top:16px;}
+.hint{position:absolute;bottom:14px;left:0;right:0;z-index:3;text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffffcc;animation:bob 1.8s infinite;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+.trip-scroll{scroll-snap-type:y proximity;scroll-padding-top:52px;}
+.home{padding:18px 16px 30px;scroll-snap-align:start;}
+.shatcard{height:150px;border-radius:20px;overflow:hidden;position:relative;box-shadow:0 14px 36px #0008;}
+.shatcard .tov2{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-shadow:0 2px 16px #000b;}
+.shatcard .kick{font-size:10px;letter-spacing:.2em;font-weight:700;}
+.shatcard .row{display:flex;gap:12px;margin-top:6px;}.shatcard .u{text-align:center;}.shatcard .n{font-family:'Anton',sans-serif;font-size:26px;line-height:1;}.shatcard .l{font-size:8px;letter-spacing:.14em;opacity:.85;}
+.nextup{margin-top:14px;background:#ffffff10;border:1px solid #ffffff18;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;}.nextup .d{font-size:18px;}.nextup b{font-size:13.5px;}.nextup small{font-size:12px;color:#ffffff99;display:block;}
+.clabel{display:flex;justify-content:space-between;align-items:baseline;margin:22px 2px 12px;}.clabel b{font-size:15px;}.clabel small{font-size:11px;color:#ffffff80;}
+.carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-ms-overflow-style:none;scrollbar-width:none;}.carousel::-webkit-scrollbar{display:none;}
+.ccard{flex:none;width:76%;scroll-snap-align:center;height:300px;border-radius:22px;overflow:hidden;position:relative;cursor:pointer;border:1px solid #ffffff18;}
+.ccard .cg{position:absolute;inset:0;}.ccard .cg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0002,#0006 45%,#000d);}
+.ccard .topr{position:absolute;top:14px;left:14px;right:14px;z-index:1;display:flex;justify-content:space-between;}
+.ccard .num{font-family:'Space Mono',monospace;font-size:11px;background:#0006;backdrop-filter:blur(6px);padding:4px 9px;border-radius:8px;}.ccard .wx{font-size:12px;font-weight:600;background:#0006;backdrop-filter:blur(6px);padding:4px 10px;border-radius:999px;}
+.ccard .bot{position:absolute;left:16px;right:16px;bottom:16px;z-index:1;}.ccard .cn{font-family:'Anton',sans-serif;font-size:32px;line-height:.95;}.ccard .cdt{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffd0;margin-top:3px;}.ccard .teaser{font-size:13px;margin-top:8px;}.ccard .go{margin-top:11px;display:inline-block;font-size:12px;font-weight:700;background:#fff;color:#12131f;padding:7px 14px;border-radius:999px;}
+.badge{position:absolute;top:46px;left:14px;z-index:1;background:#ff5e3a;font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:6px;}
+
+/* city + subscreens */
+.screen{position:fixed;inset:0;z-index:10;width:100vw;transform:translateY(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;background:#0a0b14;}
+.screen.on{transform:translateY(0);}
+.screen .fbg{position:absolute;inset:0;transition:background 1s ease;}
+.screen .fbg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0005,#0a0b14cc 52%,#0a0b14);}
+.screen .inner{width:100%;max-width:460px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;position:relative;z-index:1;}
+.sub2{background:#0a0b14;z-index:12;}.sub2 .inner{background:#0a0b14;}
+.scroll{position:relative;z-index:1;flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}.scroll::-webkit-scrollbar{display:none;}
+.back{position:sticky;top:0;z-index:3;padding:16px 18px;font-weight:700;cursor:pointer;width:max-content;background:linear-gradient(180deg,#0a0b14cc,transparent);}
+.fhero{padding:24px 20px 14px;}.fhero .hf{font-size:24px;}.fhero .hn{font-family:'Anton',sans-serif;font-size:48px;line-height:.95;margin:4px 0;}.fhero .hd{font-family:'Space Mono',monospace;font-size:12px;color:#ffffffd0;}.fhero .hwx{display:inline-block;margin-top:10px;background:#0006;backdrop-filter:blur(6px);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;}
+.fbody{padding:6px 18px 50px;}
+.qa{display:flex;justify-content:space-between;gap:8px;margin:8px 0 16px;}.qa button{flex:1;background:none;border:none;color:#fff;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;}.qa .qc{width:54px;height:54px;border-radius:16px;background:#ffffff14;border:1px solid #ffffff1c;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-size:21px;}.qa small{font-size:10px;color:#ffffffc0;}
+.flightbanner{background:#12131fcc;backdrop-filter:blur(10px);border:1px solid #5ab0ff44;border-radius:16px;padding:14px;margin-bottom:14px;cursor:pointer;}
+.flightbanner .tn{font-family:'Space Mono',monospace;font-size:10px;color:#9fd0ff;text-align:center;letter-spacing:.1em;margin-bottom:6px;}
+.flightbanner .fl{display:flex;align-items:center;gap:10px;}.flightbanner .ap{flex:1;}.flightbanner .ap.r{text-align:right;}.flightbanner .code{font-family:'Anton',sans-serif;font-size:28px;line-height:1;}.flightbanner .c2{font-size:10px;color:#ffffffa0;}.flightbanner .tt{font-family:'Space Mono',monospace;font-size:11px;color:#5ab0ff;margin-top:2px;}.flightbanner .ln{color:#5ab0ff;}.flightbanner .more{text-align:center;font-size:11px;color:#9fd0ff;margin-top:8px;font-weight:600;}
+.ith{display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;}.ith b{font-size:16px;}.ith small{font-family:'Space Mono',monospace;font-size:11px;color:#ffffff90;}
+.it{display:flex;gap:12px;padding:10px 0;align-items:flex-start;border-top:1px solid #ffffff10;}.it:first-of-type{border:none;}.it .g{width:32px;height:32px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;}.it .mid{flex:1;}.it .mid b{font-size:14px;display:block;}.it .mid small{font-size:12px;color:#ffffff90;}.it .tm{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffa0;padding-top:3px;}.it.match .mid b{color:#ff8a5c;}
+.viewall{color:#ff8a5c;font-size:13px;font-weight:600;padding:12px 0;}
+.exp{background:#12131fcc;backdrop-filter:blur(10px);border:1px solid #ffffff16;border-radius:16px;padding:14px;margin-top:6px;}.exp.hidden .ev{filter:blur(7px);}
+.eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}.eh b{font-size:14px;}.eye{background:#ffffff14;border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;}
+.erow{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid #ffffff10;font-size:13.5px;}.erow:first-of-type{border:none;}.erow .ev{font-family:'Space Mono',monospace;font-weight:700;}
+.you{display:inline-flex;align-items:center;gap:7px;margin:6px 0 14px;padding:8px 13px;border-radius:999px;font-size:12.5px;font-weight:700;}.you::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;}
+.map{height:190px;position:relative;overflow:hidden;background:#0d1a2e;}.map svg{width:100%;height:100%;}
+.fd-card{margin:-30px 16px 0;position:relative;z-index:2;background:#12131f;border:1px solid #ffffff18;border-radius:18px;padding:16px;}
+.fd-route{font-family:'Anton',sans-serif;font-size:22px;}.fd-no{font-family:'Space Mono',monospace;font-size:11px;color:#9fd0ff;margin-top:2px;}
+.fd-leg{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid #ffffff12;}.fd-leg:last-child{border:none;}
+.fd-leg .l .code{font-family:'Anton',sans-serif;font-size:26px;}.fd-leg .l .ap{font-size:12px;color:#ffffffa0;}.fd-leg .l .tg{font-size:11px;color:#ffffff80;margin-top:4px;}
+.fd-leg .r{text-align:right;}.fd-leg .r .t{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#5ab0ff;}.fd-leg .r .d{font-size:11px;color:#ffffff90;}
+.fd-meta{display:flex;gap:10px;margin:14px 16px 0;}.fd-chip{flex:1;background:#12131f;border:1px solid #ffffff14;border-radius:12px;padding:10px 12px;text-align:center;}.fd-chip small{font-size:9px;letter-spacing:.12em;color:#ffffff88;display:block;}.fd-chip b{font-size:14px;}.fd-chip b.ok{color:#4ad6c4;}
+.lhero{height:160px;position:relative;background:linear-gradient(150deg,#caa07a,#6e4a5e 60%,#241a3a);}.lhero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,#0a0b14);}
+.lhero .lt{position:absolute;left:18px;bottom:14px;}.lhero .ln2{font-family:'Anton',sans-serif;font-size:28px;}.lhero .ls{font-size:12px;color:#ffffffcc;}
+.lbody{padding:14px 18px 40px;}
+.lgrid{display:flex;gap:10px;margin-bottom:14px;}.lcell{flex:1;background:#12131f;border:1px solid #ffffff14;border-radius:12px;padding:12px;}.lcell small{font-size:9px;letter-spacing:.1em;color:#ffffff88;display:block;}.lcell b{font-size:14px;}.lcell .sub{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffb0;}
+.yourroom{background:linear-gradient(135deg,#1f2740,#3a2a4a);border:1px solid #ffb34755;border-radius:14px;padding:14px;margin-bottom:12px;}.yourroom .k{font-size:10px;letter-spacing:.16em;color:#ffd166;font-weight:700;}.yourroom .v{font-family:'Anton',sans-serif;font-size:20px;margin:3px 0;}.yourroom .vs{font-size:12.5px;color:#ffffffc0;}
+.lcard{background:#12131f;border:1px solid #ffffff14;border-radius:14px;padding:14px;margin-bottom:12px;}.lcard .k{font-size:11px;letter-spacing:.12em;color:#ffffff88;margin-bottom:4px;}.lcard .v{font-size:15px;font-weight:600;}.lcard .vs{font-size:13px;color:#ffffffb0;}
+.lbtn{display:inline-block;margin-top:8px;background:#ffffff14;border:1px solid #ffffff22;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:600;cursor:pointer;}
+.ph{padding:54px 24px;text-align:center;color:#ffffff80;}.ph b{font-family:'Anton',sans-serif;font-size:22px;color:#fff;display:block;margin-bottom:8px;}
+
+/* WORLD CUP */
+.wc{padding:16px 16px 30px;}
+.wc .h{font-family:'Anton',sans-serif;font-size:30px;}
+.wclive{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#ff5e5e;}
+.wclive .dot{width:8px;height:8px;border-radius:50%;background:#ff5e5e;animation:blink 1.2s infinite;}@keyframes blink{50%{opacity:.3}}
+.sectitle{font-size:11px;letter-spacing:.2em;color:#ffffff88;margin:22px 2px 12px;}
+.feat{border-radius:20px;overflow:hidden;position:relative;border:1px solid #ff5e3a55;}
+.feat .fg{position:absolute;inset:0;background:linear-gradient(135deg,#6b2aa0,#ff5e3a 80%);}
+.feat .fc{position:relative;z-index:1;padding:18px;}
+.feat .tag{font-size:10px;letter-spacing:.18em;font-weight:800;opacity:.9;display:flex;justify-content:space-between;}
+.feat .scoreline{display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px;}
+.feat .team{text-align:center;flex:1;}.feat .team .fl{font-size:38px;}.feat .team .tn{font-family:'Anton',sans-serif;font-size:16px;margin-top:4px;}
+.feat .vs{font-family:'Anton',sans-serif;font-size:24px;padding:0 14px;opacity:.7;}
+.feat .when{text-align:center;font-family:'Space Mono',monospace;font-size:12px;opacity:.95;}
+.feat .cd{text-align:center;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.1em;}
+.table{background:#12101e;border:1px solid #ffffff14;border-radius:16px;overflow:hidden;}
+.trow{display:grid;grid-template-columns:20px 1fr 26px 26px 26px 32px;gap:6px;align-items:center;padding:10px 13px;font-size:13px;border-top:1px solid #ffffff0d;}
+.trow:first-child{border:none;}.trow.head{font-size:10px;letter-spacing:.08em;color:#ffffff77;font-weight:700;}
+.trow .pos{font-family:'Space Mono',monospace;color:#ffffff99;}.trow .tm{display:flex;align-items:center;gap:7px;font-weight:600;}
+.trow.us{background:linear-gradient(90deg,#ff5e3a22,transparent);}.trow .num{text-align:center;font-family:'Space Mono',monospace;color:#ffffffcc;}.trow .pts{text-align:center;font-family:'Space Mono',monospace;font-weight:700;}
+.fxcard{background:#12101e;border:1px solid #ffffff14;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.fxcard .ft{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;}.fxcard .fsc{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;}.fxcard .fstat{font-size:10px;color:#ffffff77;letter-spacing:.06em;}
+.databanner{margin-top:18px;background:#ffffff0c;border:1px dashed #ffffff22;border-radius:12px;padding:12px 14px;font-size:12px;color:#ffffff99;line-height:1.5;}.databanner b{color:#fff;}
+
+/* GAMES */
+.games{padding:16px 16px 30px;}
+.games .h{font-family:'Anton',sans-serif;font-size:30px;margin-bottom:4px;}
+.games .hsub{font-size:12px;color:#ffffff99;margin-bottom:18px;}
+.gamegrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.gcard{aspect-ratio:1/1.05;border-radius:20px;position:relative;overflow:hidden;cursor:pointer;border:1px solid #ffffff14;padding:16px;display:flex;flex-direction:column;justify-content:space-between;transition:.16s;}
+.gcard:hover{transform:translateY(-3px);}
+.gcard .gg{position:absolute;inset:0;z-index:0;opacity:.9;}
+.gcard .gi{position:relative;z-index:1;font-size:34px;}
+.gcard .gt{position:relative;z-index:1;}
+.gcard .gt b{font-family:'Anton',sans-serif;font-size:19px;display:block;line-height:1;}
+.gcard .gt small{font-size:11px;color:#ffffffcc;}
+.gcard .soon{position:absolute;top:12px;right:12px;z-index:2;background:#0007;font-size:9px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:6px;}
+
+/* YOU */
+.youpage{padding:18px 16px 30px;}
+.youhero{display:flex;align-items:center;gap:14px;background:#15172a;border:1px solid #ffffff14;border-radius:18px;padding:18px;margin-bottom:18px;}
+.youhero .ya{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:#0e0f1a;}
+.youhero .yn{font-family:'Anton',sans-serif;font-size:26px;}.youhero .ys{font-size:12px;color:#ffffff99;}
+.peoplelist{display:flex;flex-direction:column;gap:8px;}
+.prow{display:flex;align-items:center;gap:12px;background:#15172a;border:1px solid #ffffff12;border-radius:14px;padding:12px;cursor:pointer;transition:.14s;}
+.prow:hover{border-color:#fff5;}.prow.me{outline:2px solid currentColor;}
+.prow .pn{flex:1;font-weight:600;color:#fff;}.prow .pv{font-size:11px;color:#ffffff80;}
+
+.tabs{flex:none;display:flex;background:#0a0b14ee;backdrop-filter:blur(12px);border-top:1px solid #ffffff14;padding:8px 6px calc(8px + env(safe-area-inset-bottom));}
+.tab{flex:1;background:none;border:none;color:#ffffff70;padding:6px 2px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;}.tab.on{color:#fff;}.tab .ic{font-size:18px;}
+</style>
+
+
+<style>
+/* standalone trip section: hide shell chrome */
+.tabs{display:none !important;}
+#tab-wc,#tab-games,#tab-you{display:none !important;}
+#tab-trip{display:flex !important;}
+.picker{display:none !important;}
+</style>
+<div id="bg"></div>
+<div class="frame">
+  <div class="picker" id="picker">
+    <div class="sub">NY · SF · PCH → LA</div>
+    <h1>WEST COAST RUN</h1>
+    <div class="dates">JUN 17 – 24, 2026</div>
+    <div class="who">WHO'S RIDING?</div>
+    <div class="people" id="people"></div>
+  </div>
+
+  <!-- TRIP -->
+  <div class="panels">
+  <div class="panel on" id="tab-trip">
+    <div class="scrollarea trip-scroll" id="tripScroll">
+      <div class="topbar" id="topbar">
+        <div class="rider" id="riderBtn" title="Switch rider"><span class="av" id="av">EM</span><div><small>RIDING AS · TAP TO SWITCH</small><b id="riderName">Emre</b></div></div>
+        <div class="flags">🇹🇷 🇺🇸</div>
+      </div>
+      <div class="hero">
+        <div class="photo"><div class="tag">↑ YOUR PHOTO HERE (revealed as it shatters)</div></div>
+        <div class="puzzle" id="puzzleBig"></div>
+        <div class="tov"><div class="kick">WHEELS UP IN</div><div class="row" id="trowBig"></div><div class="ttl">WEST COAST RUN</div></div>
+        <div class="hint">SCROLL ↓</div>
+      </div>
+      <div class="home">
+        <div class="shatcard"><div class="photo"></div><div class="puzzle" id="puzzleCard"></div><div class="tov2"><div class="kick">WHEELS UP IN</div><div class="row" id="trowSm"></div></div></div>
+        <div class="nextup" id="nextup"></div>
+        <div class="clabel"><b>Your stops</b><small>swipe →</small></div>
+        <div class="carousel" id="carousel"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORLD CUP -->
+  <div class="panel" id="tab-wc">
+    <div class="scrollarea">
+      <div class="wc">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:6px"><div class="h">World Cup</div><div class="wclive"><span class="dot"></span>WC 26</div></div>
+        <div class="sectitle">OUR MATCH</div>
+        <div class="feat"><div class="fg"></div><div class="fc">
+          <div class="tag"><span>GROUP D · MATCHDAY 1</span><span id="featState">UPCOMING</span></div>
+          <div class="scoreline"><div class="team"><div class="fl">🇹🇷</div><div class="tn">TÜRKIYE</div></div><div class="vs" id="featMid">VS</div><div class="team"><div class="fl">🇵🇾</div><div class="tn">PARAGUAY</div></div></div>
+          <div class="when">Fri, Jun 19 · 8:00 PM PT · Levi's Stadium</div><div class="cd" id="featCd"></div>
+        </div></div>
+        <div class="sectitle">GROUP D · STANDINGS</div>
+        <div class="table" id="standings"></div>
+        <div class="sectitle">GROUP D · FIXTURES</div>
+        <div id="fixtures"></div>
+        <div class="databanner">⚡ <b>Demo data.</b> Live scores, standings & cards update in real time once connected to the football feed in the live app.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div class="panel" id="tab-games">
+    <div class="scrollarea">
+      <div class="games">
+        <div class="h">Games</div>
+        <div class="hsub">Play through the trip · earn bragging rights</div>
+        <div class="gamegrid" id="gamegrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YOU -->
+  <div class="panel" id="tab-you">
+    <div class="scrollarea">
+      <div class="youpage">
+        <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys" id="youSub">Riding the West Coast Run</div></div></div>
+        <div class="sectitle">SWITCH RIDER</div>
+        <div class="peoplelist" id="youList"></div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="trip"><span class="ic">🛣️</span>Trip</button>
+    <button class="tab" data-tab="wc"><span class="ic">⚽</span>World Cup</button>
+    <button class="tab" data-tab="games"><span class="ic">🎮</span>Games</button>
+    <button class="tab" data-tab="you"><span class="ic">👤</span>You</button>
+  </div>
+</div>
+
+<!-- city + subscreens -->
+<div class="screen" id="city"><div class="fbg" id="cityBg"></div><div class="inner"><div class="scroll"><div class="back" id="cityBack">‹ Trip</div><div class="fhero" id="cityHero"></div><div class="fbody" id="cityBody"></div></div></div></div>
+<div class="screen sub2" id="flight"><div class="inner"><div class="scroll" id="flightScroll"></div></div></div>
+<div class="screen sub2" id="lodging"><div class="inner"><div class="scroll" id="lodgingScroll"></div></div></div>
+<div class="screen sub2" id="cars"><div class="inner"><div class="scroll" id="carsScroll"></div></div></div>
+<div class="screen sub2" id="res"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('res')">‹ Back</div><div class="ph"><b>Reservations</b>Dinners & bookings — name, time, party size, confirmation.</div></div></div></div>
+<div class="screen sub2" id="places"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('places')">‹ Back</div><div class="ph"><b>Places</b>Spots to see & eat near you — photo, distance, category.</div></div></div></div>
+<div class="screen sub2" id="panini"><div class="inner"><div class="scroll" id="paniniScroll"></div></div></div>
+
+<script>
+const ACC=["#ff6b4a","#ffb347","#ff4d8d","#4ad6c4","#7c8cff","#ffd447"];
+const G={sun:["#ffd166","☀️"],flight:["#5ab0ff","✈️"],drive:["#ff8a5c","🚗"],bed:["#c08cff","🛏️"],place:["#4ad6c4","📍"],food:["#ff9f6b","🍽️"],match:["#ff5e3a","⚽"],train:["#7c8cff","🚆"]};
+const PEOPLE=[
+ {id:0,name:"Emre",  origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale"},
+ {id:1,name:"KD",    origin:"Already in SF",originCode:"SFO", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale"},
+ {id:2,name:"Ali",   origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale"},
+ {id:3,name:"Ali K", origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale"},
+ {id:4,name:"Mekin", origin:"Chicago",     originCode:"ORD", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale"},
+ {id:5,name:"Kaan",  origin:"Arizona",     originCode:"PHX", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale"},
+];
+const SHARED=[
+ {label:"Residence Inn Sunnyvale",total:370.76,city:1},
+ {label:"Portola Hotel — Monterey",total:634.75,city:2},
+ {label:"Santa Barbara hotel",total:0,city:3},
+ {label:"Santa Monica hotel",total:0,city:4},
+ {label:"2× Jeep Wrangler",total:807.56,city:2},
+ {label:"Full-size SUV",total:179.82,city:3},
+];
+function share(c){return c.total/PEOPLE.length;}
+const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+
+const CITIES=[
+ {n:"01",name:"San Francisco",dates:"Jun 17–19",wx:"17°/22°",bg:"linear-gradient(150deg,#e8854f,#7a3a63 55%,#241a3a)",day:"Wed, Jun 17",flag:"🌉",teaser:"Everyone lands · the city",flightIn:true,
+  items:[["flight","Everyone arrives SF","From SD · Chicago · AZ",""],["place","Explore the city","Golden Gate · Wharf",""],["food","Group dinner","",""]]},
+ {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(150deg,#6b3a9e,#ff5e3a 70%,#1a1030)",day:"Fri, Jun 19",flag:"⚽",teaser:"Match day · Levi's",match:true,
+  items:[["match","Match @ Levi's Stadium","Santa Clara · 8 PM","8:00p"],["bed","Residence Inn Sunnyvale","Penthouse · check-in 3 PM",""]]},
+ {n:"03",name:"Monterey / Carmel",dates:"Jun 20–21",wx:"18°/24°",bg:"linear-gradient(150deg,#4cbf9a,#1f5a52 60%,#0f2b2e)",day:"Sat, Jun 20",flag:"🌲",teaser:"Wranglers up · 17-Mile Drive",
+  items:[["drive","Pick up 2× Jeep Wrangler","Santa Clara · 9:30 AM","9:30a"],["place","17-Mile Drive","Pebble Beach",""],["bed","Portola Hotel & Spa","Monterey · check-in 3 PM",""]]},
+ {n:"04",name:"Big Sur → SB",dates:"Jun 21–22",wx:"19°/23°",bg:"linear-gradient(150deg,#ffb347,#ff6b4a 55%,#163a4f)",day:"Sun, Jun 21",flag:"🌊",teaser:"The PCH run · top down",
+  items:[["drive","Big Sur drive","Bixby · McWay",""],["drive","Drop Wranglers","Mon Jun 22 · 9:30 AM","9:30a"],["drive","Pick up SUV","Jun 22 · 6:30 PM","6:30p"],["bed","Santa Barbara overnight","",""]]},
+ {n:"05",name:"Santa Monica / LA",dates:"Jun 22–23",wx:"21°/26°",bg:"linear-gradient(150deg,#ffd166,#ff7eb3 55%,#6a5acd)",day:"Tue, Jun 23",flag:"🌴",teaser:"Pier · beach · LAX out",
+  items:[["place","Santa Monica Pier","Ferris wheel + beach",""],["drive","Drop SUV","Jun 23 · 6:15 PM","6:15p"],["bed","Last night on the coast","",""]]}
+];
+const LODGING={
+ 1:{name:"Residence Inn Sunnyvale Silicon Valley I",addr:"750 Lakeway Dr, Sunnyvale, CA 94085",ci:"Jun 19 · 3:00 PM",co:"Jun 20 · 11:00 AM",conf:"72073179604705",total:370.76,rooms:"1× Penthouse, 2 Bedrooms"},
+ 2:{name:"Portola Hotel & Spa at Monterey Bay",addr:"Two Portola Plaza, Monterey, CA 93940",ci:"Jun 20 · 3:00 PM",co:"Jun 21 · 11:00 AM",conf:"72073355187522",total:634.75,rooms:"2× Portola Room, Two Queen Beds"},
+};
+const GAMES=[
+ {id:"panini",name:"Panini Sticker Book",sub:"Collect the squad",icon:"🎴",bg:"linear-gradient(150deg,#ff5e3a,#b3279a)",live:true},
+ {id:"bingo",name:"Football Bingo",sub:"Match-day card",icon:"🎱",bg:"linear-gradient(150deg,#4cbf9a,#1f5a72)",live:false},
+ {id:"predict",name:"Score Predictions",sub:"Call the games",icon:"🎯",bg:"linear-gradient(150deg,#7c8cff,#3a2a8c)",live:false},
+ {id:"bracket",name:"Bracket Challenge",sub:"Pick the winner",icon:"🏆",bg:"linear-gradient(150deg,#ffd166,#ff7e54)",live:false},
+];
+const SQUAD=[
+ {name:"EMRE",pos:"GK",c:"#ff6b4a",flag:"🇹🇷",num:1,rare:true},
+ {name:"KD",pos:"CB",c:"#ffb347",flag:"🇹🇷",num:4},
+ {name:"ALI",pos:"CB",c:"#ff4d8d",flag:"🇹🇷",num:5},
+ {name:"ALI K",pos:"CM",c:"#4ad6c4",flag:"🇹🇷",num:8},
+ {name:"MEKIN",pos:"CM",c:"#7c8cff",flag:"🇺🇸",num:10},
+ {name:"KAAN",pos:"ST",c:"#ffd447",flag:"🇹🇷",num:9,rare:true},
+];
+
+const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-06-19T20:00:00-07:00");
+let ME=PEOPLE[0], curCity=0, paniniCollected=1;
+
+/* ---- picker ---- */
+const peopleEl=document.getElementById('people');
+PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
+ b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
+function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');}
+document.getElementById('riderBtn').onclick=()=>document.getElementById('picker').classList.remove('gone');
+function syncRider(){const a=document.getElementById('av');a.textContent=inits(ME.name);a.style.background=ACC[ME.id%6];
+ document.getElementById('riderName').textContent=ME.name;
+ document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
+ document.getElementById('youName').textContent=ME.name;
+ buildNext();buildYouList();}
+
+/* ---- puzzles ---- */
+function makePuzzle(host,cols,rows,scatter){host.innerHTML="";const arr=[];
+ for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const p=document.createElement('div');p.className='pc';const w=100/cols,h=100/rows;
+  p.style.left=c*w+'%';p.style.top=r*h+'%';p.style.width=w+'%';p.style.height=h+'%';
+  p.style.backgroundSize=cols*100+'% '+rows*100+'%';p.style.backgroundPosition=`${(c/(cols-1))*100}% ${(r/(rows-1))*100}%`;
+  const a=Math.random()*6.28,d=scatter*(0.5+Math.random());p.style.setProperty('--tx',Math.cos(a)*d+'px');p.style.setProperty('--ty',(Math.sin(a)*d-scatter*0.3)+'px');p.style.setProperty('--rot',(Math.random()*140-70)+'deg');
+  host.appendChild(p);arr.push(p);}
+ return {arr,total:arr.length,order:[...arr.keys()].sort(()=>Math.random()-0.5)};}
+const big=makePuzzle(document.getElementById('puzzleBig'),7,11,160);
+const cardP=makePuzzle(document.getElementById('puzzleCard'),6,4,40);
+function shatter(P,rem){const k=Math.round(Math.pow(1-rem/WINDOW,1.7)*P.total);P.order.forEach((idx,rank)=>P.arr[idx].classList.toggle('gone',rank<k));}
+function rowHTML(dd,hh,mm){return [[dd,"DAYS"],[hh,"HRS"],[mm,"MIN"]].map(c=>`<div class="u"><div class="n">${String(c[0]).padStart(2,"0")}</div><div class="l">${c[1]}</div></div>`).join("");}
+function tick(){const ms=Math.max(0,START-Date.now());const dd=Math.floor(ms/864e5),hh=Math.floor(ms%864e5/36e5),mm=Math.floor(ms%36e5/6e4);
+ document.getElementById('trowBig').innerHTML=rowHTML(dd,hh,mm);document.getElementById('trowSm').innerHTML=rowHTML(dd,hh,mm);
+ const rem=Math.max(0,Math.min(WINDOW,ms/864e5));shatter(big,rem);shatter(cardP,rem);
+ // WC featured countdown
+ const kms=KICK-Date.now();const fc=document.getElementById('featCd');
+ if(kms<=0){document.getElementById('featState').textContent="LIVE";document.getElementById('featMid').textContent="0 - 0";if(fc)fc.textContent="KICKOFF!";}
+ else if(fc){const kd=Math.floor(kms/864e5),kh=Math.floor(kms%864e5/36e5),km=Math.floor(kms%36e5/6e4);fc.textContent=`KICKOFF IN ${kd}d ${kh}h ${km}m`;}
+}
+tick();setInterval(tick,1000);
+
+function buildNext(){const txt=ME.originCode==="SFO"?"You're already in San Francisco":`Fly to San Francisco from ${ME.origin}`;document.getElementById('nextup').innerHTML=`<span class="d">🛫</span><div><b>Next up: ${txt}</b><small>Wed Jun 17 · arriving SFO</small></div>`;}
+
+/* ---- carousel ---- */
+const car=document.getElementById('carousel');
+CITIES.forEach((c,i)=>{const el=document.createElement('div');el.className='ccard';
+ el.innerHTML=`<div class="cg" style="background:${c.bg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${c.dates}</div><div class="teaser">${c.teaser}</div><span class="go">More ›</span></div>`;
+ el.onclick=()=>openCity(i);car.appendChild(el);});
+
+/* ---- city screen ---- */
+const bg=document.getElementById('bg');
+function openCity(i){curCity=i;const c=CITIES[i];
+ document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
+ document.getElementById('cityHero').innerHTML=`<div class="hf">${c.flag}</div><div class="hn">${c.name}</div><div class="hd">${c.dates} · ${c.day}</div><div class="hwx">☀️ ${c.wx}</div>`;
+ let flag="";
+ if(c.flightIn)flag=`<div class="you" style="color:#5ab0ff">${ME.originCode==="SFO"?"You're already in SF":`You fly in from ${ME.origin}`}</div>`;
+ else if(c.match)flag=`<div class="you" style="color:#ff8a5c">Match day · everyone at Levi's</div>`;
+ const costRows=SHARED.filter(s=>s.city===i&&s.total>0).map(s=>[s.label+" (÷6)",money(share(s))]);
+ const flightBanner=(c.flightIn&&ME.originCode!=="SFO")?`<div class="flightbanner" onclick="openS('flight')"><div class="tn">YOUR FLIGHT IN</div><div class="fl"><div class="ap"><div class="code">${ME.originCode}</div><div class="c2">${ME.origin}</div><div class="tt">— : —</div></div><div class="ln">✈</div><div class="ap r"><div class="code">SFO</div><div class="c2">San Francisco</div><div class="tt">— : —</div></div></div><div class="more">Add your flight receipt ›</div></div>`:(c.flightIn?`<div class="flightbanner" style="border-color:#ffffff22"><div class="tn">NO FLIGHT — ALREADY IN SF</div><div style="text-align:center;font-size:13px;color:#ffffffb0">${ME.name} is already in San Francisco</div></div>`:"");
+ document.getElementById('cityBody').innerHTML=`${flag}
+  <div class="qa"><button onclick="openS('lodging')"><span class="qc">🛏️</span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc">📅</span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc">🚗</span><small>Cars</small></button><button onclick="openS('places')"><span class="qc">📍</span><small>Places</small></button></div>
+  ${flightBanner}
+  <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
+  ${c.items.map(it=>{const g=G[it[0]];return `<div class="it ${it[0]==='match'?'match':''}"><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span></div>`}).join("")}
+  <div class="viewall">View all days ›</div>
+  <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
+  <div class="exp hidden" id="exp"><div class="eh"><b>${ME.name}'s share</b><button class="eye" id="eye">👁️</button></div>
+   ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
+ document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
+ document.getElementById('city').classList.add('on');
+}
+document.getElementById('cityBack').onclick=()=>{document.getElementById('city').classList.remove('on');resetBg();};
+function resetBg(){bg.style.background="radial-gradient(130% 80% at 70% -5%,#ff5e3a22,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f";}
+
+function openS(id){if(id==='flight')buildFlight();if(id==='lodging')buildLodging();if(id==='cars')buildCars();document.getElementById(id).classList.add('on');}
+function closeS(id){document.getElementById(id).classList.remove('on');}
+window.openS=openS;window.closeS=closeS;
+
+function buildFlight(){document.getElementById('flightScroll').innerHTML=`
+ <div class="back" onclick="closeS('flight')">‹ ${CITIES[curCity].name}</div>
+ <div class="map"><svg viewBox="0 0 440 190" preserveAspectRatio="xMidYMid slice"><rect width="440" height="190" fill="#0d1a2e"/><path d="M40,115 Q220,10 400,140" fill="none" stroke="#5ab0ff" stroke-width="2.5" stroke-dasharray="4 6"/><circle cx="40" cy="115" r="6" fill="#5ab0ff"/><circle cx="400" cy="140" r="6" fill="#5ab0ff"/><text x="40" y="135" fill="#fff" font-size="12" font-weight="700">${ME.originCode}</text><text x="382" y="162" fill="#fff" font-size="12" font-weight="700">SFO</text><text x="218" y="36" fill="#9fd0ff" font-size="16">✈</text></svg></div>
+ <div class="fd-card"><div class="fd-route">${ME.origin} → San Francisco</div><div class="fd-no">Wed, Jun 17 · add receipt for details</div>
+  <div class="fd-leg"><div class="l"><div class="code">${ME.originCode}</div><div class="ap">${ME.origin}</div><div class="tg">Terminal — · Gate —</div></div><div class="r"><div class="t">— : —</div><div class="d">Jun 17</div></div></div>
+  <div class="fd-leg"><div class="l"><div class="code">SFO</div><div class="ap">San Francisco Intl</div><div class="tg">Terminal — · Gate —</div></div><div class="r"><div class="t">— : —</div><div class="d">Jun 17</div></div></div></div>
+ <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>—</b></div><div class="fd-chip"><small>SEAT</small><b>—</b></div><div class="fd-chip"><small>STATUS</small><b class="ok">Add receipt</b></div></div>`;}
+function buildLodging(){const c=CITIES[curCity];const L=LODGING[curCity];
+ if(!L){document.getElementById('lodgingScroll').innerHTML=`<div class="back" onclick="closeS('lodging')">‹ ${c.name}</div><div class="ph"><b>Lodging</b>Hotel for ${c.name} not added yet — drop the receipt and I'll fill it in.</div>`;return;}
+ const cost=L.total/PEOPLE.length;
+ document.getElementById('lodgingScroll').innerHTML=`<div class="back" onclick="closeS('lodging')">‹ ${c.name}</div>
+ <div class="lhero"><div class="lt"><div class="ln2">${L.name.split(' ').slice(0,3).join(' ')}</div><div class="ls">${c.name}</div></div></div>
+ <div class="lbody"><div class="lgrid"><div class="lcell"><small>CHECK-IN</small><b>${L.ci.split(' · ')[0]}</b><div class="sub">${L.ci.split(' · ')[1]}</div></div><div class="lcell"><small>CHECK-OUT</small><b>${L.co.split(' · ')[0]}</b><div class="sub">${L.co.split(' · ')[1]}</div></div><div class="lcell"><small>GUESTS</small><b>6</b><div class="sub">group</div></div></div>
+  <div class="yourroom"><div class="k">YOUR ROOM</div><div class="v">${ME.room}</div><div class="vs">${ME.roomNote}</div></div>
+  <div class="lcard"><div class="k">ROOMS</div><div class="v">${L.rooms}</div></div>
+  <div class="lcard"><div class="k">ADDRESS</div><div class="v">${L.name}</div><div class="vs">${L.addr}</div><span class="lbtn">Directions ›</span></div>
+  <div class="lcard"><div class="k">CONFIRMATION</div><div class="v">${L.conf}</div></div>
+  <div class="lcard"><div class="k">YOUR COST SHARE</div><div class="v">${money(cost)}</div><div class="vs">${money(L.total)} total ÷ 6</div></div></div>`;}
+function buildCars(){const cars=[
+  {name:"Jeep Wrangler #1",type:"Open-air 4WD · 4 passengers",pick:"Jun 20 · 9:30 AM",drop:"Jun 22 · 9:30 AM",total:410.07,conf:"73452524856605"},
+  {name:"Jeep Wrangler #2",type:"Open-air 4WD · 4 passengers",pick:"Jun 20 · 9:30 AM",drop:"Jun 22 · 9:30 AM",total:397.49,conf:"73463265910668"},
+  {name:"Full-size SUV",type:"7 passengers · Tahoe class",pick:"Jun 22 · 6:30 PM",drop:"Jun 23 · 6:15 PM",total:179.82,conf:"73425481040001"}];
+ const grand=cars.reduce((s,c)=>s+c.total,0);
+ document.getElementById('carsScroll').innerHTML=`<div class="back" onclick="closeS('cars')">‹ ${CITIES[curCity].name}</div>
+  <div class="fhero" style="padding-bottom:6px"><div class="hf">🚗</div><div class="hn" style="font-size:38px">Cars</div><div class="hd">Wranglers for the coast · SUV to LA</div></div>
+  <div style="padding:6px 18px 40px">${cars.map(c=>`<div class="lcard"><div class="v" style="font-size:17px">${c.name}</div><div class="vs" style="margin-bottom:8px">${c.type}</div><div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>PICK-UP</small><b>${c.pick.split(' · ')[0]}</b><div class="sub">${c.pick.split(' · ')[1]}</div></div><div class="lcell"><small>DROP-OFF</small><b>${c.drop.split(' · ')[0]}</b><div class="sub">${c.drop.split(' · ')[1]}</div></div></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#ffffff90">Conf ${c.conf}</span><span style="font-family:'Space Mono',monospace;font-weight:700">${money(c.total)}</span></div></div>`).join("")}
+  <div class="lcard" style="border-color:#ff8a4d55"><div class="k">YOUR SHARE OF CARS</div><div class="v" style="color:#ff8a4d">${money(grand/PEOPLE.length)}</div><div class="vs">${money(grand)} total ÷ 6</div></div></div>`;}
+
+/* ---- WORLD CUP ---- */
+const GROUP_D=[{pos:1,name:"Türkiye",flag:"🇹🇷",p:0,w:0,d:0,pts:0,us:true},{pos:2,name:"Paraguay",flag:"🇵🇾",p:0,w:0,d:0,pts:0},{pos:3,name:"Team C",flag:"⚪",p:0,w:0,d:0,pts:0},{pos:4,name:"Team D",flag:"⚪",p:0,w:0,d:0,pts:0}];
+document.getElementById('standings').innerHTML=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+GROUP_D.map(t=>`<div class="trow ${t.us?'us':''}"><span class="pos">${t.pos}</span><span class="tm">${t.flag} ${t.name}</span><span class="num">${t.p}</span><span class="num">${t.w}</span><span class="num">${t.d}</span><span class="pts">${t.pts}</span></div>`).join("");
+const FIX=[{a:"🇹🇷 Türkiye",b:"🇵🇾 Paraguay",sc:"— : —",stat:"FRI JUN 19 · 8:00 PM"},{a:"⚪ Team C",b:"⚪ Team D",sc:"— : —",stat:"FRI JUN 19 · 5:00 PM"},{a:"🇹🇷 Türkiye",b:"⚪ Team C",sc:"— : —",stat:"TUE JUN 23"},{a:"🇵🇾 Paraguay",b:"⚪ Team D",sc:"— : —",stat:"TUE JUN 23"}];
+document.getElementById('fixtures').innerHTML=FIX.map(f=>`<div class="fxcard"><div class="ft">${f.a}</div><div style="text-align:center"><div class="fsc">${f.sc}</div><div class="fstat">${f.stat}</div></div><div class="ft" style="justify-content:flex-end">${f.b}</div></div>`).join("");
+
+/* ---- GAMES ---- */
+const gg=document.getElementById('gamegrid');
+GAMES.forEach(g=>{const el=document.createElement('div');el.className='gcard';
+ el.innerHTML=`<div class="gg" style="background:${g.bg}"></div>${g.live?'':'<span class="soon">SOON</span>'}<div class="gi">${g.icon}</div><div class="gt"><b>${g.name}</b><small>${g.sub}</small></div>`;
+ el.onclick=()=>{if(g.id==='panini'){buildPanini();document.getElementById('panini').classList.add('on');}};
+ gg.appendChild(el);});
+
+function stickerHTML(p){return `<div style="position:absolute;inset:0;border-radius:11px;overflow:hidden;padding:6px 5px;background:linear-gradient(160deg,${p.c},#150f25 80%);border:2px solid #ffce6e;box-shadow:inset 0 0 16px #ffffff14;display:flex;flex-direction:column">${p.rare?'<div style="position:absolute;top:4px;right:6px;font-size:10px">⭐</div>':''}<div style="font-size:8px;font-weight:800;opacity:.9">${p.pos} · #${p.num}</div><div style="width:30px;height:30px;border-radius:50%;background:#e8b58c;border:2px solid #ffffff55;margin:5px auto 3px"></div><div style="text-align:center;font-family:'Anton',sans-serif;font-size:11px">${p.name}</div><div style="display:flex;justify-content:space-between;margin-top:auto;font-family:'Space Mono',monospace;font-size:7px;opacity:.85"><span>WCR'26</span><span>${p.flag}</span></div></div>`;}
+function buildPanini(){document.getElementById('paniniScroll').innerHTML=`
+ <div class="back" onclick="closeS('panini')">‹ Games</div>
+ <div style="text-align:center;padding:8px 16px 4px"><div style="font-size:11px;letter-spacing:.24em;color:#ffd166;font-weight:800">PANINI · WEST COAST RUN</div><div style="font-family:'Anton',sans-serif;font-size:28px">THE SQUAD ALBUM</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#ffffffaa" id="palbumCount">${paniniCollected} / 6 collected</div></div>
+ <div style="padding:14px 16px 30px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px" id="pgrid"></div>
+ <button id="popenBtn" style="width:100%;margin-top:16px;background:linear-gradient(120deg,#ff6b4a,#ff4d8d);color:#0e0f1a;border:none;border-radius:14px;padding:14px;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer">OPEN TODAY'S PACK ✦</button>
+ <div style="font-size:11px;color:#ffffff88;text-align:center;margin-top:10px">A new pack every day until kickoff</div></div>`;
+ renderPGrid();
+ document.getElementById('popenBtn').onclick=()=>{if(paniniCollected<6){paniniCollected++;renderPGrid();}};
+}
+function renderPGrid(){const g=document.getElementById('pgrid');if(!g)return;g.innerHTML="";
+ SQUAD.forEach((p,i)=>{const s=document.createElement('div');s.style.cssText="aspect-ratio:3/4.2;border-radius:11px;position:relative";
+  s.innerHTML=i<paniniCollected?stickerHTML(p):`<div style="position:absolute;inset:0;border:2px dashed #ffffff22;background:#ffffff08;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#ffffff44"><div style="font-family:'Anton',sans-serif;font-size:22px">?</div><div style="font-size:9px;letter-spacing:.1em;font-weight:700">${p.pos}</div></div>`;
+  g.appendChild(s);});
+ const cnt=document.getElementById('palbumCount');if(cnt)cnt.textContent=`${paniniCollected} / 6 collected`;
+ const b=document.getElementById('popenBtn');if(b&&paniniCollected>=6){b.textContent="ALBUM COMPLETE ✦";b.style.background="#ffffff14";b.style.color="#ffffff77";}
+}
+
+/* ---- YOU ---- */
+function buildYouList(){const l=document.getElementById('youList');l.innerHTML="";
+ PEOPLE.forEach(p=>{const el=document.createElement('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
+  el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
+  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
+
+/* ---- tabs ---- */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+ const id=t.dataset.tab;
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
+ if(id==='trip'){const a=document.querySelector('#city.on');if(!a)resetBg();}
+ else resetBg();
+});
+
+document.getElementById('tripScroll').addEventListener('scroll',()=>{document.getElementById('topbar').classList.toggle('solid',document.getElementById('tripScroll').scrollTop>40);});
+const _rp=new URLSearchParams(location.search).get('rider');if(_rp!==null&&PEOPLE[+_rp])ME=PEOPLE[+_rp];
+syncRider();
+</script>
