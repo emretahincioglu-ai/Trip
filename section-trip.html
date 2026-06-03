@@ -2,6 +2,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>West Coast Run</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -30,7 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .scrollarea{flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .scrollarea::-webkit-scrollbar{display:none;}
 
-.topbar{position:sticky;top:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;transition:background .25s;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 10px;}
 .topbar.solid{backdrop-filter:blur(12px);background:rgba(10,11,20,.8);}
 .rider{display:flex;align-items:center;gap:8px;cursor:pointer;}
 .av{width:30px;height:30px;border-radius:50%;color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;}
@@ -42,7 +44,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .puzzle{position:absolute;inset:0;}
 .pc{position:absolute;background-image:radial-gradient(circle at 25% 18%,#9fb2c8 0 3%,transparent 14%),linear-gradient(180deg,#2a3a52,#3d5571 48%,#536b88 74%,#101a2c 100%);background-repeat:no-repeat;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .9s,filter .9s;outline:.5px solid #00000022;}
 .pc.gone{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.55);opacity:0;filter:blur(1px);}
-.hero{height:calc(100dvh - 120px);position:relative;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;}
+.hero{height:100dvh;width:100%;position:relative;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;}
 .hero .photo .tag{position:absolute;left:0;right:0;bottom:64px;text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;color:#fff;opacity:.7;}
 .tov{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-shadow:0 3px 24px #000c;}
 .tov .kick{font-size:12px;letter-spacing:.24em;font-weight:700;}
@@ -51,14 +53,30 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .hint{position:absolute;bottom:14px;left:0;right:0;z-index:3;text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffffcc;animation:bob 1.8s infinite;}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-.trip-scroll{scroll-snap-type:y proximity;scroll-padding-top:52px;}
-.home{padding:18px 16px 30px;scroll-snap-align:start;}
+.trip-scroll{scroll-snap-type:y mandatory;}
+.home{padding:14px 16px 30px;scroll-snap-align:start;min-height:100dvh;}
 .shatcard{height:150px;border-radius:20px;overflow:hidden;position:relative;box-shadow:0 14px 36px #0008;}
 .shatcard .tov2{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-shadow:0 2px 16px #000b;}
 .shatcard .kick{font-size:10px;letter-spacing:.2em;font-weight:700;}
 .shatcard .row{display:flex;gap:12px;margin-top:6px;}.shatcard .u{text-align:center;}.shatcard .n{font-family:'Anton',sans-serif;font-size:26px;line-height:1;}.shatcard .l{font-size:8px;letter-spacing:.14em;opacity:.85;}
 .nextup{margin-top:14px;background:#ffffff10;border:1px solid #ffffff18;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;}.nextup .d{font-size:18px;}.nextup b{font-size:13.5px;}.nextup small{font-size:12px;color:#ffffff99;display:block;}
 .clabel{display:flex;justify-content:space-between;align-items:baseline;margin:22px 2px 12px;}.clabel b{font-size:15px;}.clabel small{font-size:11px;color:#ffffff80;}
+/* view toggle */
+.viewtog{display:flex;gap:6px;background:#ffffff10;border:1px solid #ffffff18;border-radius:999px;padding:4px;margin:20px 0 4px;}
+.vt{flex:1;background:none;border:none;color:#ffffff80;font-family:inherit;font-size:13px;font-weight:700;padding:9px;border-radius:999px;cursor:pointer;transition:.25s;}
+.vt.on{background:#fff;color:#12131f;}
+/* overview type cards */
+.ovgrid{display:flex;flex-direction:column;gap:12px;margin-top:14px;animation:ovin .4s ease;}
+@keyframes ovin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ovcard{position:relative;border-radius:18px;overflow:hidden;padding:18px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;box-shadow:0 12px 30px #0007;transition:transform .15s;}
+.ovcard:active{transform:scale(.97);}
+.ovcard .ovg{position:absolute;inset:0;z-index:0;opacity:.92;}
+.ovcard .ovtop{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;}
+.ovcard .ovic{font-size:30px;}
+.ovcard .ovcount{font-family:'Space Mono',monospace;font-size:12px;background:#0003;backdrop-filter:blur(4px);padding:5px 10px;border-radius:999px;font-weight:700;}
+.ovcard .ovbot{position:relative;z-index:1;}
+.ovcard .ovname{font-family:'Anton',sans-serif;font-size:26px;line-height:.95;}
+.ovcard .ovsub{font-size:12px;color:#ffffffce;margin-top:3px;}
 .carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-ms-overflow-style:none;scrollbar-width:none;}.carousel::-webkit-scrollbar{display:none;}
 .ccard{flex:none;width:76%;scroll-snap-align:center;height:300px;border-radius:22px;overflow:hidden;position:relative;cursor:pointer;border:1px solid #ffffff18;}
 .ccard .cg{position:absolute;inset:0;}.ccard .cg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0002,#0006 45%,#000d);}
@@ -84,6 +102,12 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .flightbanner .fl{display:flex;align-items:center;gap:10px;}.flightbanner .ap{flex:1;}.flightbanner .ap.r{text-align:right;}.flightbanner .code{font-family:'Anton',sans-serif;font-size:28px;line-height:1;}.flightbanner .c2{font-size:10px;color:#ffffffa0;}.flightbanner .tt{font-family:'Space Mono',monospace;font-size:11px;color:#5ab0ff;margin-top:2px;}.flightbanner .ln{color:#5ab0ff;}.flightbanner .more{text-align:center;font-size:11px;color:#9fd0ff;margin-top:8px;font-weight:600;}
 .ith{display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;}.ith b{font-size:16px;}.ith small{font-family:'Space Mono',monospace;font-size:11px;color:#ffffff90;}
 .it{display:flex;gap:12px;padding:10px 0;align-items:flex-start;border-top:1px solid #ffffff10;}.it:first-of-type{border:none;}.it .g{width:32px;height:32px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;}.it .mid{flex:1;}.it .mid b{font-size:14px;display:block;}.it .mid small{font-size:12px;color:#ffffff90;}.it .tm{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffa0;padding-top:3px;}.it.match .mid b{color:#ff8a5c;}
+.itog{display:flex;gap:4px;background:#ffffff14;border-radius:999px;padding:3px;}
+.itb{background:none;border:none;color:#ffffff90;font-family:inherit;font-size:11px;font-weight:700;padding:5px 13px;border-radius:999px;cursor:pointer;}
+.itb.on{background:#fff;color:#12131f;}
+.mapbox{width:100%;height:420px;border-radius:16px;overflow:hidden;margin-top:6px;background:#1a1d2e;}
+.mappin{width:26px;height:26px;border-radius:50% 50% 50% 0;background:#ff5e3a;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 8px #0007;display:flex;align-items:center;justify-content:center;}
+.mappin span{transform:rotate(45deg);font-size:11px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;}
 .viewall{color:#ff8a5c;font-size:13px;font-weight:600;padding:12px 0;}
 .exp{background:#12131fcc;backdrop-filter:blur(10px);border:1px solid #ffffff16;border-radius:16px;padding:14px;margin-top:6px;}.exp.hidden .ev{filter:blur(7px);}
 .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}.eh b{font-size:14px;}.eye{background:#ffffff14;border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;}
@@ -179,21 +203,25 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
   <div class="panels">
   <div class="panel on" id="tab-trip">
     <div class="scrollarea trip-scroll" id="tripScroll">
-      <div class="topbar" id="topbar">
-        <div class="rider" id="riderBtn" title="Switch rider"><span class="av" id="av">EM</span><div><small>RIDING AS · TAP TO SWITCH</small><b id="riderName">Emre</b></div></div>
-        <div class="flags">🇹🇷 🇺🇸</div>
-      </div>
-      <div class="hero">
+      <div class="hero" id="lockHero">
         <div class="photo"><div class="tag">↑ YOUR PHOTO HERE (revealed as it shatters)</div></div>
         <div class="puzzle" id="puzzleBig"></div>
         <div class="tov"><div class="kick">WHEELS UP IN</div><div class="row" id="trowBig"></div><div class="ttl">WEST COAST RUN</div></div>
-        <div class="hint">SCROLL ↓</div>
+        <div class="hint">SWIPE UP ↑</div>
       </div>
       <div class="home">
-        <div class="shatcard"><div class="photo"></div><div class="puzzle" id="puzzleCard"></div><div class="tov2"><div class="kick">WHEELS UP IN</div><div class="row" id="trowSm"></div></div></div>
+        <div class="topbar" id="topbar">
+          <div class="rider" id="riderBtn" title="Switch rider"><span class="av" id="av">EM</span><div><small>RIDING AS · TAP TO SWITCH</small><b id="riderName">Emre</b></div></div>
+          <div class="flags">🇹🇷 🇺🇸</div>
+        </div>
+        <div class="shatcard" onclick="document.getElementById('lockHero').scrollIntoView({behavior:'smooth'})"><div class="photo"></div><div class="puzzle" id="puzzleCard"></div><div class="tov2"><div class="kick">WHEELS UP IN</div><div class="row" id="trowSm"></div></div></div>
         <div class="nextup" id="nextup"></div>
-        <div class="clabel"><b>Your stops</b><small>swipe →</small></div>
-        <div class="carousel" id="carousel"></div>
+        <div class="viewtog"><button class="vt on" id="vtCity" onclick="setTripView('city')">By City</button><button class="vt" id="vtOver" onclick="setTripView('over')">Overview</button></div>
+        <div id="viewCity">
+          <div class="clabel"><b>Your stops</b><small>swipe →</small></div>
+          <div class="carousel" id="carousel"></div>
+        </div>
+        <div id="viewOver" style="display:none"></div>
       </div>
     </div>
   </div>
@@ -255,7 +283,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 <div class="screen sub2" id="flight"><div class="inner"><div class="scroll" id="flightScroll"></div></div></div>
 <div class="screen sub2" id="lodging"><div class="inner"><div class="scroll" id="lodgingScroll"></div></div></div>
 <div class="screen sub2" id="cars"><div class="inner"><div class="scroll" id="carsScroll"></div></div></div>
-<div class="screen sub2" id="res"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('res')">‹ Back</div><div class="ph"><b>Reservations</b>Dinners & bookings — name, time, party size, confirmation.</div></div></div></div>
+<div class="screen sub2" id="res"><div class="inner"><div class="scroll" id="resScroll"></div></div></div>
 <div class="screen sub2" id="places"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('places')">‹ Back</div><div class="ph"><b>Places</b>Spots to see & eat near you — photo, distance, category.</div></div></div></div>
 <div class="screen sub2" id="panini"><div class="inner"><div class="scroll" id="paniniScroll"></div></div></div>
 
@@ -263,40 +291,93 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 const ACC=["#ff6b4a","#ffb347","#ff4d8d","#4ad6c4","#7c8cff","#ffd447"];
 const G={sun:["#ffd166","☀️"],flight:["#5ab0ff","✈️"],drive:["#ff8a5c","🚗"],bed:["#c08cff","🛏️"],place:["#4ad6c4","📍"],food:["#ff9f6b","🍽️"],match:["#ff5e3a","⚽"],train:["#7c8cff","🚆"]};
 const PEOPLE=[
- {id:0,name:"Emre",  origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale"},
- {id:1,name:"KD",    origin:"Already in SF",originCode:"SFO", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale"},
- {id:2,name:"Ali",   origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale"},
- {id:3,name:"Ali K", origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale"},
- {id:4,name:"Mekin", origin:"Chicago",     originCode:"ORD", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale"},
- {id:5,name:"Kaan",  origin:"Arizona",     originCode:"PHX", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale"},
+ {id:0,name:"Emre",  origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale",
+  flights:[
+   {leg:"to-sd", from:"EWR",fromCity:"Newark/NYC",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"UA 1826",airline:"United",dep:"4:59 PM",arr:"7:52 PM",seat:"",cls:"Economy",price:null},
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
+  ]},
+ {id:1,name:"KD",    origin:"Already in SF",originCode:"SFO", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale",
+  flights:[
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
+  ]},
+ {id:2,name:"Ali",   origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale",
+  flights:[
+   {leg:"to-sd", from:"EWR",fromCity:"Newark/NYC",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"UA 1826",airline:"United",dep:"4:59 PM",arr:"7:52 PM",seat:"",cls:"Economy",price:null},
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
+  ]},
+ {id:3,name:"Ali K", origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale",
+  flights:[
+   {leg:"to-sd", from:"JFK",fromCity:"New York",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"DL 685",airline:"Delta",dep:"8:29 PM",arr:"11:39 PM",seat:"",cls:"Main Basic",price:null},
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
+  ]},
+ {id:4,name:"Mekin", origin:"Chicago",     originCode:"ORD", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale",
+  flights:[
+   {leg:"to-sf", from:"ORD",fromCity:"Chicago",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"",airline:"",dep:"",arr:"",seat:"",cls:"",price:null,unknown:true},
+  ]},
+ {id:5,name:"Kaan",  origin:"London",      originCode:"LHR", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale",
+  flights:[
+   {leg:"to-sd", from:"LHR",fromCity:"London Heathrow",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"AA 6986",airline:"British Airways",dep:"2:30 PM",arr:"5:50 PM",seat:"",cls:"Economy",price:null},
+   {leg:"sd-az", from:"SAN",fromCity:"San Diego",to:"PHX",toCity:"Phoenix",date:"Jun 15",num:"AA 625",airline:"American",dep:"6:25 AM",arr:"8:02 AM",seat:"8F",cls:"Economy",price:null},
+   {leg:"az-sf", from:"PHX",fromCity:"Phoenix",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"AA 686",airline:"American",dep:"8:22 PM",arr:"10:23 PM",seat:"8F",cls:"Economy",price:null},
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"LHR",toCity:"London",date:"Jun 23",num:"AA 136",airline:"British Airways",dep:"6:05 PM",arr:"12:45 PM",seat:"32J",cls:"Economy",price:null},
+  ]},
 ];
 const SHARED=[
- {label:"Residence Inn Sunnyvale",total:370.76,city:1},
- {label:"Portola Hotel — Monterey",total:634.75,city:2},
- {label:"Santa Barbara hotel",total:0,city:3},
- {label:"Santa Monica hotel",total:0,city:4},
- {label:"2× Jeep Wrangler",total:807.56,city:2},
- {label:"Full-size SUV",total:179.82,city:3},
+ {label:"Residence Inn Sunnyvale",total:370.76,city:2},
+ {label:"Portola Hotel — Monterey",total:634.75,city:3},
+ {label:"Santa Barbara hotel",total:0,city:4},
+ {label:"Santa Monica hotel",total:0,city:5},
+ {label:"2× Jeep Wrangler",total:807.56,city:3},
+ {label:"Full-size SUV",total:179.82,city:4},
 ];
 function share(c){return c.total/PEOPLE.length;}
 const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
 const CITIES=[
+ {n:"00",name:"San Diego",dates:"Jun 12–17",wx:"19°/24°",bg:"linear-gradient(150deg,#ff9f5c,#ff5e7e 55%,#3a2350)",day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
+  seenBy:[0,2,3,5], // Emre, Ali, Ali K, Kaan
+  flightIn:true, sdLeg:true,
+  items:[["flight","Arrive San Diego","SD crew lands",""],["place","San Diego days","Beaches · Gaslamp",""],["flight","Kaan → Arizona","Jun 15 · leaves early","Jun 15"],["flight","Fly up to SF","Jun 17",""]]},
  {n:"01",name:"San Francisco",dates:"Jun 17–19",wx:"17°/22°",bg:"linear-gradient(150deg,#e8854f,#7a3a63 55%,#241a3a)",day:"Wed, Jun 17",flag:"🌉",teaser:"Everyone lands · the city",flightIn:true,
-  items:[["flight","Everyone arrives SF","From SD · Chicago · AZ",""],["place","Explore the city","Golden Gate · Wharf",""],["food","Group dinner","",""]]},
- {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(150deg,#6b3a9e,#ff5e3a 70%,#1a1030)",day:"Fri, Jun 19",flag:"⚽",teaser:"Match day · Levi's",match:true,
-  items:[["match","Match @ Levi's Stadium","Santa Clara · 8 PM","8:00p"],["bed","Residence Inn Sunnyvale","Penthouse · check-in 3 PM",""]]},
+  mapCenter:[-122.43,37.79],mapZoom:11.4,
+  items:[
+   ["flight","Everyone arrives SF","From SD · Chicago · AZ","",null],
+   ["place","Battery Spencer","Golden Gate postcard shot","9:00a",[-122.4816692,37.827761]],
+   ["place","Palace of Fine Arts","Rotunda + lagoon","10:00a",[-122.4484231,37.8029308]],
+   ["food","Breakfast near the Wharf","","10:45a",[-122.4125282,37.8085771]],
+   ["place","Ghirardelli + Wharf + Pier 39","Sea lions · waterfront","11:30a",[-122.4125282,37.8085771]],
+   ["place","Lombard Street","The zigzag road","1:00p",[-122.4195579,37.8020179]],
+   ["food","Chinatown","Good Mong Kok dumplings · Fortune Cookie Factory","1:30p",[-122.408356,37.795455]],
+   ["place","Painted Ladies","Alamo Square","2:30p",[-122.4327556,37.7762528]],
+   ["place","The Mission","Clarion Alley murals · Valencia St","3:15p",[-122.4195098,37.7630606]],
+   ["bed","Back to hotel","Rest · shower · change","4:30p",null],
+   ["food","Dinner — San Ho Won","","7:00p",[-122.4102473,37.759599]]
+  ]},
+ {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(150deg,#6b3a9e,#ff5e3a 70%,#1a1030)",day:"Fri, Jun 19",flag:"⚽",teaser:"Bike ride · then match day",match:true,
+  items:[
+   ["food","Breakfast near hotel","","8:00a"],
+   ["place","Bike rental pickup","Bay City / Blazing Saddles · Wharf","9:00a"],
+   ["drive","Ride: Wharf → GG Bridge → Sausalito","8 miles · ~2 hrs","9:30a"],
+   ["place","Arrive Sausalito","Explore waterfront","11:30a"],
+   ["food","Lunch in Sausalito","","12:00p"],
+   ["train","Ferry back to SF","Bikes on board","1:00p"],
+   ["place","Drop bikes + grab bags","From hotel","1:30p"],
+   ["drive","Drive to Santa Clara","~1 hour","2:00p"],
+   ["bed","Check in: Residence Inn Sunnyvale","Penthouse · 750 Lakeway Dr","3:00p"],
+   ["bed","Rest · eat · head to stadium","","3:00p"],
+   ["match","TÜRKIYE MATCH — Levi's Stadium","Santa Clara","9:00p"]
+  ]},
  {n:"03",name:"Monterey / Carmel",dates:"Jun 20–21",wx:"18°/24°",bg:"linear-gradient(150deg,#4cbf9a,#1f5a52 60%,#0f2b2e)",day:"Sat, Jun 20",flag:"🌲",teaser:"Wranglers up · 17-Mile Drive",
   items:[["drive","Pick up 2× Jeep Wrangler","Santa Clara · 9:30 AM","9:30a"],["place","17-Mile Drive","Pebble Beach",""],["bed","Portola Hotel & Spa","Monterey · check-in 3 PM",""]]},
  {n:"04",name:"Big Sur → SB",dates:"Jun 21–22",wx:"19°/23°",bg:"linear-gradient(150deg,#ffb347,#ff6b4a 55%,#163a4f)",day:"Sun, Jun 21",flag:"🌊",teaser:"The PCH run · top down",
   items:[["drive","Big Sur drive","Bixby · McWay",""],["drive","Drop Wranglers","Mon Jun 22 · 9:30 AM","9:30a"],["drive","Pick up SUV","Jun 22 · 6:30 PM","6:30p"],["bed","Santa Barbara overnight","",""]]},
- {n:"05",name:"Santa Monica / LA",dates:"Jun 22–23",wx:"21°/26°",bg:"linear-gradient(150deg,#ffd166,#ff7eb3 55%,#6a5acd)",day:"Tue, Jun 23",flag:"🌴",teaser:"Pier · beach · LAX out",
-  items:[["place","Santa Monica Pier","Ferris wheel + beach",""],["drive","Drop SUV","Jun 23 · 6:15 PM","6:15p"],["bed","Last night on the coast","",""]]}
+ {n:"05",name:"Santa Monica / LA",dates:"Jun 22–23",wx:"21°/26°",bg:"linear-gradient(150deg,#ffd166,#ff7eb3 55%,#6a5acd)",day:"Tue, Jun 23",flag:"🌴",teaser:"Pier · beach · LAX out",flightOut:true,
+  items:[["place","Santa Monica Pier","Ferris wheel + beach",""],["drive","Drop SUV","Jun 23 · 6:15 PM","6:15p"],["flight","Everyone flies home","LAX out",""]]}
 ];
 const LODGING={
- 1:{name:"Residence Inn Sunnyvale Silicon Valley I",addr:"750 Lakeway Dr, Sunnyvale, CA 94085",ci:"Jun 19 · 3:00 PM",co:"Jun 20 · 11:00 AM",conf:"72073179604705",total:370.76,rooms:"1× Penthouse, 2 Bedrooms"},
- 2:{name:"Portola Hotel & Spa at Monterey Bay",addr:"Two Portola Plaza, Monterey, CA 93940",ci:"Jun 20 · 3:00 PM",co:"Jun 21 · 11:00 AM",conf:"72073355187522",total:634.75,rooms:"2× Portola Room, Two Queen Beds"},
+ 2:{name:"Residence Inn Sunnyvale Silicon Valley I",addr:"750 Lakeway Dr, Sunnyvale, CA 94085",dates:"Jun 19–20",ci:"Jun 19 · 3:00 PM",co:"Jun 20 · 11:00 AM",conf:"72073179604705",total:370.76,rooms:"1× Penthouse, 2 Bedrooms"},
+ 3:{name:"Portola Hotel & Spa at Monterey Bay",addr:"Two Portola Plaza, Monterey, CA 93940",dates:"Jun 20–21",ci:"Jun 20 · 3:00 PM",co:"Jun 21 · 11:00 AM",conf:"72073355187522",total:634.75,rooms:"2× Portola Room, Two Queen Beds"},
 };
 const GAMES=[
  {id:"panini",name:"Panini Sticker Book",sub:"Collect the squad",icon:"🎴",bg:"linear-gradient(150deg,#ff5e3a,#b3279a)",live:true},
@@ -326,7 +407,7 @@ function syncRider(){const a=document.getElementById('av');a.textContent=inits(M
  document.getElementById('riderName').textContent=ME.name;
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
  document.getElementById('youName').textContent=ME.name;
- buildNext();buildYouList();}
+ buildNext();buildYouList();if(typeof renderCarousel==='function')renderCarousel();if(typeof renderOverview==='function'&&document.getElementById('viewOver')&&document.getElementById('viewOver').style.display!=='none')renderOverview();}
 
 /* ---- puzzles ---- */
 function makePuzzle(host,cols,rows,scatter){host.innerHTML="";const arr=[];
@@ -354,12 +435,80 @@ function buildNext(){const txt=ME.originCode==="SFO"?"You're already in San Fran
 
 /* ---- carousel ---- */
 const car=document.getElementById('carousel');
-CITIES.forEach((c,i)=>{const el=document.createElement('div');el.className='ccard';
- el.innerHTML=`<div class="cg" style="background:${c.bg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${c.dates}</div><div class="teaser">${c.teaser}</div><span class="go">More ›</span></div>`;
- el.onclick=()=>openCity(i);car.appendChild(el);});
+function citySeen(c){return !c.seenBy || c.seenBy.includes(ME.id);}
+function renderCarousel(){
+ car.innerHTML="";
+ CITIES.forEach((c,i)=>{if(!citySeen(c))return;
+  const el=document.createElement('div');el.className='ccard';
+  let teaser=c.teaser;
+  if(c.sdLeg&&ME.id===5)teaser="Until Jun 15 · then Arizona"; // Kaan leaves early
+  el.innerHTML=`<div class="cg" style="background:${c.bg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${c.dates}</div><div class="teaser">${teaser}</div><span class="go">More ›</span></div>`;
+  el.onclick=()=>openCity(i);car.appendChild(el);});
+}
+renderCarousel();
+
+/* ---- trip view toggle: By City / Overview ---- */
+function setTripView(v){
+ document.getElementById('vtCity').classList.toggle('on',v==='city');
+ document.getElementById('vtOver').classList.toggle('on',v==='over');
+ document.getElementById('viewCity').style.display=v==='city'?'':'none';
+ document.getElementById('viewOver').style.display=v==='over'?'':'none';
+ if(v==='over')renderOverview();
+}
+window.setTripView=setTripView;
+function renderOverview(){
+ const fl=(ME.flights||[]).length;
+ const hotels=Object.keys(LODGING).length;
+ const types=[
+  {id:'overFlights',ic:'✈️',name:'Flights',sub:`${fl} leg${fl!==1?'s':''} · ${ME.name}'s journey`,count:fl,bg:'linear-gradient(135deg,#5ab0ff,#2a5fa0)'},
+  {id:'overStays',  ic:'🛏️',name:'Stays',  sub:`${hotels} booked · ${4-hotels} to go`,count:hotels,bg:'linear-gradient(135deg,#9b6bff,#5a2a9e)'},
+  {id:'overCars',   ic:'🚗',name:'Cars',   sub:'2 Wranglers · 1 SUV',count:3,bg:'linear-gradient(135deg,#ff8a4d,#c0432a)'},
+  {id:'overRes',    ic:'📅',name:'Bookings',sub:'Dinners & reservations',count:1,bg:'linear-gradient(135deg,#4ad6c4,#1f7a6e)'},
+ ];
+ document.getElementById('viewOver').innerHTML=`<div class="ovgrid">`+types.map(t=>`
+   <div class="ovcard" onclick="openOverview('${t.id}')"><div class="ovg" style="background:${t.bg}"></div>
+     <div class="ovtop"><span class="ovic">${t.ic}</span><span class="ovcount">${t.count}</span></div>
+     <div class="ovbot"><div class="ovname">${t.name}</div><div class="ovsub">${t.sub}</div></div></div>`).join("")+`</div>`;
+}
+function openOverview(which){
+ if(which==='overFlights')return openS('flight');
+ if(which==='overStays')return openAllStays();
+ if(which==='overCars')return openS('cars');
+ if(which==='overRes')return openS('res');
+}
+window.openOverview=openOverview;
+function openAllStays(){
+ const keys=Object.keys(LODGING);let body=`<div class="back" onclick="closeS('lodging')">‹ Back</div>
+  <div class="fhero" style="padding-bottom:6px"><div class="hf">🛏️</div><div class="hn" style="font-size:38px">All Stays</div><div class="hd">Every hotel on the trip</div></div>
+  <div style="padding:6px 18px 40px">`;
+ keys.forEach(k=>{const L=LODGING[k];const c=CITIES[k];const cost=L.total/PEOPLE.length;
+   body+=`<div class="lcard"><div class="v" style="font-size:17px">${L.name.split(' ').slice(0,4).join(' ')}</div><div class="vs" style="margin-bottom:8px">${c?c.name+' · ':''}${L.dates||''}</div>
+    <div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>CHECK-IN</small><b>${L.ci.split(' · ')[0]}</b><div class="sub">${L.ci.split(' · ')[1]||''}</div></div><div class="lcell"><small>CHECK-OUT</small><b>${L.co.split(' · ')[0]}</b><div class="sub">${L.co.split(' · ')[1]||''}</div></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#ffffff90">Conf ${L.conf}</span><span style="font-family:'Space Mono',monospace;font-weight:700">${money(cost)} <span style="color:#ffffff70;font-weight:400">/ you</span></span></div></div>`;});
+ [["Santa Barbara","Jun 21–22"],["Santa Monica","Jun 22–23"]].forEach(m=>{body+=`<div class="lcard" style="border:1px dashed #ffffff33"><div class="v" style="font-size:16px">${m[0]} hotel</div><div class="vs">${m[1]} · not booked yet</div></div>`;});
+ body+=`</div>`;document.getElementById('lodgingScroll').innerHTML=body;document.getElementById('lodging').classList.add('on');
+}
+window.openAllStays=openAllStays;
 
 /* ---- city screen ---- */
 const bg=document.getElementById('bg');
+function flightCard(f,label){
+ return `<div class="flightbanner" onclick="openS('flight')"><div class="tn">${label}</div><div class="fl"><div class="ap"><div class="code">${f.from}</div><div class="c2">${f.fromCity}</div><div class="tt">${f.dep||'— : —'}</div></div><div class="ln">✈</div><div class="ap r"><div class="code">${f.to}</div><div class="c2">${f.toCity}</div><div class="tt">${f.arr||'— : —'}</div></div></div><div class="more">${f.airline?f.airline+' '+f.num:'Add your flight'} ›</div></div>`;
+}
+function buildFlightBanner(c){
+ const fl=ME.flights||[];
+ if(c.sdLeg){ // San Diego arrival
+   const f=fl.find(x=>x.to==="SAN"); return f?flightCard(f,"YOUR FLIGHT TO SAN DIEGO"):"";
+ }
+ if(c.flightIn){ // SF arrival
+   if(ME.originCode==="SFO")return `<div class="flightbanner" style="border-color:#ffffff22"><div class="tn">NO FLIGHT — ALREADY IN SF</div><div style="text-align:center;font-size:13px;color:#ffffffb0">${ME.name} is already in San Francisco</div></div>`;
+   const f=fl.find(x=>x.to==="SFO"); return f?flightCard(f,"YOUR FLIGHT TO SF"):`<div class="flightbanner" onclick="openS('flight')"><div class="tn">YOUR FLIGHT IN</div><div style="text-align:center;font-size:13px;color:#9fd0ff">Flight to SF — add details ›</div></div>`;
+ }
+ if(c.flightOut){ // return home
+   const f=fl.find(x=>x.leg==="home"); return f?flightCard(f,"YOUR FLIGHT HOME"):"";
+ }
+ return "";
+}
 function openCity(i){curCity=i;const c=CITIES[i];
  document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
  document.getElementById('cityHero').innerHTML=`<div class="hf">${c.flag}</div><div class="hn">${c.name}</div><div class="hd">${c.dates} · ${c.day}</div><div class="hwx">☀️ ${c.wx}</div>`;
@@ -367,33 +516,96 @@ function openCity(i){curCity=i;const c=CITIES[i];
  if(c.flightIn)flag=`<div class="you" style="color:#5ab0ff">${ME.originCode==="SFO"?"You're already in SF":`You fly in from ${ME.origin}`}</div>`;
  else if(c.match)flag=`<div class="you" style="color:#ff8a5c">Match day · everyone at Levi's</div>`;
  const costRows=SHARED.filter(s=>s.city===i&&s.total>0).map(s=>[s.label+" (÷6)",money(share(s))]);
- const flightBanner=(c.flightIn&&ME.originCode!=="SFO")?`<div class="flightbanner" onclick="openS('flight')"><div class="tn">YOUR FLIGHT IN</div><div class="fl"><div class="ap"><div class="code">${ME.originCode}</div><div class="c2">${ME.origin}</div><div class="tt">— : —</div></div><div class="ln">✈</div><div class="ap r"><div class="code">SFO</div><div class="c2">San Francisco</div><div class="tt">— : —</div></div></div><div class="more">Add your flight receipt ›</div></div>`:(c.flightIn?`<div class="flightbanner" style="border-color:#ffffff22"><div class="tn">NO FLIGHT — ALREADY IN SF</div><div style="text-align:center;font-size:13px;color:#ffffffb0">${ME.name} is already in San Francisco</div></div>`:"");
+ const flightBanner=buildFlightBanner(c);
  document.getElementById('cityBody').innerHTML=`${flag}
   <div class="qa"><button onclick="openS('lodging')"><span class="qc">🛏️</span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc">📅</span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc">🚗</span><small>Cars</small></button><button onclick="openS('places')"><span class="qc">📍</span><small>Places</small></button></div>
   ${flightBanner}
-  <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
+  <div class="ith"><b>Itinerary</b><div class="itog">${c.items.some(it=>it[4])?`<button class="itb on" id="itbList" onclick="setItinView('list')">List</button><button class="itb" id="itbMap" onclick="setItinView('map')">Map</button>`:`<small>${c.day}</small>`}</div></div>
+  <div id="itinList">
   ${c.items.map(it=>{const g=G[it[0]];return `<div class="it ${it[0]==='match'?'match':''}"><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span></div>`}).join("")}
   <div class="viewall">View all days ›</div>
+  </div>
+  <div id="itinMap" style="display:none"><div id="mapbox" class="mapbox"></div></div>
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
   <div class="exp hidden" id="exp"><div class="eh"><b>${ME.name}'s share</b><button class="eye" id="eye">👁️</button></div>
    ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
  document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
  document.getElementById('city').classList.add('on');
 }
+
+/* ---- itinerary list/map toggle + Mapbox ---- */
+const MAPBOX_TOKEN="pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA";
+let mapInstance=null;
+function setItinView(v){
+ const list=document.getElementById('itinList'),map=document.getElementById('itinMap');
+ document.getElementById('itbList').classList.toggle('on',v==='list');
+ document.getElementById('itbMap').classList.toggle('on',v==='map');
+ list.style.display=v==='list'?'':'none';
+ map.style.display=v==='map'?'':'none';
+ if(v==='map')initMap();
+}
+window.setItinView=setItinView;
+function initMap(){
+ const c=CITIES[curCity];
+ const stops=c.items.filter(it=>it[4]); // items with coords
+ if(typeof mapboxgl==='undefined'||MAPBOX_TOKEN.startsWith("REPLACE")){
+   document.getElementById('mapbox').innerHTML=`<div style="padding:40px 20px;text-align:center;color:#888;font-size:13px">🗺️<br><br>Map needs the Mapbox token.<br>Paste your <b>pk.</b> token and I'll wire it.</div>`;
+   return;
+ }
+ mapboxgl.accessToken=MAPBOX_TOKEN;
+ document.getElementById('mapbox').innerHTML="";
+ mapInstance=new mapboxgl.Map({
+   container:'mapbox',
+   style:'mapbox://styles/mapbox/dark-v11',
+   center:c.mapCenter||stops[0][4],
+   zoom:c.mapZoom||11.5,
+ });
+ mapInstance.addControl(new mapboxgl.NavigationControl(),'top-right');
+ const bounds=new mapboxgl.LngLatBounds();
+ stops.forEach((it,idx)=>{
+   const el=document.createElement('div');el.className='mappin';el.innerHTML=`<span>${idx+1}</span>`;
+   new mapboxgl.Marker(el).setLngLat(it[4])
+     .setPopup(new mapboxgl.Popup({offset:18}).setHTML(`<b style="font-family:sans-serif">${it[1]}</b><br><small style="color:#666">${it[3]||''} ${it[2]||''}</small>`))
+     .addTo(mapInstance);
+   bounds.extend(it[4]);
+ });
+ // connecting line
+ mapInstance.on('load',()=>{
+   mapInstance.addSource('route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:stops.map(it=>it[4])}}});
+   mapInstance.addLayer({id:'route',type:'line',source:'route',paint:{'line-color':'#ff5e3a','line-width':3,'line-dasharray':[2,1.5]}});
+   mapInstance.fitBounds(bounds,{padding:50,maxZoom:13});
+ });
+ setTimeout(()=>mapInstance&&mapInstance.resize(),200);
+}
 document.getElementById('cityBack').onclick=()=>{document.getElementById('city').classList.remove('on');resetBg();};
 function resetBg(){bg.style.background="radial-gradient(130% 80% at 70% -5%,#ff5e3a22,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f";}
 
-function openS(id){if(id==='flight')buildFlight();if(id==='lodging')buildLodging();if(id==='cars')buildCars();document.getElementById(id).classList.add('on');}
+function openS(id){if(id==='flight')buildFlight();if(id==='lodging')buildLodging();if(id==='cars')buildCars();if(id==='res')buildReservations();document.getElementById(id).classList.add('on');}
 function closeS(id){document.getElementById(id).classList.remove('on');}
 window.openS=openS;window.closeS=closeS;
 
-function buildFlight(){document.getElementById('flightScroll').innerHTML=`
- <div class="back" onclick="closeS('flight')">‹ ${CITIES[curCity].name}</div>
- <div class="map"><svg viewBox="0 0 440 190" preserveAspectRatio="xMidYMid slice"><rect width="440" height="190" fill="#0d1a2e"/><path d="M40,115 Q220,10 400,140" fill="none" stroke="#5ab0ff" stroke-width="2.5" stroke-dasharray="4 6"/><circle cx="40" cy="115" r="6" fill="#5ab0ff"/><circle cx="400" cy="140" r="6" fill="#5ab0ff"/><text x="40" y="135" fill="#fff" font-size="12" font-weight="700">${ME.originCode}</text><text x="382" y="162" fill="#fff" font-size="12" font-weight="700">SFO</text><text x="218" y="36" fill="#9fd0ff" font-size="16">✈</text></svg></div>
- <div class="fd-card"><div class="fd-route">${ME.origin} → San Francisco</div><div class="fd-no">Wed, Jun 17 · add receipt for details</div>
-  <div class="fd-leg"><div class="l"><div class="code">${ME.originCode}</div><div class="ap">${ME.origin}</div><div class="tg">Terminal — · Gate —</div></div><div class="r"><div class="t">— : —</div><div class="d">Jun 17</div></div></div>
-  <div class="fd-leg"><div class="l"><div class="code">SFO</div><div class="ap">San Francisco Intl</div><div class="tg">Terminal — · Gate —</div></div><div class="r"><div class="t">— : —</div><div class="d">Jun 17</div></div></div></div>
- <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>—</b></div><div class="fd-chip"><small>SEAT</small><b>—</b></div><div class="fd-chip"><small>STATUS</small><b class="ok">Add receipt</b></div></div>`;}
+function buildFlight(){
+ const flights=ME.flights||[];
+ let body=`<div class="back" onclick="closeS('flight')">‹ ${CITIES[curCity].name}</div>`;
+ if(!flights.length){
+   body+=`<div class="ph"><b>No flights yet</b>${ME.name}'s flights aren't added — we'll fill them in.</div>`;
+ } else {
+   body+=`<div style="font-family:'Anton',sans-serif;font-size:22px;margin:4px 4px 14px">${ME.name}'s flights</div>`;
+   flights.forEach(f=>{
+     if(f.unknown){
+       body+=`<div class="fd-card" style="border:1px dashed #5ab0ff55"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.date} · flight details unknown</div>
+        <div style="text-align:center;padding:14px;color:#9fd0ff;font-size:13px">✈️ We don't have this flight yet —<br>add the details when you have them.</div></div>`;
+       return;
+     }
+     const priceRow = f.price!=null ? `<div class="fd-chip"><small>PRICE</small><b>$${f.price}</b></div>` : `<div class="fd-chip"><small>PRICE</small><b class="ok">Add it</b></div>`;
+     body+=`<div class="fd-card"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.airline} ${f.num} · ${f.date}</div>
+      <div class="fd-leg"><div class="l"><div class="code">${f.from}</div><div class="ap">${f.fromCity}</div></div><div class="r"><div class="t">${f.dep||'— : —'}</div><div class="d">${f.date}</div></div></div>
+      <div class="fd-leg"><div class="l"><div class="code">${f.to}</div><div class="ap">${f.toCity}</div></div><div class="r"><div class="t">${f.arr||'— : —'}</div><div class="d">${f.date}</div></div></div>
+      <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>${f.num||'—'}</b></div><div class="fd-chip"><small>SEAT</small><b>${f.seat||'—'}</b></div>${priceRow}</div></div>`;
+   });
+ }
+ document.getElementById('flightScroll').innerHTML=body;
+}
 function buildLodging(){const c=CITIES[curCity];const L=LODGING[curCity];
  if(!L){document.getElementById('lodgingScroll').innerHTML=`<div class="back" onclick="closeS('lodging')">‹ ${c.name}</div><div class="ph"><b>Lodging</b>Hotel for ${c.name} not added yet — drop the receipt and I'll fill it in.</div>`;return;}
  const cost=L.total/PEOPLE.length;
@@ -410,12 +622,24 @@ function buildCars(){const cars=[
   {name:"Jeep Wrangler #2",type:"Open-air 4WD · 4 passengers",pick:"Jun 20 · 9:30 AM",drop:"Jun 22 · 9:30 AM",total:397.49,conf:"73463265910668"},
   {name:"Full-size SUV",type:"7 passengers · Tahoe class",pick:"Jun 22 · 6:30 PM",drop:"Jun 23 · 6:15 PM",total:179.82,conf:"73425481040001"}];
  const grand=cars.reduce((s,c)=>s+c.total,0);
- document.getElementById('carsScroll').innerHTML=`<div class="back" onclick="closeS('cars')">‹ ${CITIES[curCity].name}</div>
+ document.getElementById('carsScroll').innerHTML=`<div class="back" onclick="closeS('cars')">‹ Back</div>
   <div class="fhero" style="padding-bottom:6px"><div class="hf">🚗</div><div class="hn" style="font-size:38px">Cars</div><div class="hd">Wranglers for the coast · SUV to LA</div></div>
   <div style="padding:6px 18px 40px">${cars.map(c=>`<div class="lcard"><div class="v" style="font-size:17px">${c.name}</div><div class="vs" style="margin-bottom:8px">${c.type}</div><div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>PICK-UP</small><b>${c.pick.split(' · ')[0]}</b><div class="sub">${c.pick.split(' · ')[1]}</div></div><div class="lcell"><small>DROP-OFF</small><b>${c.drop.split(' · ')[0]}</b><div class="sub">${c.drop.split(' · ')[1]}</div></div></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#ffffff90">Conf ${c.conf}</span><span style="font-family:'Space Mono',monospace;font-weight:700">${money(c.total)}</span></div></div>`).join("")}
   <div class="lcard" style="border-color:#ff8a4d55"><div class="k">YOUR SHARE OF CARS</div><div class="v" style="color:#ff8a4d">${money(grand/PEOPLE.length)}</div><div class="vs">${money(grand)} total ÷ 6</div></div></div>`;}
 
-/* ---- WORLD CUP ---- */
+function buildReservations(){
+ const RES=[
+  {name:"San Ho Won",type:"Dinner · San Francisco",when:"Wed Jun 17 · 7:00 PM",party:"6",conf:null},
+ ];
+ let body=`<div class="back" onclick="closeS('res')">‹ Back</div>
+  <div class="fhero" style="padding-bottom:6px"><div class="hf">📅</div><div class="hn" style="font-size:38px">Bookings</div><div class="hd">All reservations · whole trip</div></div>
+  <div style="padding:6px 18px 40px">`;
+ if(!RES.length){ body+=`<div class="ph"><b>No bookings yet</b>Dinners & reservations show here as you add them.</div>`; }
+ RES.forEach(r=>{body+=`<div class="lcard"><div class="v" style="font-size:17px">${r.name}</div><div class="vs" style="margin-bottom:8px">${r.type}</div>
+   <div class="lgrid" style="margin:0"><div class="lcell"><small>WHEN</small><b style="font-size:13px">${r.when.split(' · ')[0]}</b><div class="sub">${r.when.split(' · ')[1]||''}</div></div><div class="lcell"><small>PARTY</small><b>${r.party}</b><div class="sub">people</div></div><div class="lcell"><small>CONF</small><b style="font-size:12px">${r.conf||'—'}</b><div class="sub">${r.conf?'':'add it'}</div></div></div></div>`;});
+ body+=`<div class="lcard" style="border:1px dashed #ffffff33"><div class="v" style="font-size:15px">More dinners to book</div><div class="vs">Monterey · Santa Barbara · Santa Monica — add as you reserve</div></div></div>`;
+ document.getElementById('resScroll').innerHTML=body;
+}
 const GROUP_D=[{pos:1,name:"Türkiye",flag:"🇹🇷",p:0,w:0,d:0,pts:0,us:true},{pos:2,name:"Paraguay",flag:"🇵🇾",p:0,w:0,d:0,pts:0},{pos:3,name:"Team C",flag:"⚪",p:0,w:0,d:0,pts:0},{pos:4,name:"Team D",flag:"⚪",p:0,w:0,d:0,pts:0}];
 document.getElementById('standings').innerHTML=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+GROUP_D.map(t=>`<div class="trow ${t.us?'us':''}"><span class="pos">${t.pos}</span><span class="tm">${t.flag} ${t.name}</span><span class="num">${t.p}</span><span class="num">${t.w}</span><span class="num">${t.d}</span><span class="pts">${t.pts}</span></div>`).join("");
 const FIX=[{a:"🇹🇷 Türkiye",b:"🇵🇾 Paraguay",sc:"— : —",stat:"FRI JUN 19 · 8:00 PM"},{a:"⚪ Team C",b:"⚪ Team D",sc:"— : —",stat:"FRI JUN 19 · 5:00 PM"},{a:"🇹🇷 Türkiye",b:"⚪ Team C",sc:"— : —",stat:"TUE JUN 23"},{a:"🇵🇾 Paraguay",b:"⚪ Team D",sc:"— : —",stat:"TUE JUN 23"}];
@@ -457,11 +681,13 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  const id=t.dataset.tab;
  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
- if(id==='trip'){const a=document.querySelector('#city.on');if(!a)resetBg();}
+ if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
+   // land on HOME, not the lock screen — lock is only reachable by tapping the shatter card
+   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
+ }}
  else resetBg();
 });
 
-document.getElementById('tripScroll').addEventListener('scroll',()=>{document.getElementById('topbar').classList.toggle('solid',document.getElementById('tripScroll').scrollTop>40);});
 const _rp=new URLSearchParams(location.search).get('rider');if(_rp!==null&&PEOPLE[+_rp])ME=PEOPLE[+_rp];
 syncRider();
 </script>
