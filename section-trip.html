@@ -292,6 +292,20 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .psheet-trip .kt{font-size:10px;letter-spacing:.18em;color:#ff8a5c;font-weight:700;margin-bottom:5px;}
 .psheet-trip .kv{font-size:13.5px;line-height:1.5;}
 .psheet-trip .kv b{font-family:'Anton',sans-serif;font-size:20px;display:block;margin-bottom:3px;font-weight:400;letter-spacing:.02em;}
+
+/* GAME DAY screen */
+#gameday .gdhero{height:100dvh;}
+#gameday .gdhero .photo{background-image:url('./squad.jpg'),radial-gradient(circle at 50% 30%,#fff0c0 0 7%,#ffd166 15%,transparent 42%),linear-gradient(180deg,#ff8a3a,#ff5e6a 40%,#9a3a7a 66%,#1c2e5a 100%);background-size:cover,auto,auto;background-position:center,0 0,0 0;background-repeat:no-repeat;}
+#gameday .gdhero .tov .ttl{font-size:22px;letter-spacing:.04em;margin-top:14px;}
+#gameday .gdbody{padding:18px 16px 60px;background:#0a0b14;}
+.gdcard{background:#15172a;border:1px solid #ffffff14;border-radius:16px;padding:16px;margin-bottom:14px;}
+.gdcard .gdk{font-size:10px;letter-spacing:.2em;color:#ff8a5c;font-weight:800;margin-bottom:10px;}
+.gdrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #ffffff10;font-size:13.5px;}
+.gdrow:first-of-type{border:none;}
+.gdrow span{color:#ffffffa0;}
+.gdrow b{font-weight:600;text-align:right;}
+.gdcoming p{color:#ffffffa8;font-size:13px;line-height:1.55;}
+#gameday .back{background:linear-gradient(180deg,#000000aa,transparent);}
 </style>
 
 <div id="bg"></div>
@@ -307,19 +321,12 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
   <!-- TRIP -->
   <div class="panels">
   <div class="panel on" id="tab-trip">
-    <div class="scrollarea trip-scroll" id="tripScroll">
-      <div class="hero" id="lockHero">
-        <div class="photo"><div class="tag">↑ YOUR PHOTO HERE (revealed as it shatters)</div></div>
-        <div class="puzzle" id="puzzleBig"></div>
-        <div class="tov"><div class="kick">WHEELS UP IN</div><div class="row" id="trowBig"></div><div class="ttl">WEST COAST RUN</div></div>
-        <div class="hint">SWIPE UP ↑</div>
-      </div>
+    <div class="scrollarea" id="tripScroll">
       <div class="home">
         <div class="topbar" id="topbar">
           <div class="rider" id="riderBtn" title="Switch rider"><span class="av" id="av">EM</span><div><small>RIDING AS · TAP TO SWITCH</small><b id="riderName">Emre</b></div></div>
           <div class="flags">🇹🇷 🇺🇸</div>
         </div>
-        <div class="shatcard" onclick="document.getElementById('lockHero').scrollIntoView({behavior:'smooth'})"><div class="photo"></div><div class="puzzle" id="puzzleCard"></div><div class="tov2"><div class="kick">WHEELS UP IN</div><div class="row" id="trowSm"></div></div></div>
         <div class="nextup" id="nextup"></div>
         <div class="viewtog"><button class="vt on" id="vtCity" onclick="setTripView('city')">By City</button><button class="vt" id="vtOver" onclick="setTripView('over')">Overview</button></div>
         <div id="viewCity">
@@ -391,6 +398,40 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 <div class="screen sub2" id="res"><div class="inner"><div class="scroll" id="resScroll"></div></div></div>
 <div class="screen sub2" id="places"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('places')">‹ Back</div><div class="ph"><b>Places</b>Spots to see & eat near you — photo, distance, category.</div></div></div></div>
 <div class="screen sub2" id="panini"><div class="inner"><div class="scroll" id="paniniScroll"></div></div></div>
+<div class="screen sub2" id="gameday">
+  <div class="inner">
+    <div class="scroll" id="gdScroll">
+      <div class="back" onclick="closeS('gameday')">‹ Trip</div>
+      <div class="hero gdhero" id="gdHero">
+        <div class="photo"></div>
+        <div class="puzzle" id="puzzleBig"></div>
+        <div class="tov"><div class="kick">GAME DAY IN</div><div class="row" id="trowBig"></div><div class="ttl">TÜRKİYE 🇹🇷 vs 🇵🇾 PARAGUAY</div></div>
+        <div class="hint">SWIPE UP FOR MATCH INFO ↑</div>
+      </div>
+      <div class="gdbody">
+        <div class="gdcard">
+          <div class="gdk">MATCH DETAILS</div>
+          <div class="gdrow"><span>📅 Date</span><b>Fri, Jun 19 · 8:00 PM PT</b></div>
+          <div class="gdrow"><span>🏟️ Stadium</span><b>Levi's Stadium, Santa Clara</b></div>
+          <div class="gdrow"><span>🏆 Group</span><b>Group D · Matchday 1</b></div>
+          <div class="gdrow"><span>📺 Coverage</span><b>FOX · Telemundo</b></div>
+        </div>
+        <div class="gdcard">
+          <div class="gdk">GROUP D · STANDINGS</div>
+          <div id="gdStandings"></div>
+        </div>
+        <div class="gdcard">
+          <div class="gdk">GROUP D · FIXTURES</div>
+          <div id="gdFixtures"></div>
+        </div>
+        <div class="gdcard gdcoming">
+          <div class="gdk">COMING SOON</div>
+          <p>Live scores · Bracket · Player squads · Predictor results · Match-day playlist</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="placesheet" id="placesheet"><div class="psheet-inner"><div class="psheet-scroll" id="placesheetScroll"></div></div></div>
 
 <script>
@@ -567,7 +608,7 @@ function syncRider(){const a=document.getElementById('av');a.textContent=inits(M
  buildNext();buildYouList();if(typeof renderCarousel==='function')renderCarousel();if(typeof renderOverview==='function'&&document.getElementById('viewOver')&&document.getElementById('viewOver').style.display!=='none')renderOverview();}
 
 /* ---- puzzles ---- */
-function makePuzzle(host,cols,rows,scatter){host.innerHTML="";const arr=[];
+function makePuzzle(host,cols,rows,scatter){if(!host)return{arr:[],total:0,order:[]};host.innerHTML="";const arr=[];
  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const p=document.createElement('div');p.className='pc';const w=100/cols,h=100/rows;
   p.style.left=c*w+'%';p.style.top=r*h+'%';p.style.width=w+'%';p.style.height=h+'%';
   p.style.backgroundSize=cols*100+'% '+rows*100+'%';p.style.backgroundPosition=`${(c/(cols-1))*100}% ${(r/(rows-1))*100}%`;
@@ -601,22 +642,31 @@ function animateShatter(P,currentK,prevK){
 /* tick() shatter calls are no-ops; on-load anim handles it */
 function shatter(P,rem){/* handled by animateShatter on load */}
 
-/* Run the on-open animation once */
-(function runInitialShatter(){
- const ms=Math.max(0,START-Date.now());
+/* runShatter — called on Game Day open. Counts from KICK so it's the match countdown. */
+function runShatter(){
+ const ms=Math.max(0,KICK-Date.now());
  const days=ms/864e5;
  const bigK=dayK(days,big.total);
  const bigPrev=dayK(days+1,big.total);
  animateShatter(big,bigK,bigPrev);
- // Small countdown card: simple staggered reveal, no slow tail
- const cK=dayK(days,cardP.total);
- cardP.arr.forEach(p=>p.classList.remove('gone'));
- cardP.order.forEach((idx,rank)=>{if(rank>=cK)return;setTimeout(()=>cardP.arr[idx].classList.add('gone'),200+rank*60);});
+}
+/* If we're loaded with ?screen=gameday, auto-open the Game Day screen (Match Day tab) */
+(function autoOpenScreen(){
+ const sp=new URLSearchParams(window.location.search);
+ if(sp.get('screen')==='gameday'){
+   setTimeout(()=>{
+     try{openS('gameday');runShatter();}catch(e){}
+     // hide the back arrow in tab-mode since the bottom tabs are the navigation
+     const gd=document.getElementById('gameday');
+     if(gd){const bk=gd.querySelector('.back');if(bk)bk.style.display='none';}
+   },150);
+ }
 })();
+window.runShatter=runShatter;
 function rowHTML(dd,hh,mm){return [[dd,"DAYS"],[hh,"HRS"],[mm,"MIN"]].map(c=>`<div class="u"><div class="n">${String(c[0]).padStart(2,"0")}</div><div class="l">${c[1]}</div></div>`).join("");}
-function tick(){const ms=Math.max(0,START-Date.now());const dd=Math.floor(ms/864e5),hh=Math.floor(ms%864e5/36e5),mm=Math.floor(ms%36e5/6e4);
- document.getElementById('trowBig').innerHTML=rowHTML(dd,hh,mm);document.getElementById('trowSm').innerHTML=rowHTML(dd,hh,mm);
- const rem=Math.max(0,Math.min(WINDOW,ms/864e5));shatter(big,rem);shatter(cardP,rem);
+function tick(){const ms=Math.max(0,KICK-Date.now());const dd=Math.floor(ms/864e5),hh=Math.floor(ms%864e5/36e5),mm=Math.floor(ms%36e5/6e4);
+ const tb=document.getElementById('trowBig');if(tb)tb.innerHTML=rowHTML(dd,hh,mm);
+ const ts=document.getElementById('trowSm');if(ts)ts.innerHTML=rowHTML(dd,hh,mm);
  // WC featured countdown
  const kms=KICK-Date.now();const fc=document.getElementById('featCd');
  if(kms<=0){document.getElementById('featState').textContent="LIVE";document.getElementById('featMid').textContent="0 - 0";if(fc)fc.textContent="KICKOFF!";}
@@ -1017,9 +1067,13 @@ function buildReservations(){
  document.getElementById('resScroll').innerHTML=body;
 }
 const GROUP_D=[{pos:1,name:"Türkiye",flag:"🇹🇷",p:0,w:0,d:0,pts:0,us:true},{pos:2,name:"Paraguay",flag:"🇵🇾",p:0,w:0,d:0,pts:0},{pos:3,name:"Team C",flag:"⚪",p:0,w:0,d:0,pts:0},{pos:4,name:"Team D",flag:"⚪",p:0,w:0,d:0,pts:0}];
-document.getElementById('standings').innerHTML=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+GROUP_D.map(t=>`<div class="trow ${t.us?'us':''}"><span class="pos">${t.pos}</span><span class="tm">${t.flag} ${t.name}</span><span class="num">${t.p}</span><span class="num">${t.w}</span><span class="num">${t.d}</span><span class="pts">${t.pts}</span></div>`).join("");
+const standingsHTML=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+GROUP_D.map(t=>`<div class="trow ${t.us?'us':''}"><span class="pos">${t.pos}</span><span class="tm">${t.flag} ${t.name}</span><span class="num">${t.p}</span><span class="num">${t.w}</span><span class="num">${t.d}</span><span class="pts">${t.pts}</span></div>`).join("");
+document.getElementById('standings').innerHTML=standingsHTML;
+const gds=document.getElementById('gdStandings');if(gds)gds.innerHTML=`<div class="table">${standingsHTML}</div>`;
 const FIX=[{a:"🇹🇷 Türkiye",b:"🇵🇾 Paraguay",sc:"— : —",stat:"FRI JUN 19 · 8:00 PM"},{a:"⚪ Team C",b:"⚪ Team D",sc:"— : —",stat:"FRI JUN 19 · 5:00 PM"},{a:"🇹🇷 Türkiye",b:"⚪ Team C",sc:"— : —",stat:"TUE JUN 23"},{a:"🇵🇾 Paraguay",b:"⚪ Team D",sc:"— : —",stat:"TUE JUN 23"}];
-document.getElementById('fixtures').innerHTML=FIX.map(f=>`<div class="fxcard"><div class="ft">${f.a}</div><div style="text-align:center"><div class="fsc">${f.sc}</div><div class="fstat">${f.stat}</div></div><div class="ft" style="justify-content:flex-end">${f.b}</div></div>`).join("");
+const fixturesHTML=FIX.map(f=>`<div class="fxcard"><div class="ft">${f.a}</div><div style="text-align:center"><div class="fsc">${f.sc}</div><div class="fstat">${f.stat}</div></div><div class="ft" style="justify-content:flex-end">${f.b}</div></div>`).join("");
+document.getElementById('fixtures').innerHTML=fixturesHTML;
+const gdf=document.getElementById('gdFixtures');if(gdf)gdf.innerHTML=fixturesHTML;
 
 /* ---- GAMES ---- */
 const gg=document.getElementById('gamegrid');
@@ -1059,6 +1113,29 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
  if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
    // land on HOME, not the lock screen — lock is only reachable by tapping the shatter card
+   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
+ }}
+ else resetBg();
+});
+</script>
+eight:700">${p.pos}</div></div>`;
+  g.appendChild(s);});
+ const cnt=document.getElementById('palbumCount');if(cnt)cnt.textContent=`${paniniCollected} / 6 collected`;
+ const b=document.getElementById('popenBtn');if(b&&paniniCollected>=6){b.textContent="ALBUM COMPLETE ✦";b.style.background="#ffffff14";b.style.color="#ffffff77";}
+}
+
+/* ---- YOU ---- */
+function buildYouList(){const l=document.getElementById('youList');l.innerHTML="";
+ PEOPLE.forEach(p=>{const el=document.createElement('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
+  el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
+  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
+
+/* ---- tabs ---- */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+ const id=t.dataset.tab;
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
+ if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
    const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
  }}
  else resetBg();

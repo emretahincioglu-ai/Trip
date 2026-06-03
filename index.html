@@ -61,6 +61,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
   <div class="stage">
     <div class="loader on" id="loader"><div class="ring"></div></div>
     <iframe class="fr on" id="fr-trip" src="section-trip.html"></iframe>
+    <iframe class="fr" id="fr-matchday" data-src="section-trip.html?screen=gameday"></iframe>
     <iframe class="fr" id="fr-wc" data-src="section-worldcup.html"></iframe>
     <iframe class="fr" id="fr-games" data-src="section-games.html"></iframe>
     <div class="youpanel" id="fr-you">
@@ -73,8 +74,9 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
   </div>
 
   <div class="tabs">
-    <button class="tab on" data-tab="trip"><span class="ic">🛣️</span>Trip</button>
-    <button class="tab" data-tab="wc"><span class="ic">⚽</span>World Cup</button>
+    <button class="tab on" data-tab="trip"><span class="ic">🏠</span>Home</button>
+    <button class="tab" data-tab="matchday"><span class="ic">🔥</span>Match Day</button>
+    <button class="tab" data-tab="wc"><span class="ic">🏆</span>Scores</button>
     <button class="tab" data-tab="games"><span class="ic">🎮</span>Games</button>
     <button class="tab" data-tab="you"><span class="ic">👤</span>You</button>
   </div>
@@ -103,21 +105,18 @@ function buildYouList(){const l=document.getElementById('youList');l.innerHTML="
  PEOPLE.forEach(p=>{const el=document.createElement('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
   el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
   el.onclick=()=>{ME=p;syncRider();reloadTrip();showTab('trip');};l.appendChild(el);});}
-function reloadTrip(){const f=document.getElementById('fr-trip');f.src='section-trip.html?rider='+ME.id;}
+function reloadTrip(){
+ document.getElementById('fr-trip').src='section-trip.html?rider='+ME.id;
+ const fm=document.getElementById('fr-matchday');
+ if(fm.src && fm.src!=='about:blank') fm.src='section-trip.html?rider='+ME.id+'&screen=gameday';
+}
 
 // tabs — lazy-load iframes on first open
 const loaderEl=document.getElementById('loader');
-['trip','wc','games'].forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
+const IFRAME_KEYS=['trip','matchday','wc','games'];
+IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
 function showTab(id){
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
- const isFrame=['trip','wc','games'].includes(id);
- ['trip','wc','games'].forEach(k=>{const f=document.getElementById('fr-'+k);f.classList.toggle('on',k===id);
-   if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
- document.getElementById('fr-you').classList.toggle('on',id==='you');
- if(!isFrame)loaderEl.classList.remove('on');
-}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
-// preload trip with rider param
-document.getElementById('fr-trip').src='section-trip.html?rider=0';
-syncRider();
-</script>
+ const isFrame=IFRAME_KEYS.includes(id);
+ IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.classList.toggle('on',k===id);
+   if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.d
