@@ -227,13 +227,14 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .scrub .stm{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;display:block;letter-spacing:.04em;}
 .scrub .stn{font-size:10px;font-weight:700;margin-top:1px;display:block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* sleek SVG teardrop pins (anchored at tip) */
+/* simple CSS teardrop pins (anchored at tip) */
 .mapbox{height:50vh;min-height:340px;}
-.wmark{position:relative;width:22px;height:32px;cursor:pointer;animation:mkdrop .5s cubic-bezier(.3,1.5,.5,1) backwards;transition:transform .25s;}
+.wmark{position:relative;width:24px;height:32px;cursor:pointer;animation:mkdrop .45s cubic-bezier(.3,1.5,.5,1) backwards;transition:transform .25s;}
 @keyframes mkdrop{from{opacity:0;transform:translateY(-22px) scale(.4)}to{opacity:1;transform:none}}
-.wmark svg{display:block;width:100%;height:100%;filter:drop-shadow(0 3px 5px #0008);transition:filter .25s;}
-.wmark.active{transform:scale(1.4);z-index:5;}
-.wmark.active svg{filter:drop-shadow(0 4px 10px #000a) drop-shadow(0 0 14px var(--mc));}
+.wmark .pin{position:absolute;top:0;left:0;width:24px;height:24px;border-radius:50%;background:var(--mc);border:2px solid #fff;box-shadow:0 3px 6px #0008;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10px;font-weight:800;color:#0e0f1a;line-height:1;}
+.wmark .tail{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:9px solid var(--mc);filter:drop-shadow(0 1px 1px #0006);}
+.wmark.active{transform:scale(1.25);z-index:5;}
+.wmark.active .pin{box-shadow:0 4px 10px #000a,0 0 16px var(--mc);}
 
 /* map toggle button (above the list) */
 .maptoggle{width:100%;background:#15172a;border:1px solid #ffffff18;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-family:inherit;font-size:14px;font-weight:600;transition:.18s;margin:6px 0 0;}
@@ -756,35 +757,20 @@ function initMap(){
  }
  mapboxgl.accessToken=MAPBOX_TOKEN;
  const host=document.getElementById('mapbox');
- host.innerHTML=`
-   <button class="playtour" id="playTour" onclick="playTour()" type="button"><span class="pic"></span><span id="playLabel">PLAY TOUR</span></button>
-   <div class="timepill dusk" id="timePill"><span id="timeLabel">🌇 DUSK</span></div>
- `;
+ host.innerHTML='';
  mapInstance=new mapboxgl.Map({
    container:host,
    style:'mapbox://styles/mapbox/standard',
    center:c.mapCenter||stops[0][4],
-   zoom:10.5,pitch:55,bearing:-15,antialias:true,
-   config:{basemap:{lightPreset:'dusk',show3dObjects:true,showPointOfInterestLabels:true,showPlaceLabels:true,showRoadLabels:true,showTransitLabels:false}}
+   zoom:11.5,pitch:0,bearing:0,antialias:true,
+   config:{basemap:{lightPreset:'day',show3dObjects:false,showPointOfInterestLabels:true,showPlaceLabels:true,showRoadLabels:true,showTransitLabels:false}}
  });
  mapInstance.on('error',e=>console.warn('map',e&&e.error&&e.error.message));
 
  mapInstance.on('style.load',()=>{
-   try{
-     if(!mapInstance.getSource('mapbox-dem')){
-       mapInstance.addSource('mapbox-dem',{type:'raster-dem',url:'mapbox://mapbox.mapbox-terrain-dem-v1',tileSize:512,maxzoom:14});
-       mapInstance.setTerrain({source:'mapbox-dem',exaggeration:1.5});
-     }
-   }catch(e){}
    if(!mapInstance.getSource('route')){
      mapInstance.addSource('route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[stops[0][4]]}}});
-     mapInstance.addLayer({id:'routeglow',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff5e3a','line-width':['interpolate',['linear'],['zoom'],10,10,14,16,17,24],'line-opacity':0.45,'line-blur':14}});
-     mapInstance.addLayer({id:'route',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff8a5c','line-width':['interpolate',['linear'],['zoom'],10,3,14,5,17,7],'line-opacity':1}});
-   }
-   if(!mapInstance.getSource('comet')){
-     mapInstance.addSource('comet',{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:stops[0][4]}}});
-     mapInstance.addLayer({id:'cometglow',type:'circle',source:'comet',slot:'top',paint:{'circle-radius':22,'circle-color':'#ff5e3a','circle-blur':1,'circle-opacity':0.7}});
-     mapInstance.addLayer({id:'cometdot',type:'circle',source:'comet',slot:'top',paint:{'circle-radius':6,'circle-color':'#fff','circle-stroke-color':'#ff8a5c','circle-stroke-width':3}});
+     mapInstance.addLayer({id:'route',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff5e3a','line-width':4,'line-opacity':1}});
    }
  });
 
@@ -795,7 +781,7 @@ function initMap(){
      const g=MK[type]||['#4ad6c4','📍'];
      const el=document.createElement('div');
      el.className='wmark';el.style.setProperty('--mc',g[0]);el.dataset.idx=idx;
-     el.innerHTML=`<svg viewBox="0 0 22 32" xmlns="http://www.w3.org/2000/svg"><path d="M11 0C4.9 0 0 4.9 0 11c0 8 11 21 11 21s11-13 11-21C22 4.9 17.1 0 11 0z" fill="${g[0]}" stroke="#fff" stroke-width="1.8"/><circle cx="11" cy="11" r="5.5" fill="#fff"/><text x="11" y="14.5" font-family="Space Mono, monospace" font-weight="800" font-size="9" text-anchor="middle" fill="#0e0f1a">${idx+1}</text></svg>`;
+     el.innerHTML=`<div class="pin">${idx+1}</div><div class="tail"></div>`;
      el.style.animationDelay=(0.45+idx*0.08)+'s';
      el.addEventListener('click',e=>{e.stopPropagation();focusStop(idx,true);});
      new mapboxgl.Marker(el,{anchor:'bottom'}).setLngLat(coords).addTo(mapInstance);
@@ -816,10 +802,10 @@ function initMap(){
 function animateRouteIn(stops){
  const coords=[stops[0][4]];let i=0;
  const iv=setInterval(()=>{
-   i++;if(i>=stops.length){clearInterval(iv);startComet(stops);return;}
+   i++;if(i>=stops.length){clearInterval(iv);return;}
    coords.push(stops[i][4]);
    if(mapInstance&&mapInstance.getSource('route'))mapInstance.getSource('route').setData({type:'Feature',geometry:{type:'LineString',coordinates:coords.slice()}});
- },260);
+ },200);
 }
 function startComet(stops){
  cancelAnimationFrame(cometRAF);let segIdx=0,segT=0;
@@ -834,9 +820,8 @@ function startComet(stops){
  }
  step();
 }
-function focusStop(idx,openSheet,opts){
+function focusStop(idx,openSheet){
  if(!mapInstance)return;
- opts=opts||{};
  const stops=CITIES[curCity].items.filter(it=>it[4]);
  if(idx<0||idx>=stops.length)return;
  cancelOrbit();
@@ -844,10 +829,7 @@ function focusStop(idx,openSheet,opts){
  document.querySelectorAll('.wmark').forEach(el=>el.classList.toggle('active',+el.dataset.idx===idx));
  document.querySelectorAll('.it').forEach(el=>el.classList.toggle('on',+el.dataset.stopidx===idx));
  const it=stops[idx];
- setLightPreset(hourToPreset(timeToHour(it[3])));
- const dur=opts.fast?1400:1700;
- const zoom=opts.fast?15.6:16.2;
- mapInstance.flyTo({center:it[4],zoom:zoom,pitch:opts.fast?55:60,bearing:opts.fast?-15:-15,duration:dur,essential:true});
+ mapInstance.flyTo({center:it[4],zoom:15.5,pitch:0,bearing:0,duration:1500,essential:true});
  if(openSheet)openPlaceSheet(idx);
 }
 window.focusStop=focusStop;
