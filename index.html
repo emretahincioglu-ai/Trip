@@ -119,4 +119,12 @@ function showTab(id){
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
  const isFrame=IFRAME_KEYS.includes(id);
  IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.classList.toggle('on',k===id);
-   if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.d
+   if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
+ document.getElementById('fr-you').classList.toggle('on',id==='you');
+ if(!isFrame)loaderEl.classList.remove('on');
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
+// preload trip with rider param
+document.getElementById('fr-trip').src='section-trip.html?rider=0';
+syncRider();
+</script>
