@@ -227,18 +227,25 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .scrub .stm{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;display:block;letter-spacing:.04em;}
 .scrub .stn{font-size:10px;font-weight:700;margin-top:1px;display:block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* classic teardrop pins (anchored at tip) */
-.mapbox{height:52vh;min-height:380px;}
-.wmark{position:relative;width:30px;height:40px;cursor:pointer;animation:mkdrop .5s cubic-bezier(.3,1.5,.5,1) backwards;}
-@keyframes mkdrop{from{opacity:0;transform:translateY(-26px) scale(.5)}to{opacity:1;transform:none}}
-.wmark .pin{position:absolute;top:0;left:0;width:30px;height:30px;border-radius:50%;background:var(--mc);border:2.5px solid #fff;box-shadow:0 5px 14px #0009;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:800;color:#0e0f1a;line-height:1;transition:transform .25s,box-shadow .25s;z-index:1;}
-.wmark .tail{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid var(--mc);filter:drop-shadow(0 2px 3px #0007);}
-.wmark.active{z-index:5;}
-.wmark.active .pin{transform:scale(1.28);box-shadow:0 6px 18px #000a,0 0 22px var(--mc);}
+/* sleek SVG teardrop pins (anchored at tip) */
+.mapbox{height:50vh;min-height:340px;}
+.wmark{position:relative;width:22px;height:32px;cursor:pointer;animation:mkdrop .5s cubic-bezier(.3,1.5,.5,1) backwards;transition:transform .25s;}
+@keyframes mkdrop{from{opacity:0;transform:translateY(-22px) scale(.4)}to{opacity:1;transform:none}}
+.wmark svg{display:block;width:100%;height:100%;filter:drop-shadow(0 3px 5px #0008);transition:filter .25s;}
+.wmark.active{transform:scale(1.4);z-index:5;}
+.wmark.active svg{filter:drop-shadow(0 4px 10px #000a) drop-shadow(0 0 14px var(--mc));}
 
-/* info button on each list row */
-.itinfo{flex:none;width:34px;height:34px;background:#ffffff14;border:1px solid #ffffff22;color:#ff8a5c;border-radius:50%;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;align-self:center;margin-left:6px;transition:.15s;font-family:inherit;}
-.itinfo:hover,.itinfo:active{background:#ff5e3a;color:#fff;border-color:#ff5e3a;transform:scale(1.08);}
+/* map toggle button (above the list) */
+.maptoggle{width:100%;background:#15172a;border:1px solid #ffffff18;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-family:inherit;font-size:14px;font-weight:600;transition:.18s;margin:6px 0 0;}
+.maptoggle:hover,.maptoggle:active{background:#1c1f2e;border-color:#ff5e3a55;}
+.maptoggle .mti{font-size:20px;line-height:1;}
+.maptoggle .mtl{flex:1;text-align:left;}
+.maptoggle .mtchev{color:#ff8a5c;font-size:20px;font-weight:700;transition:transform .25s;line-height:1;}
+.maptoggle.open{background:#1c1f2e;border-color:#ff5e3a88;}
+.maptoggle.open .mtchev{transform:rotate(90deg);}
+.maptoggle.open .mtl{color:#ff8a5c;}
+#mapWrap{overflow:hidden;animation:mwopen .3s ease;}
+@keyframes mwopen{from{max-height:0;opacity:.3}to{max-height:1000px;opacity:1}}
 
 /* itinerary list clickable */
 .it.clickable{cursor:pointer;border-radius:8px;transition:background .2s;padding-left:4px;padding-right:4px;margin:0 -4px;}
@@ -673,9 +680,9 @@ function openCity(i){curCity=i;const c=CITIES[i];
   <div class="qa"><button onclick="openS('lodging')"><span class="qc">🛏️</span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc">📅</span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc">🚗</span><small>Cars</small></button><button onclick="openS('places')"><span class="qc">📍</span><small>Places</small></button></div>
   ${flightBanner}
   <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
-  ${hasCoords?`<div id="mapbox" class="mapbox"></div>`:''}
-  <div id="itinList" style="margin-top:${hasCoords?'14px':'0'}">
-  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const info=has?`<button class="itinfo" type="button" onclick="event.stopPropagation();openPlaceSheet(${sidx})" title="More info">i</button>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${info}</div>`}).join("")}
+  ${hasCoords?`<button class="maptoggle" id="mapToggle" type="button" onclick="toggleMap()"><span class="mti">🗺️</span><span class="mtl">View Stops on Map</span><span class="mtchev">›</span></button><div id="mapWrap" style="display:none;margin-top:10px"><div id="mapbox" class="mapbox"></div></div>`:''}
+  <div id="itinList" style="margin-top:14px">
+  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ff8a5c;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
   <div class="viewall">View all days ›</div>
   </div>
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
@@ -683,17 +690,42 @@ function openCity(i){curCity=i;const c=CITIES[i];
    ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
  document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
  document.getElementById('city').classList.add('on');
- // auto-launch the map for cities with coords
- if(hasCoords)setTimeout(()=>initMap(),120);
+ // reset map state for the new city (map is opt-in via toggle)
+ mapInstance=null;mapOpened=false;activeIdx=-1;cancelOrbit&&cancelOrbit();
 }
 
 /* ---- itinerary list/map toggle + WOW Mapbox ---- */
 const MAPBOX_TOKEN="pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA";
-let mapInstance=null,tourTimers=[],cometRAF=null,isTouring=false,orbitTimer=null,orbitRAF=null,activeIdx=-1;
+let mapInstance=null,tourTimers=[],cometRAF=null,isTouring=false,orbitTimer=null,orbitRAF=null,activeIdx=-1,mapOpened=false;
 function cancelOrbit(){if(orbitTimer){clearTimeout(orbitTimer);orbitTimer=null;}if(orbitRAF){cancelAnimationFrame(orbitRAF);orbitRAF=null;}}
 function deselect(){activeIdx=-1;cancelOrbit();document.querySelectorAll('.wmark').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.it.on').forEach(el=>el.classList.remove('on'));}
-function navToStop(stopIdx){if(activeIdx===stopIdx){deselect();return;}focusStop(stopIdx,false);const m=document.getElementById('mapbox');if(m)m.scrollIntoView({behavior:'smooth',block:'center'});}
-window.deselect=deselect;window.navToStop=navToStop;
+function toggleMap(){
+ const wrap=document.getElementById('mapWrap');const btn=document.getElementById('mapToggle');if(!wrap||!btn)return;
+ const lab=btn.querySelector('.mtl');
+ if(wrap.style.display==='none'){
+   wrap.style.display='block';btn.classList.add('open');lab.textContent='Hide Map';
+   if(!mapOpened){mapOpened=true;setTimeout(()=>initMap(),60);}
+   else if(mapInstance){setTimeout(()=>mapInstance.resize(),60);}
+   setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'start'}),150);
+ } else {
+   wrap.style.display='none';btn.classList.remove('open');lab.textContent='View Stops on Map';
+   stopTour&&stopTour();
+ }
+}
+function navToStop(stopIdx){
+ // sync map if it's open, and always open the place sheet
+ const wrap=document.getElementById('mapWrap');
+ if(wrap && wrap.style.display!=='none' && mapInstance){
+   focusStop(stopIdx,false);
+ } else {
+   // highlight the list row even when map is closed
+   document.querySelectorAll('.it.on').forEach(el=>el.classList.remove('on'));
+   const row=document.querySelector(`.it[data-stopidx="${stopIdx}"]`);if(row)row.classList.add('on');
+   activeIdx=stopIdx;
+ }
+ openPlaceSheet(stopIdx);
+}
+window.deselect=deselect;window.navToStop=navToStop;window.toggleMap=toggleMap;
 function setItinView(v){
  const list=document.getElementById('itinList'),map=document.getElementById('itinMap');
  document.getElementById('itbList').classList.toggle('on',v==='list');
@@ -746,13 +778,13 @@ function initMap(){
    }catch(e){}
    if(!mapInstance.getSource('route')){
      mapInstance.addSource('route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[stops[0][4]]}}});
-     mapInstance.addLayer({id:'routeglow',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff5e3a','line-width':18,'line-opacity':0.35,'line-blur':12}});
-     mapInstance.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff8a5c','line-width':4,'line-opacity':0.95}});
+     mapInstance.addLayer({id:'routeglow',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff5e3a','line-width':['interpolate',['linear'],['zoom'],10,10,14,16,17,24],'line-opacity':0.45,'line-blur':14}});
+     mapInstance.addLayer({id:'route',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff8a5c','line-width':['interpolate',['linear'],['zoom'],10,3,14,5,17,7],'line-opacity':1}});
    }
    if(!mapInstance.getSource('comet')){
      mapInstance.addSource('comet',{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:stops[0][4]}}});
-     mapInstance.addLayer({id:'cometglow',type:'circle',source:'comet',paint:{'circle-radius':22,'circle-color':'#ff5e3a','circle-blur':1,'circle-opacity':0.6}});
-     mapInstance.addLayer({id:'cometdot',type:'circle',source:'comet',paint:{'circle-radius':6,'circle-color':'#fff','circle-stroke-color':'#ff8a5c','circle-stroke-width':3}});
+     mapInstance.addLayer({id:'cometglow',type:'circle',source:'comet',slot:'top',paint:{'circle-radius':22,'circle-color':'#ff5e3a','circle-blur':1,'circle-opacity':0.7}});
+     mapInstance.addLayer({id:'cometdot',type:'circle',source:'comet',slot:'top',paint:{'circle-radius':6,'circle-color':'#fff','circle-stroke-color':'#ff8a5c','circle-stroke-width':3}});
    }
  });
 
@@ -763,7 +795,7 @@ function initMap(){
      const g=MK[type]||['#4ad6c4','📍'];
      const el=document.createElement('div');
      el.className='wmark';el.style.setProperty('--mc',g[0]);el.dataset.idx=idx;
-     el.innerHTML=`<div class="pin">${idx+1}</div><div class="tail"></div>`;
+     el.innerHTML=`<svg viewBox="0 0 22 32" xmlns="http://www.w3.org/2000/svg"><path d="M11 0C4.9 0 0 4.9 0 11c0 8 11 21 11 21s11-13 11-21C22 4.9 17.1 0 11 0z" fill="${g[0]}" stroke="#fff" stroke-width="1.8"/><circle cx="11" cy="11" r="5.5" fill="#fff"/><text x="11" y="14.5" font-family="Space Mono, monospace" font-weight="800" font-size="9" text-anchor="middle" fill="#0e0f1a">${idx+1}</text></svg>`;
      el.style.animationDelay=(0.45+idx*0.08)+'s';
      el.addEventListener('click',e=>{e.stopPropagation();focusStop(idx,true);});
      new mapboxgl.Marker(el,{anchor:'bottom'}).setLngLat(coords).addTo(mapInstance);
@@ -1014,4 +1046,3 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  else resetBg();
 });
 </script>
-                                                                                                                                                                                                                                                              
