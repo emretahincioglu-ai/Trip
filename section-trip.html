@@ -227,18 +227,23 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .scrub .stm{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;display:block;letter-spacing:.04em;}
 .scrub .stn{font-size:10px;font-weight:700;margin-top:1px;display:block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* minimal numbered dot markers */
-.wmark{position:relative;width:24px;height:24px;cursor:pointer;animation:mkdrop .45s cubic-bezier(.3,1.5,.5,1) backwards;}
-@keyframes mkdrop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
-.wmark .pin{position:absolute;inset:0;border-radius:50%;background:var(--mc);box-shadow:0 2px 8px #0009,0 0 0 2px #fff;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:800;color:#0e0f1a;line-height:1;transition:transform .25s,box-shadow .25s;}
-.wmark .tlabel{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0a0b14ee;color:#fff;font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;border-radius:5px;white-space:nowrap;letter-spacing:.04em;border:1px solid #ffffff22;pointer-events:none;}
+/* classic teardrop pins (anchored at tip) */
+.mapbox{height:52vh;min-height:380px;}
+.wmark{position:relative;width:30px;height:40px;cursor:pointer;animation:mkdrop .5s cubic-bezier(.3,1.5,.5,1) backwards;}
+@keyframes mkdrop{from{opacity:0;transform:translateY(-26px) scale(.5)}to{opacity:1;transform:none}}
+.wmark .pin{position:absolute;top:0;left:0;width:30px;height:30px;border-radius:50%;background:var(--mc);border:2.5px solid #fff;box-shadow:0 5px 14px #0009;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:800;color:#0e0f1a;line-height:1;transition:transform .25s,box-shadow .25s;z-index:1;}
+.wmark .tail{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid var(--mc);filter:drop-shadow(0 2px 3px #0007);}
 .wmark.active{z-index:5;}
-.wmark.active .pin{transform:scale(1.55);box-shadow:0 3px 12px #000a,0 0 0 2.5px #fff,0 0 22px var(--mc);}
-.wmark.active .tlabel{display:block;}
+.wmark.active .pin{transform:scale(1.28);box-shadow:0 6px 18px #000a,0 0 22px var(--mc);}
+
+/* info button on each list row */
+.itinfo{flex:none;width:34px;height:34px;background:#ffffff14;border:1px solid #ffffff22;color:#ff8a5c;border-radius:50%;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;align-self:center;margin-left:6px;transition:.15s;font-family:inherit;}
+.itinfo:hover,.itinfo:active{background:#ff5e3a;color:#fff;border-color:#ff5e3a;transform:scale(1.08);}
 
 /* itinerary list clickable */
-.it.clickable{cursor:pointer;border-radius:8px;transition:background .15s;}
+.it.clickable{cursor:pointer;border-radius:8px;transition:background .2s;padding-left:4px;padding-right:4px;margin:0 -4px;}
 .it.clickable:hover{background:#ffffff08;}
+.it.on{background:linear-gradient(90deg,#ff5e3a26,#ff5e3a08);box-shadow:inset 3px 0 0 #ff8a5c;}
 
 /* PLACE SHEET */
 .placesheet{position:fixed;inset:0;z-index:25;background:#0a0b14;transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
@@ -663,29 +668,32 @@ function openCity(i){curCity=i;const c=CITIES[i];
  const flightBanner=buildFlightBanner(c);
  // map item index -> stop index (only items with coords get a stop index)
  const stopMap={};let si=-1;c.items.forEach((it,ix)=>{if(it[4]){si++;stopMap[ix]=si;}});
+ const hasCoords=c.items.some(it=>it[4]);
  document.getElementById('cityBody').innerHTML=`${flag}
   <div class="qa"><button onclick="openS('lodging')"><span class="qc">🛏️</span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc">📅</span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc">🚗</span><small>Cars</small></button><button onclick="openS('places')"><span class="qc">📍</span><small>Places</small></button></div>
   ${flightBanner}
-  <div class="ith"><b>Itinerary</b><div class="itog">${c.items.some(it=>it[4])?`<button class="itb on" id="itbList" onclick="setItinView('list')">List</button><button class="itb" id="itbMap" onclick="setItinView('map')">Map</button>`:`<small>${c.day}</small>`}</div></div>
-  <div id="itinList">
-  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const click=has?`onclick="openPlaceSheet(${stopMap[ix]})"`:'';const chev=has?`<span style="color:#ffffff60;font-size:14px;align-self:center;padding-left:6px">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${click}><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
+  <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
+  ${hasCoords?`<div id="mapbox" class="mapbox"></div>`:''}
+  <div id="itinList" style="margin-top:${hasCoords?'14px':'0'}">
+  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const info=has?`<button class="itinfo" type="button" onclick="event.stopPropagation();openPlaceSheet(${sidx})" title="More info">i</button>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}22">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${info}</div>`}).join("")}
   <div class="viewall">View all days ›</div>
   </div>
-  <div id="itinMap" style="display:none"><div id="mapbox" class="mapbox"></div></div>
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
   <div class="exp hidden" id="exp"><div class="eh"><b>${ME.name}'s share</b><button class="eye" id="eye">👁️</button></div>
    ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
  document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
  document.getElementById('city').classList.add('on');
+ // auto-launch the map for cities with coords
+ if(hasCoords)setTimeout(()=>initMap(),120);
 }
 
 /* ---- itinerary list/map toggle + WOW Mapbox ---- */
 const MAPBOX_TOKEN="pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA";
 let mapInstance=null,tourTimers=[],cometRAF=null,isTouring=false,orbitTimer=null,orbitRAF=null,activeIdx=-1;
 function cancelOrbit(){if(orbitTimer){clearTimeout(orbitTimer);orbitTimer=null;}if(orbitRAF){cancelAnimationFrame(orbitRAF);orbitRAF=null;}}
-function deselect(){activeIdx=-1;cancelOrbit();document.querySelectorAll('.wmark').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.scrub').forEach(el=>el.classList.remove('on'));}
-function tapScrub(idx){if(activeIdx===idx){deselect();}else{focusStop(idx,false);}}
-window.deselect=deselect;window.tapScrub=tapScrub;
+function deselect(){activeIdx=-1;cancelOrbit();document.querySelectorAll('.wmark').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.it.on').forEach(el=>el.classList.remove('on'));}
+function navToStop(stopIdx){if(activeIdx===stopIdx){deselect();return;}focusStop(stopIdx,false);const m=document.getElementById('mapbox');if(m)m.scrollIntoView({behavior:'smooth',block:'center'});}
+window.deselect=deselect;window.navToStop=navToStop;
 function setItinView(v){
  const list=document.getElementById('itinList'),map=document.getElementById('itinMap');
  document.getElementById('itbList').classList.toggle('on',v==='list');
@@ -719,7 +727,6 @@ function initMap(){
  host.innerHTML=`
    <button class="playtour" id="playTour" onclick="playTour()" type="button"><span class="pic"></span><span id="playLabel">PLAY TOUR</span></button>
    <div class="timepill dusk" id="timePill"><span id="timeLabel">🌇 DUSK</span></div>
-   <div class="scrubber"><div class="strip" id="scrubStrip"></div></div>
  `;
  mapInstance=new mapboxgl.Map({
    container:host,
@@ -756,13 +763,12 @@ function initMap(){
      const g=MK[type]||['#4ad6c4','📍'];
      const el=document.createElement('div');
      el.className='wmark';el.style.setProperty('--mc',g[0]);el.dataset.idx=idx;
-     el.innerHTML=`<div class="pin">${idx+1}</div>`;
-     el.style.animationDelay=(0.5+idx*0.09)+'s';
+     el.innerHTML=`<div class="pin">${idx+1}</div><div class="tail"></div>`;
+     el.style.animationDelay=(0.45+idx*0.08)+'s';
      el.addEventListener('click',e=>{e.stopPropagation();focusStop(idx,true);});
-     new mapboxgl.Marker(el,{anchor:'center'}).setLngLat(coords).addTo(mapInstance);
+     new mapboxgl.Marker(el,{anchor:'bottom'}).setLngLat(coords).addTo(mapInstance);
    });
    const strip=document.getElementById('scrubStrip');
-   if(strip)strip.innerHTML=stops.map((it,idx)=>{const n=it[1].split(' — ')[0].split(' + ')[0];const short=n.length>14?n.slice(0,13)+'…':n;return `<div class="scrub" data-idx="${idx}" onclick="tapScrub(${idx})"><span class="stm">${it[3]||'—'}</span><span class="stn">${short}</span></div>`;}).join('');
    // tap empty map (not a pin) to deselect
    mapInstance.on('click',e=>{if(e.originalEvent.target.closest('.wmark'))return;deselect();});
    setTimeout(()=>{
@@ -796,20 +802,20 @@ function startComet(stops){
  }
  step();
 }
-function focusStop(idx,openSheet){
+function focusStop(idx,openSheet,opts){
  if(!mapInstance)return;
+ opts=opts||{};
  const stops=CITIES[curCity].items.filter(it=>it[4]);
  if(idx<0||idx>=stops.length)return;
  cancelOrbit();
  activeIdx=idx;
  document.querySelectorAll('.wmark').forEach(el=>el.classList.toggle('active',+el.dataset.idx===idx));
- document.querySelectorAll('.scrub').forEach(el=>el.classList.toggle('on',+el.dataset.idx===idx));
- const onScrub=document.querySelector(`.scrub[data-idx="${idx}"]`);
- if(onScrub)onScrub.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+ document.querySelectorAll('.it').forEach(el=>el.classList.toggle('on',+el.dataset.stopidx===idx));
  const it=stops[idx];
  setLightPreset(hourToPreset(timeToHour(it[3])));
- mapInstance.flyTo({center:it[4],zoom:16.2,pitch:60,bearing:-15,duration:2000,essential:true});
- // no auto-orbit on manual taps -- user can pan/zoom/rotate freely
+ const dur=opts.fast?1400:1700;
+ const zoom=opts.fast?15.6:16.2;
+ mapInstance.flyTo({center:it[4],zoom:zoom,pitch:opts.fast?55:60,bearing:opts.fast?-15:-15,duration:dur,essential:true});
  if(openSheet)openPlaceSheet(idx);
 }
 window.focusStop=focusStop;
@@ -822,7 +828,7 @@ function playTour(){
  const btn=document.getElementById('playTour');if(btn)btn.classList.add('playing');
  const lab=document.getElementById('playLabel');if(lab)lab.textContent='STOP TOUR';
  let i=0;
- function step(){if(!isTouring||i>=stops.length){stopTour();return;}focusStop(i,false);i++;tourTimers.push(setTimeout(step,6000));}
+ function step(){if(!isTouring||i>=stops.length){stopTour();return;}focusStop(i,false,{fast:true});i++;tourTimers.push(setTimeout(step,2400));}
  step();
 }
 function stopTour(){
@@ -1008,4 +1014,4 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  else resetBg();
 });
 </script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                              
