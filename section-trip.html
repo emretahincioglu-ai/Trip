@@ -40,7 +40,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .flags{font-size:16px;}
 
 /* shatter */
-.photo{position:absolute;inset:0;background-image:radial-gradient(circle at 50% 30%,#fff0c0 0 7%,#ffd166 15%,transparent 42%),linear-gradient(180deg,#ff8a3a,#ff5e6a 40%,#9a3a7a 66%,#1c2e5a 100%);}
+.photo{position:absolute;inset:0;background-image:url('./squad.jpg'),radial-gradient(circle at 50% 30%,#fff0c0 0 7%,#ffd166 15%,transparent 42%),linear-gradient(180deg,#ff8a3a,#ff5e6a 40%,#9a3a7a 66%,#1c2e5a 100%);background-size:cover,auto,auto;background-position:center,0 0,0 0;background-repeat:no-repeat;}
 .puzzle{position:absolute;inset:0;}
 .pc{position:absolute;background-image:radial-gradient(circle at 25% 18%,#9fb2c8 0 3%,transparent 14%),linear-gradient(180deg,#2a3a52,#3d5571 48%,#536b88 74%,#101a2c 100%);background-repeat:no-repeat;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .9s,filter .9s;outline:.5px solid #00000022;}
 .pc.gone{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.55);opacity:0;filter:blur(1px);}
@@ -576,7 +576,43 @@ function makePuzzle(host,cols,rows,scatter){host.innerHTML="";const arr=[];
  return {arr,total:arr.length,order:[...arr.keys()].sort(()=>Math.random()-0.5)};}
 const big=makePuzzle(document.getElementById('puzzleBig'),7,11,160);
 const cardP=makePuzzle(document.getElementById('puzzleCard'),6,4,40);
-function shatter(P,rem){const k=Math.round(Math.pow(1-rem/WINDOW,1.7)*P.total);P.order.forEach((idx,rank)=>P.arr[idx].classList.toggle('gone',rank<k));}
+
+/* Day-based shatter math: more bricks fall as kickoff nears (acceleration curve) */
+function dayK(daysRem,total){const rem=Math.max(0,Math.min(WINDOW,daysRem));return Math.round(Math.pow(1-rem/WINDOW,1.7)*total);}
+
+/* Sequential animation:
+   - Bricks shattered on PREVIOUS days fade fast (in 1.4s total)
+   - TODAY's new bricks fall slowly (650ms each) so you see them
+*/
+function animateShatter(P,currentK,prevK){
+ P.arr.forEach(p=>p.classList.remove('gone'));
+ if(currentK<=0)return;
+ const oldEnd=1400;
+ const oldStep=prevK>0?oldEnd/prevK:0;
+ P.order.forEach((idx,rank)=>{
+   if(rank>=currentK)return;
+   let delay;
+   if(rank<prevK){delay=200+rank*oldStep;}
+   else{const todayRank=rank-prevK;delay=oldEnd+500+todayRank*650;}
+   setTimeout(()=>P.arr[idx].classList.add('gone'),delay);
+ });
+}
+
+/* tick() shatter calls are no-ops; on-load anim handles it */
+function shatter(P,rem){/* handled by animateShatter on load */}
+
+/* Run the on-open animation once */
+(function runInitialShatter(){
+ const ms=Math.max(0,START-Date.now());
+ const days=ms/864e5;
+ const bigK=dayK(days,big.total);
+ const bigPrev=dayK(days+1,big.total);
+ animateShatter(big,bigK,bigPrev);
+ // Small countdown card: simple staggered reveal, no slow tail
+ const cK=dayK(days,cardP.total);
+ cardP.arr.forEach(p=>p.classList.remove('gone'));
+ cardP.order.forEach((idx,rank)=>{if(rank>=cK)return;setTimeout(()=>cardP.arr[idx].classList.add('gone'),200+rank*60);});
+})();
 function rowHTML(dd,hh,mm){return [[dd,"DAYS"],[hh,"HRS"],[mm,"MIN"]].map(c=>`<div class="u"><div class="n">${String(c[0]).padStart(2,"0")}</div><div class="l">${c[1]}</div></div>`).join("");}
 function tick(){const ms=Math.max(0,START-Date.now());const dd=Math.floor(ms/864e5),hh=Math.floor(ms%864e5/36e5),mm=Math.floor(ms%36e5/6e4);
  document.getElementById('trowBig').innerHTML=rowHTML(dd,hh,mm);document.getElementById('trowSm').innerHTML=rowHTML(dd,hh,mm);
