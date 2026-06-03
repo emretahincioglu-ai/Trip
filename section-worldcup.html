@@ -22,6 +22,26 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 .hdr .menu{width:38px;height:38px;border-radius:50%;background:#1c1c1e;display:flex;align-items:center;justify-content:center;font-size:16px;}
 
 /* date tabs */
+.sectabs{display:flex;gap:26px;padding:10px 16px 0;border-bottom:1px solid #1c1c1e;}
+.sectab{font-size:16px;font-weight:700;color:#666;padding-bottom:12px;cursor:pointer;}
+.sectab.on{color:#fff;border-bottom:2px solid #16e06a;}
+/* full standings */
+.standwrap{padding:8px 12px 20px;}
+.grpcard{background:#1c1c1e;border-radius:14px;margin-bottom:12px;overflow:hidden;}
+.grphead{font-weight:800;font-size:15px;padding:14px 16px 6px;}
+.stbl{width:100%;}
+.stbl .sthead,.stbl .strow{display:grid;grid-template-columns:18px 1fr 22px 22px 22px 22px 40px 30px;gap:3px;align-items:center;padding:9px 14px;font-size:13px;}
+.stbl .sthead{font-size:10px;color:#888;font-weight:700;letter-spacing:.03em;}
+.stbl .strow{border-top:1px solid #141414;}
+.stbl .strow .qb{width:3px;height:22px;border-radius:2px;}
+.stbl .strow .tm{display:flex;align-items:center;gap:7px;font-weight:600;min-width:0;overflow:hidden;}
+.stbl .strow .tm .cr{width:20px;height:20px;border-radius:50%;overflow:hidden;flex:none;background:#2c2c2e;display:inline-flex;align-items:center;justify-content:center;font-size:12px;}
+.stbl .strow .tm .cr img{width:100%;height:100%;object-fit:cover;}
+.stbl .strow .tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stbl .strow .n{text-align:center;color:#bbb;font-family:'Space Mono',monospace;}
+.stbl .strow .gd{text-align:center;color:#999;font-family:'Space Mono',monospace;font-size:12px;}
+.stbl .strow .pt{text-align:center;font-weight:800;font-family:'Space Mono',monospace;}
+.stbl .strow.ours{background:#16e06a0e;}
 .datetabs{display:flex;gap:20px;padding:6px 16px 14px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;border-bottom:1px solid #1c1c1e;}.datetabs::-webkit-scrollbar{display:none;}
 .dtab{flex:none;font-size:17px;font-weight:700;color:#666;cursor:pointer;white-space:nowrap;padding-bottom:4px;}
 .dtab.on{color:#fff;border-bottom:2px solid #16e06a;}
@@ -36,8 +56,9 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 .mrow .side{flex:1;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;}
 .mrow .side.home{justify-content:flex-end;text-align:right;}
 .mrow .fl{width:30px;height:30px;border-radius:50%;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2c2c2e;flex:none;overflow:hidden;}
-.mrow .fl .crestimg{width:100%;height:100%;object-fit:cover;}
-.crestimg{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.mrow .fl .crestimg{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.crestimg{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;}
+.dscore .t .fl .crestimg,.tphero .fl .crestimg{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .mrow .mid{width:74px;text-align:center;flex:none;}
 .mrow .mid .time{font-size:15px;font-weight:700;line-height:1.15;}
 .mrow .mid .sc{font-size:20px;font-weight:800;font-family:'Space Mono',monospace;}
@@ -54,7 +75,7 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 .dnav .back,.dnav .more{width:40px;height:40px;border-radius:50%;background:#ffffff18;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;}
 .dscore{display:flex;align-items:center;justify-content:space-between;padding:16px 8px 18px;}
 .dscore .t{flex:1;text-align:center;}
-.dscore .t .fl{width:70px;height:70px;border-radius:50%;background:#2c2c2e;font-size:44px;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+.dscore .t .fl{width:70px;height:70px;border-radius:50%;background:#2c2c2e;font-size:44px;display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;}
 .dscore .t .tn{font-size:16px;font-weight:700;margin-top:8px;}
 .dscore .t .rk{font-size:11px;color:#888;background:#ffffff14;display:inline-block;padding:2px 8px;border-radius:999px;margin-top:4px;}
 .dscore .mid{padding:0 10px;text-align:center;}
@@ -126,7 +147,7 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
 .teampage #teamInner{width:100%;max-width:460px;margin:0 auto;}
 .tphead{padding:14px 16px 0;}
 .tphero{display:flex;align-items:center;gap:14px;padding:14px 4px 16px;}
-.tphero .fl{width:64px;height:64px;border-radius:50%;background:#2c2c2e;font-size:38px;display:flex;align-items:center;justify-content:center;}
+.tphero .fl{width:64px;height:64px;border-radius:50%;background:#2c2c2e;font-size:38px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .tphero .tn{font-size:26px;font-weight:800;}
 .tphero .rk{font-size:12px;color:#888;background:#ffffff14;display:inline-block;padding:3px 10px;border-radius:999px;margin-top:4px;}
 .tptabs{display:flex;gap:22px;padding:0 16px;border-bottom:1px solid #1c1c1e;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;}.tptabs::-webkit-scrollbar{display:none;}
@@ -154,8 +175,17 @@ body{font-family:'DM Sans',sans-serif;background:#000;color:#fff;overflow:hidden
       <div class="logo">🏆 World<span class="b">Cup</span></div>
       <div class="ctrls"><div class="livepill on" id="livePill"><span class="dot"></span>Live</div><div class="menu">☰</div></div>
     </div>
-    <div class="datetabs" id="datetabs"></div>
-    <div id="matchlist"></div>
+    <div class="sectabs" id="sectabs">
+      <div class="sectab on" data-sec="matches" onclick="showSection('matches')">Matches</div>
+      <div class="sectab" data-sec="table" onclick="showSection('table')">Table</div>
+      <div class="sectab" data-sec="bracket" onclick="showSection('bracket')">Bracket</div>
+    </div>
+    <div id="sec-matches">
+      <div class="datetabs" id="datetabs"></div>
+      <div id="matchlist"></div>
+    </div>
+    <div id="sec-table" style="display:none"></div>
+    <div id="sec-bracket" style="display:none"></div>
   </div>
 
   <div class="tabs">
@@ -312,18 +342,25 @@ function setDetailTab(t){detailTab=t;document.querySelectorAll('.dtab2').forEach
 window.setDetailTab=setDetailTab;
 function drawDetailBody(){const m=curMatch;const b=document.getElementById('dbody');let h="";
  if(detailTab==="preview"){
-  h+=`<div class="card"><div class="vote"><div class="vh"><b>Who will win?</b><small>Tap to vote</small></div><div class="voptions">
-   <button class="vopt" style="--p:34%"><span class="fl">${mFl(m,'h')}</span><span class="lbl">${mName(m,'h')}</span><span class="pct">34%</span><div class="barbg"></div></button>
-   <button class="vopt" style="--p:28%"><span class="lbl">Draw</span><span class="pct">28%</span><div class="barbg"></div></button>
-   <button class="vopt" style="--p:38%"><span class="fl">${mFl(m,'a')}</span><span class="lbl">${mName(m,'a')}</span><span class="pct">38%</span><div class="barbg"></div></button>
-  </div></div></div>`;
-  h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${m.matchNo||'World Cup 2026'}</div><div class="saddr">FIFA World Cup 2026 · Group Stage</div><div class="srow"><span class="k">Kickoff</span><span>${m.time||'TBD'}</span></div><div class="srow"><span class="k">Group</span><span>${m.grp||''}</span></div></div></div>`;
-  // both teams quick-access cards
-  h+=`<div class="card"><div class="form"><div class="sectit">Teams</div>
-    <div class="frow" style="cursor:pointer" onclick="openTeamLive('${m.hName}',${m.hId||'null'})"><span class="fl" style="width:30px;height:30px;border-radius:50%;overflow:hidden;display:inline-flex">${mFl(m,'h')}</span><span class="opp">${mName(m,'h')} ›</span></div>
-    <div class="frow" style="cursor:pointer" onclick="openTeamLive('${m.aName}',${m.aId||'null'})"><span class="fl" style="width:30px;height:30px;border-radius:50%;overflow:hidden;display:inline-flex">${mFl(m,'a')}</span><span class="opp">${mName(m,'a')} ›</span></div>
+  // HERO matchup banner with crests + colors
+  h+=`<div class="card" style="background:linear-gradient(135deg,${m.hC||'#333'}33,${m.aC||'#333'}33);">
+    <div style="display:flex;align-items:center;justify-content:space-around;padding:18px 10px">
+      <div style="text-align:center;flex:1"><div style="width:54px;height:54px;border-radius:50%;overflow:hidden;margin:0 auto 8px;background:#2c2c2e;display:flex;align-items:center;justify-content:center;font-size:30px">${mFl(m,'h')}</div><div style="font-weight:700;font-size:13px">${mName(m,'h')}</div></div>
+      <div style="font-family:'Space Mono',monospace;font-size:20px;color:#888">VS</div>
+      <div style="text-align:center;flex:1"><div style="width:54px;height:54px;border-radius:50%;overflow:hidden;margin:0 auto 8px;background:#2c2c2e;display:flex;align-items:center;justify-content:center;font-size:30px">${mFl(m,'a')}</div><div style="font-weight:700;font-size:13px">${mName(m,'a')}</div></div>
+    </div></div>`;
+  // match info
+  h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${m.matchNo||'World Cup 2026'}</div><div class="saddr">FIFA World Cup 2026 · Group Stage</div><div class="srow"><span class="k">Kickoff</span><span>${m.time||'TBD'}</span></div><div class="srow"><span class="k">Date</span><span>${m.dd||''}</span></div><div class="srow"><span class="k">Group</span><span>${m.grp||''}</span></div></div></div>`;
+  // group standings mini (real, from group)
+  h+=`<div class="card"><div class="form"><div class="sectit">${m.grp} standings</div><div id="prevStand" style="color:#888;font-size:13px">Loading…</div></div></div>`;
+  // tap teams
+  h+=`<div class="card"><div class="form"><div class="sectit">Explore teams</div>
+    <div class="frow" style="cursor:pointer;align-items:center" onclick="openTeamLive('${m.hName}',${m.hId||'null'})"><span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-flex;background:#2c2c2e;align-items:center;justify-content:center;font-size:16px">${mFl(m,'h')}</span><span class="opp">${mName(m,'h')} — squad, stadium ›</span></div>
+    <div class="frow" style="cursor:pointer;align-items:center" onclick="openTeamLive('${m.aName}',${m.aId||'null'})"><span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-flex;background:#2c2c2e;align-items:center;justify-content:center;font-size:16px">${mFl(m,'a')}</span><span class="opp">${mName(m,'a')} — squad, stadium ›</span></div>
   </div></div>`;
-  const F=TEAM[m.h]?.form||(OURS_TEAMS.includes(m.hName)?TEAM.TUR.form:null);if(F)h+=`<div class="card"><div class="form"><div class="sectit">${mName(m,'h')} · recent form</div>${F.map(f=>`<div class="frow"><span class="res ${f[0].toLowerCase()}">${f[1]}</span><span class="opp">${f[3]} ${f[2]}</span></div>`).join("")}</div></div>`;
+  b.innerHTML=h;
+  loadPreviewStandings(m);
+  return;
  }
  else if(detailTab==="table"){
   h+=`<div class="card"><div class="grouphdr" style="padding:14px 16px 4px"><span class="ico">🏆</span>${m.grp}</div><div class="tbl"><div class="thead"><span></span><span>Team</span><span>PL</span><span>W</span><span>D</span><span>L</span><span>PTS</span></div>${GROUP_D.map((t,i)=>`<div class="trow ${t[0]===m.h||t[0]===m.a?'us':''}"><span class="pos">${i+1}</span><span class="tm"><span class="bar" style="background:${i<2?'#16e06a':'#444'}"></span><span class="fl">${teamFl(t[0])}</span>${teamName(t[0])}</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>`).join("")}</div></div>`;
@@ -340,6 +377,28 @@ function drawDetailBody(){const m=curMatch;const b=document.getElementById('dbod
 
 // team page
 let teamTab="overview",curTeam=null;
+
+/* ---- live standings cache + preview group table ---- */
+let STANDINGS=null;
+async function ensureStandings(){
+ if(STANDINGS) return STANDINGS;
+ try{ const r=await WCR.smFetch(`standings/seasons/${WCR.WC_SEASON_ID}`); STANDINGS=r&&r.data?r.data:[]; }catch(e){STANDINGS=[];}
+ return STANDINGS;
+}
+async function loadPreviewStandings(m){
+ const el=document.getElementById('prevStand'); if(!el) return;
+ const st=await ensureStandings();
+ // group_id letter match: find rows whose group matches this match's group letter
+ const letter=(m.grp||'').replace('GROUP ','').trim();
+ const gid=Object.keys(WCR.GROUP_IDS).find(k=>WCR.GROUP_IDS[k]===letter);
+ const rows=st.filter(r=>String(r.group_id)===String(gid)).sort((a,b)=>(a.position||9)-(b.position||9));
+ if(!rows.length){ el.innerHTML=`<div style="color:#888">Standings populate once games begin (Jun 11).</div>`; return; }
+ el.innerHTML=rows.map(r=>{
+   const nm=WCR.teamNameById?WCR.teamNameById(r.participant_id):('Team '+r.participant_id);
+   return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #ffffff0d"><span>${r.position}. ${nm}</span><span style="font-family:'Space Mono',monospace">${r.points||0} pts</span></div>`;
+ }).join("");
+}
+
 function openTeam(c){if(!TEAM[c])return;curTeam=c;teamTab="overview";drawTeam();document.getElementById('teampage').classList.add('on');}
 function closeTeam(){document.getElementById('teampage').classList.remove('on');}
 window.openTeam=openTeam;window.closeTeam=closeTeam;
@@ -348,7 +407,10 @@ window.openTeam=openTeam;window.closeTeam=closeTeam;
 let liveTeam=null;
 async function openTeamLive(name,id){
  const info=WCR.teamInfo(name)||{};const col=WCR.colorsFor(name);
- liveTeam={n:name,fl:col.fl,crest:info.crest||null,id:id||info.id||null,c1:col.c1,squad:null,loading:true};
+ const extra=TEAM[info.code]||(OURS_TEAMS.includes(name)?TEAM.TUR:null)||{};
+ liveTeam={n:name,fl:col.fl,c1:col.c1,crest:info.crest||null,id:id||info.id||null,code:info.code,
+   coach:extra.coach||null,rank:extra.rank||null,stadium:extra.stadium||null,form:extra.form||null,
+   squad:null,loading:true};
  curTeam='__live__';teamTab="overview";
  document.getElementById('teampage').classList.add('on');
  drawLiveTeam();
@@ -358,21 +420,30 @@ async function openTeamLive(name,id){
      if(resp&&resp.data&&resp.data.players){
        const seen=new Set();const buckets={Keepers:[],Defenders:[],Midfielders:[],Forwards:[]};
        resp.data.players.forEach(row=>{const p=row.player;if(!p||seen.has(p.id))return;seen.add(p.id);
-         const b=WCR.posBucket(row.position_id);
-         buckets[b].push([row.jersey_number||"",p.display_name||p.name,p.image_path||"",p.date_of_birth?age(p.date_of_birth):""]);});
+         const bk=WCR.posBucket(row.position_id);
+         buckets[bk].push([row.jersey_number||"",p.display_name||p.name,p.image_path||"",p.date_of_birth?age(p.date_of_birth):""]);});
        liveTeam.squad=buckets;
      }
+     if(resp&&resp.data&&resp.data.venue_id){liveTeam.venueId=resp.data.venue_id;}
    }catch(e){console.error("[wc] squad load",e);}
  }
  liveTeam.loading=false;drawLiveTeam();
 }
 function age(dob){const d=new Date(dob);return Math.floor((Date.now()-d)/3.156e10);}
 window.openTeamLive=openTeamLive;
+function teamNextMatch(name){
+ // find earliest upcoming match in MATCHES involving this team
+ let found=null,best=Infinity;
+ Object.keys(MATCHES).forEach(k=>MATCHES[k].forEach(m=>{
+   if((m.hName===name||m.aName===name)&&m.status!=='final'){ const t=new Date(m.dd).getTime()||0; if(true){ if(!found)found=m; } }
+ }));
+ return found;
+}
 function drawLiveTeam(){const T=liveTeam;const hasSquad=T.squad&&Object.values(T.squad).some(a=>a.length);
  const tabs=hasSquad?["Overview","Squad"]:["Overview"];
- const crestHTML=T.crest?`<div class="fl"><img class="crestimg" src="${T.crest}" onerror="this.replaceWith(document.createTextNode('${T.fl}'))"></div>`:`<div class="fl">${T.fl}</div>`;
- let inner=`<div class="tphead"><div class="dnav"><div class="back" onclick="closeTeam()">‹</div><div class="more" onclick="closeTeam()">✕</div></div>
-   <div class="tphero">${crestHTML}<div><div class="tn">${T.n}</div></div></div>
+ const crestHTML=T.crest?`<div class="fl"><img class="crestimg" src="${T.crest}" onerror="this.parentElement.textContent='${T.fl}'"></div>`:`<div class="fl">${T.fl}</div>`;
+ let inner=`<div class="tphead" style="background:linear-gradient(180deg,${T.c1}22,transparent)"><div class="dnav"><div class="back" onclick="closeTeam()">‹</div><div class="more" onclick="closeTeam()">✕</div></div>
+   <div class="tphero">${crestHTML}<div><div class="tn">${T.n}</div>${T.rank?`<div class="rk">FIFA #${T.rank}</div>`:''}</div></div>
    <div class="tptabs">${tabs.map(t=>`<div class="tpt ${t.toLowerCase()===teamTab?'on':''}" onclick="setLiveTeamTab('${t.toLowerCase()}')">${t}</div>`).join("")}</div></div>
   <div class="tpbody" id="tpbody"></div>`;
  document.getElementById('teamInner').innerHTML=inner;drawLiveTeamBody();
@@ -381,16 +452,39 @@ function setLiveTeamTab(t){teamTab=t;document.querySelectorAll('.tpt').forEach(x
 window.setLiveTeamTab=setLiveTeamTab;
 function drawLiveTeamBody(){const T=liveTeam;const b=document.getElementById('tpbody');let h="";
  if(teamTab==="overview"){
-   h+=`<div class="card"><div class="stad"><div class="sname">${T.fl} ${T.n}</div><div class="saddr">FIFA World Cup 2026</div></div></div>`;
-   if(T.loading)h+=`<div class="card"><div style="padding:24px;text-align:center;color:#888">Loading squad…</div></div>`;
-   else if(!T.squad)h+=`<div class="card"><div style="padding:24px;text-align:center;color:#888">Squad data not available yet.</div></div>`;
-   else h+=`<div class="card"><div style="padding:18px;text-align:center;color:#aaa">Tap the <b>Squad</b> tab to see the full roster with photos.</div></div>`;
+   // NEXT MATCH
+   const nm=teamNextMatch(T.n);
+   if(nm){ const opp=nm.hName===T.n?nm.aName:nm.hName; const oppFl=nm.hName===T.n?mFl(nm,'a'):mFl(nm,'h');
+     h+=`<div class="card"><div class="nextm"><div class="nh">Next match</div><div class="nrow"><span class="tm">${T.n}</span><span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-flex;background:#2c2c2e;align-items:center;justify-content:center">${T.crest?`<img class="crestimg" src="${T.crest}">`:T.fl}</span><span class="tt">${(nm.dd||'').toUpperCase()}</span><span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-flex;background:#2c2c2e;align-items:center;justify-content:center">${oppFl}</span><span class="tm">${opp}</span></div></div></div>`;
+   }
+   // FORM (real for Türkiye, else skip cleanly)
+   if(T.form)h+=`<div class="card"><div class="form"><div class="sectit">Recent form</div>${T.form.map(f=>`<div class="frow"><span class="res ${f[0].toLowerCase()}">${f[1]}</span><span class="opp">${f[3]} ${f[2]}</span></div>`).join("")}</div></div>`;
+   // COACH
+   if(T.coach)h+=`<div class="card"><div class="stad"><div class="sname">👔 ${T.coach}</div><div class="saddr">Head coach</div></div></div>`;
+   // STADIUM
+   if(T.stadium&&T.stadium!=="—")h+=`<div class="card"><div class="stad"><div class="sname">🏟️ ${T.stadium}</div><div class="srow"><span class="k">Surface</span><span>Grass</span></div></div></div>`;
+   // GROUP STANDING
+   h+=`<div class="card"><div class="form"><div class="sectit">Group standing</div><div id="teamStand" style="color:#888;font-size:13px">Loading…</div></div></div>`;
+   if(T.loading)h+=`<div class="card"><div style="padding:20px;text-align:center;color:#888">Loading squad…</div></div>`;
+   b.innerHTML=h;
+   loadTeamStanding(T);
+   return;
  } else if(teamTab==="squad"&&T.squad){
    h+=`<div class="card squad">`;Object.keys(T.squad).forEach(pos=>{if(!T.squad[pos].length)return;
      h+=`<div class="pos-h">${pos}</div>`+T.squad[pos].map(p=>`<div class="pl-row"><span class="no">${p[0]||'–'}</span><div class="ph" style="${p[2]?`background-image:url('${p[2]}');background-size:cover;background-position:center top`:''}"></div><div class="nm"><b>${p[1]}</b></div><div class="ag">${p[3]||''}</div></div>`).join("");});
    h+=`</div>`;
  }
  b.innerHTML=h;
+}
+async function loadTeamStanding(T){
+ const el=document.getElementById('teamStand'); if(!el) return;
+ const st=await ensureStandings();
+ const myId=T.id;
+ const myRow=st.find(r=>String(r.participant_id)===String(myId));
+ if(!myRow){ el.innerHTML=`<div style="color:#888">Standings populate once games begin (Jun 11).</div>`; return; }
+ const rows=st.filter(r=>String(r.group_id)===String(myRow.group_id)).sort((a,b)=>(a.position||9)-(b.position||9));
+ el.innerHTML=rows.map(r=>{const nm=WCR.teamNameById(r.participant_id);const me=String(r.participant_id)===String(myId);
+   return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #ffffff0d;${me?'color:#16e06a;font-weight:700':''}"><span>${r.position}. ${nm}</span><span style="font-family:'Space Mono',monospace">${r.points||0} pts</span></div>`;}).join("");
 }
 function drawTeam(){const T=TEAM[curTeam];const tabs=T.squad?["Overview","Matches","Table","Squad"]:["Overview","Matches","Table"];
  let inner=`<div class="tphead"><div class="dnav"><div class="back" onclick="closeTeam()">‹</div><div class="more" onclick="closeTeam()">✕</div></div>
@@ -418,7 +512,50 @@ function drawTeamBody(){const T=TEAM[curTeam];const b=document.getElementById('t
  b.innerHTML=h;
 }
 
-/* initial demo render, then load live fixtures */
+/* ---- SECTION SWITCHING (Matches / Table / Bracket) ---- */
+function showSection(s){
+ document.querySelectorAll('.sectab').forEach(t=>t.classList.toggle('on',t.dataset.sec===s));
+ document.getElementById('sec-matches').style.display = s==='matches'?'':'none';
+ document.getElementById('sec-table').style.display = s==='table'?'':'none';
+ document.getElementById('sec-bracket').style.display = s==='bracket'?'':'none';
+ if(s==='table') renderTable();
+ if(s==='bracket') renderBracket();
+}
+window.showSection=showSection;
+
+async function renderTable(){
+ const host=document.getElementById('sec-table');
+ host.innerHTML=`<div class="standwrap"><div style="padding:30px;text-align:center;color:#888">Loading tables…</div></div>`;
+ const st=await ensureStandings();
+ if(!st||!st.length){ host.innerHTML=`<div class="standwrap"><div style="padding:30px;text-align:center;color:#888">Standings populate once the tournament begins (Jun 11). The structure is ready.</div></div>`; return; }
+ // group rows by group_id, ordered A..L
+ const byGroup={};
+ st.forEach(r=>{(byGroup[r.group_id]=byGroup[r.group_id]||[]).push(r);});
+ const gids=Object.keys(byGroup).sort((a,b)=>{const la=WCR.groupLetter(a),lb=WCR.groupLetter(b);return la.localeCompare(lb);});
+ let h=`<div class="standwrap">`;
+ gids.forEach(gid=>{
+   const letter=WCR.groupLetter(gid);
+   const rows=byGroup[gid].sort((a,b)=>(a.position||9)-(b.position||9));
+   h+=`<div class="grpcard"><div class="grphead">🏆 Group ${letter}</div>
+     <div class="stbl"><div class="sthead"><span></span><span>Team</span><span>PL</span><span>W</span><span>D</span><span>L</span><span>+/-</span><span>PTS</span></div>`;
+   rows.forEach((r,i)=>{
+     const info=WCR.teamById(r.participant_id);
+     const nm=info?info.name:WCR.teamNameById(r.participant_id);
+     const crest=info?info.crest:null;
+     const ours=info&&(info.name==='Türkiye');
+     const qbColor=i<2?'#16e06a':(i===2?'#ffd447':'#444');
+     const cr=crest?`<span class="cr"><img src="${crest}" onerror="this.parentElement.textContent='⚪'"></span>`:`<span class="cr">⚪</span>`;
+     h+=`<div class="strow ${ours?'ours':''}"><span class="qb" style="background:${qbColor}"></span><span class="tm">${cr}<span class="nm">${nm}</span></span><span class="n">${r.games_played||0}</span><span class="n">${r.won||0}</span><span class="n">${r.draw||0}</span><span class="n">${r.lost||0}</span><span class="gd">${(r.goals_scored||0)}-${(r.goals_against||0)}</span><span class="pt">${r.points||0}</span></div>`;
+   });
+   h+=`</div></div>`;
+ });
+ h+=`</div>`;
+ host.innerHTML=h;
+}
+function renderBracket(){
+ document.getElementById('sec-bracket').innerHTML=`<div class="standwrap"><div style="padding:40px 20px;text-align:center;color:#888">🏆<br><br>Knockout bracket coming soon —<br>Round of 32 → Final.<br><br>Fills in as group stage finishes.</div></div>`;
+}
+
 rebuildDayTabs();
 renderList();
 loadLiveFixtures();

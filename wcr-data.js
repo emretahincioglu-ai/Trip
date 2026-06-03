@@ -74,6 +74,11 @@ function teamInfo(name){
  const key=Object.keys(TEAM_DATA).find(k=>norm(k)===norm(name));
  return key?TEAM_DATA[key]:null;
 }
+/* reverse: team id → {name, crest, code} */
+const ID_TO_TEAM={};
+Object.keys(TEAM_DATA).forEach(n=>{ID_TO_TEAM[TEAM_DATA[n].id]={name:n,...TEAM_DATA[n]};});
+function teamById(id){return ID_TO_TEAM[id]||null;}
+function teamNameById(id){return ID_TO_TEAM[id]?ID_TO_TEAM[id].name:('Team '+id);}
 
 /* World Cup 2026 season + group stage IDs (from SportMonks docs) */
 const WC_SEASON_ID = 26618;
@@ -206,4 +211,4 @@ const wcrApi = {
 };
 
 /* expose globally for the section files / iframes */
-window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_DATA, teamInfo, GROUP_IDS, groupLetter, fetchAllGroupFixtures };
+window.WCR = { TEAM_COLORS, colorsFor, smFetch, wcrApi, WC_SEASON_ID, WC_GROUP_STAGE_ID, SM_PROXY, SM_ANON, POS_MAP, posBucket, TEAM_DATA, teamInfo, teamById, teamNameById, ID_TO_TEAM, GROUP_IDS, groupLetter, fetchAllGroupFixtures };
