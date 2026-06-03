@@ -681,8 +681,11 @@ function openCity(i){curCity=i;const c=CITIES[i];
 
 /* ---- itinerary list/map toggle + WOW Mapbox ---- */
 const MAPBOX_TOKEN="pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA";
-let mapInstance=null,tourTimers=[],cometRAF=null,isTouring=false,orbitTimer=null,orbitRAF=null;
+let mapInstance=null,tourTimers=[],cometRAF=null,isTouring=false,orbitTimer=null,orbitRAF=null,activeIdx=-1;
 function cancelOrbit(){if(orbitTimer){clearTimeout(orbitTimer);orbitTimer=null;}if(orbitRAF){cancelAnimationFrame(orbitRAF);orbitRAF=null;}}
+function deselect(){activeIdx=-1;cancelOrbit();document.querySelectorAll('.wmark').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.scrub').forEach(el=>el.classList.remove('on'));}
+function tapScrub(idx){if(activeIdx===idx){deselect();}else{focusStop(idx,false);}}
+window.deselect=deselect;window.tapScrub=tapScrub;
 function setItinView(v){
  const list=document.getElementById('itinList'),map=document.getElementById('itinMap');
  document.getElementById('itbList').classList.toggle('on',v==='list');
@@ -753,13 +756,15 @@ function initMap(){
      const g=MK[type]||['#4ad6c4','📍'];
      const el=document.createElement('div');
      el.className='wmark';el.style.setProperty('--mc',g[0]);el.dataset.idx=idx;
-     el.innerHTML=`<div class="pin">${idx+1}</div>${time?`<div class="tlabel">${time} · ${name.split(' — ')[0].split(' + ')[0].slice(0,22)}</div>`:''}`;
+     el.innerHTML=`<div class="pin">${idx+1}</div>`;
      el.style.animationDelay=(0.5+idx*0.09)+'s';
      el.addEventListener('click',e=>{e.stopPropagation();focusStop(idx,true);});
      new mapboxgl.Marker(el,{anchor:'center'}).setLngLat(coords).addTo(mapInstance);
    });
    const strip=document.getElementById('scrubStrip');
-   if(strip)strip.innerHTML=stops.map((it,idx)=>{const n=it[1].split(' — ')[0].split(' + ')[0];const short=n.length>14?n.slice(0,13)+'…':n;return `<div class="scrub" data-idx="${idx}" onclick="focusStop(${idx},false)"><span class="stm">${it[3]||'—'}</span><span class="stn">${short}</span></div>`;}).join('');
+   if(strip)strip.innerHTML=stops.map((it,idx)=>{const n=it[1].split(' — ')[0].split(' + ')[0];const short=n.length>14?n.slice(0,13)+'…':n;return `<div class="scrub" data-idx="${idx}" onclick="tapScrub(${idx})"><span class="stm">${it[3]||'—'}</span><span class="stn">${short}</span></div>`;}).join('');
+   // tap empty map (not a pin) to deselect
+   mapInstance.on('click',e=>{if(e.originalEvent.target.closest('.wmark'))return;deselect();});
    setTimeout(()=>{
      const b=new mapboxgl.LngLatBounds();stops.forEach(it=>b.extend(it[4]));
      mapInstance.fitBounds(b,{padding:{top:90,bottom:160,left:60,right:60},pitch:55,bearing:-15,duration:3000,essential:true,maxZoom:13.5});
@@ -796,20 +801,15 @@ function focusStop(idx,openSheet){
  const stops=CITIES[curCity].items.filter(it=>it[4]);
  if(idx<0||idx>=stops.length)return;
  cancelOrbit();
+ activeIdx=idx;
  document.querySelectorAll('.wmark').forEach(el=>el.classList.toggle('active',+el.dataset.idx===idx));
  document.querySelectorAll('.scrub').forEach(el=>el.classList.toggle('on',+el.dataset.idx===idx));
  const onScrub=document.querySelector(`.scrub[data-idx="${idx}"]`);
  if(onScrub)onScrub.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
  const it=stops[idx];
  setLightPreset(hourToPreset(timeToHour(it[3])));
- mapInstance.flyTo({center:it[4],zoom:16.2,pitch:65,bearing:Math.random()*60-30,duration:2400,essential:true});
- orbitTimer=setTimeout(()=>{
-   orbitTimer=null;
-   if(!mapInstance)return;
-   const start=Date.now();const bear0=mapInstance.getBearing();
-   function orbit(){if(!mapInstance){orbitRAF=null;return;}const t=(Date.now()-start)/3500;if(t>1){orbitRAF=null;return;}mapInstance.setBearing(bear0+t*35);orbitRAF=requestAnimationFrame(orbit);}
-   orbit();
- },2500);
+ mapInstance.flyTo({center:it[4],zoom:16.2,pitch:60,bearing:-15,duration:2000,essential:true});
+ // no auto-orbit on manual taps -- user can pan/zoom/rotate freely
  if(openSheet)openPlaceSheet(idx);
 }
 window.focusStop=focusStop;
@@ -1008,4 +1008,4 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  else resetBg();
 });
 </script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
