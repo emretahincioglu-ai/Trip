@@ -227,16 +227,17 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .scrub .stm{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;display:block;letter-spacing:.04em;}
 .scrub .stn{font-size:10px;font-weight:700;margin-top:1px;display:block;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* custom glowing markers */
-.wmark{position:relative;width:46px;height:46px;cursor:pointer;animation:mkdrop .6s cubic-bezier(.3,1.5,.5,1) backwards;}
+/* custom teardrop pin markers (anchored at the tip) */
+.wmark{position:relative;width:38px;height:52px;cursor:pointer;animation:mkdrop .6s cubic-bezier(.3,1.5,.5,1) backwards;}
 @keyframes mkdrop{from{opacity:0;transform:translateY(-44px) scale(.4)}to{opacity:1;transform:none}}
-.wmark .ring{position:absolute;inset:-2px;border-radius:50%;background:radial-gradient(circle,var(--mc) 0 40%,transparent 60%);opacity:.4;animation:mkpulse 2.4s infinite;}
+.wmark .ring{position:absolute;top:-4px;left:-4px;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,var(--mc) 0 40%,transparent 60%);opacity:.38;animation:mkpulse 2.4s infinite;}
 @keyframes mkpulse{0%{transform:scale(.75);opacity:.55}80%,100%{transform:scale(1.8);opacity:0}}
-.wmark .pin{position:absolute;inset:8px;border-radius:50%;background:var(--mc);box-shadow:0 4px 16px #000a,0 0 0 2.5px #fff,inset 0 -3px 0 #0003;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;transition:transform .3s;}
+.wmark .pin{position:absolute;top:0;left:0;width:38px;height:38px;border-radius:50%;background:var(--mc);box-shadow:0 5px 18px #000c,0 0 0 2.5px #fff,inset 0 -3px 0 #0003;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;transition:transform .3s;}
+.wmark .tail{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:16px solid var(--mc);filter:drop-shadow(0 3px 3px #0009);}
 .wmark .num{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:#12131f;color:#fff;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;}
 .wmark .tlabel{position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:#0a0b14ee;color:#fff;font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:5px;white-space:nowrap;letter-spacing:.04em;border:1px solid #ffffff22;}
 .wmark.active{z-index:5;}
-.wmark.active .pin{transform:scale(1.3);box-shadow:0 6px 24px var(--mc),0 0 0 3px #fff,0 0 36px var(--mc);}
+.wmark.active .pin{transform:scale(1.22);box-shadow:0 6px 24px var(--mc),0 0 0 3px #fff,0 0 36px var(--mc);}
 .wmark.active .ring{animation-duration:1.1s;opacity:.75;}
 
 /* itinerary list clickable */
@@ -717,7 +718,7 @@ function initMap(){
  const host=document.getElementById('mapbox');
  host.innerHTML=`
    <button class="playtour" id="playTour" onclick="playTour()" type="button"><span class="pic"></span><span id="playLabel">PLAY TOUR</span></button>
-   <div class="timepill dusk" id="timePill"><span class="ti">🌇</span><span id="timeLabel">DUSK</span></div>
+   <div class="timepill dusk" id="timePill"><span id="timeLabel">🌇 DUSK</span></div>
    <div class="scrubber"><div class="strip" id="scrubStrip"></div></div>
  `;
  mapInstance=new mapboxgl.Map({
@@ -738,13 +739,13 @@ function initMap(){
    }catch(e){}
    if(!mapInstance.getSource('route')){
      mapInstance.addSource('route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[stops[0][4]]}}});
-     mapInstance.addLayer({id:'routeglow',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff8a5c','line-width':16,'line-opacity':0.22,'line-blur':10}});
-     mapInstance.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffd447','line-width':3.5,'line-opacity':0.95}});
+     mapInstance.addLayer({id:'routeglow',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff5e3a','line-width':18,'line-opacity':0.35,'line-blur':12}});
+     mapInstance.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ff8a5c','line-width':4,'line-opacity':0.95}});
    }
    if(!mapInstance.getSource('comet')){
      mapInstance.addSource('comet',{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:stops[0][4]}}});
-     mapInstance.addLayer({id:'cometglow',type:'circle',source:'comet',paint:{'circle-radius':22,'circle-color':'#ffd447','circle-blur':1,'circle-opacity':0.55}});
-     mapInstance.addLayer({id:'cometdot',type:'circle',source:'comet',paint:{'circle-radius':6,'circle-color':'#fff','circle-stroke-color':'#ffd447','circle-stroke-width':3}});
+     mapInstance.addLayer({id:'cometglow',type:'circle',source:'comet',paint:{'circle-radius':22,'circle-color':'#ff5e3a','circle-blur':1,'circle-opacity':0.6}});
+     mapInstance.addLayer({id:'cometdot',type:'circle',source:'comet',paint:{'circle-radius':6,'circle-color':'#fff','circle-stroke-color':'#ff8a5c','circle-stroke-width':3}});
    }
  });
 
@@ -755,13 +756,13 @@ function initMap(){
      const g=MK[type]||['#4ad6c4','📍'];
      const el=document.createElement('div');
      el.className='wmark';el.style.setProperty('--mc',g[0]);el.dataset.idx=idx;
-     el.innerHTML=`${time?`<div class="tlabel">${time}</div>`:''}<div class="ring"></div><div class="pin">${(PLACES[name]&&PLACES[name].icon)||g[1]}</div><div class="num">${idx+1}</div>`;
+     el.innerHTML=`${time?`<div class="tlabel">${time}</div>`:''}<div class="ring"></div><div class="pin">${(PLACES[name]&&PLACES[name].icon)||g[1]}</div><div class="num">${idx+1}</div><div class="tail"></div>`;
      el.style.animationDelay=(0.6+idx*0.13)+'s';
      el.addEventListener('click',e=>{e.stopPropagation();focusStop(idx,true);});
-     new mapboxgl.Marker(el,{anchor:'center'}).setLngLat(coords).addTo(mapInstance);
+     new mapboxgl.Marker(el,{anchor:'bottom',offset:[0,2]}).setLngLat(coords).addTo(mapInstance);
    });
    const strip=document.getElementById('scrubStrip');
-   if(strip)strip.innerHTML=stops.map((it,idx)=>{const n=it[1].split(' — ')[0].split(' + ')[0];const short=n.length>14?n.slice(0,13)+'…':n;return `<div class="scrub" data-idx="${idx}" onclick="focusStop(${idx},true)"><span class="stm">${it[3]||'—'}</span><span class="stn">${short}</span></div>`;}).join('');
+   if(strip)strip.innerHTML=stops.map((it,idx)=>{const n=it[1].split(' — ')[0].split(' + ')[0];const short=n.length>14?n.slice(0,13)+'…':n;return `<div class="scrub" data-idx="${idx}" onclick="focusStop(${idx},false)"><span class="stm">${it[3]||'—'}</span><span class="stn">${short}</span></div>`;}).join('');
    setTimeout(()=>{
      const b=new mapboxgl.LngLatBounds();stops.forEach(it=>b.extend(it[4]));
      mapInstance.fitBounds(b,{padding:{top:90,bottom:160,left:60,right:60},pitch:55,bearing:-15,duration:3000,essential:true,maxZoom:13.5});
@@ -1001,12 +1002,4 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
  if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
-   // land on HOME, not the lock screen — lock is only reachable by tapping the shatter card
-   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-
-const _rp=new URLSearchParams(location.search).get('rider');if(_rp!==null&&PEOPLE[+_rp])ME=PEOPLE[+_rp];
-syncRider();
-</script>
+   // land on HOME, n
