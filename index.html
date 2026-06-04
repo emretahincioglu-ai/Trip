@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>World Cup Trip</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -26,27 +26,38 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 @keyframes pglow{from{opacity:.5;transform:translateX(-50%) scale(1);}to{opacity:.75;transform:translateX(-50%) scale(1.08);}}
 .pstage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px calc(40px + env(safe-area-inset-bottom));}
 
-/* Welcome stage */
-.pwelcome{transition:opacity .35s,transform .35s;}
+/* Welcome stage — icon centers big, then shrinks to corner badge as title takes the stage */
+.pwelcome{transition:opacity .35s,transform .35s;cursor:pointer;}
 .pwelcome.gone{opacity:0;transform:translateY(-10px);pointer-events:none;}
-.pflag{width:128px;height:128px;border-radius:30px;overflow:hidden;margin-bottom:22px;position:relative;animation:pflagIn 1.6s cubic-bezier(.22,1,.36,1) both, pflagFloat 4.5s ease-in-out 1.6s infinite alternate;box-shadow:0 16px 44px #e30a1799,0 0 0 1px #ffffff10,inset 0 0 0 1px #ffffff14;}
+
+/* Icon — starts huge centered, then docks to top-left corner */
+.pflag{width:200px;height:200px;border-radius:42px;overflow:hidden;position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);box-shadow:0 24px 56px #e30a17aa,0 0 0 1px #ffffff14;animation:pflagIn 1.4s cubic-bezier(.22,1,.36,1) both, pflagDock 1.3s 2.4s cubic-bezier(.65,0,.35,1) forwards;}
 .pflag img{width:100%;height:100%;object-fit:cover;display:block;}
-.pflag::after{content:'';position:absolute;inset:-5px;border-radius:32px;border:2px solid #e30a17;opacity:0;pointer-events:none;animation:pflagRing 2.4s ease-out 1.6s infinite;}
-@keyframes pflagIn{0%{opacity:0;transform:scale(.35) rotate(-8deg);filter:blur(8px);}55%{opacity:1;transform:scale(1.08) rotate(3deg);filter:blur(0);}100%{opacity:1;transform:scale(1) rotate(0);filter:blur(0);}}
-@keyframes pflagFloat{from{transform:translateY(0) rotate(0);}to{transform:translateY(-7px) rotate(.6deg);}}
+.pflag::after{content:'';position:absolute;inset:-6px;border-radius:48px;border:2px solid #e30a17;opacity:0;pointer-events:none;animation:pflagRing 2.4s ease-out 1.4s 1;}
+@keyframes pflagIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-10deg);filter:blur(14px);}55%{opacity:1;transform:translate(-50%,-50%) scale(1.06) rotate(3deg);filter:blur(0);}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0);filter:blur(0);}}
+@keyframes pflagDock{
+ 0%{left:50%;top:38%;width:200px;height:200px;border-radius:42px;transform:translate(-50%,-50%);}
+ 100%{left:24px;top:calc(env(safe-area-inset-top,18px) + 22px);width:54px;height:54px;border-radius:16px;transform:translate(0,0);}
+}
 @keyframes pflagRing{0%{opacity:0;transform:scale(1);}35%{opacity:.85;}100%{opacity:0;transform:scale(1.22);}}
-.ptitle{text-align:center;font-family:'Inter',-apple-system,sans-serif;font-weight:900;font-size:52px;line-height:.9;color:#fafafa;animation:ptitleIn 1.2s .35s cubic-bezier(.22,1,.36,1) both;letter-spacing:-.02em;}
-@keyframes ptitleIn{from{opacity:0;letter-spacing:.18em;transform:translateY(8px);}to{opacity:1;letter-spacing:-.02em;transform:none;}}
+
+/* Title — appears centered after icon docks */
+.ptitlewrap{position:absolute;left:0;right:0;top:46%;transform:translateY(-50%);text-align:center;padding:0 28px;}
+.ptitle{font-family:'Inter',-apple-system,sans-serif;font-weight:900;font-size:64px;line-height:.86;color:#fafafa;letter-spacing:-.03em;animation:ptitleIn 1.2s 2.6s cubic-bezier(.22,1,.36,1) both;}
+@keyframes ptitleIn{0%{opacity:0;letter-spacing:.22em;transform:translateY(14px) scale(.96);}60%{opacity:1;letter-spacing:-.04em;transform:translateY(0) scale(1.02);}100%{opacity:1;letter-spacing:-.03em;transform:translateY(0) scale(1);}}
 .ptitle span{display:block;}
-.pdates{text-align:center;margin-top:14px;font-family:'Space Mono',monospace;font-size:12px;color:#ffffffb0;letter-spacing:.18em;animation:pdatesIn 1s .9s both;}
-.psub{text-align:center;margin-top:6px;font-size:10.5px;color:#ffffff70;letter-spacing:.28em;animation:pdatesIn 1s 1.05s both;}
+.ptitle .pword2{background:linear-gradient(95deg,#e30a17,#ff6b4a 55%,#fafafa 110%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.pdates{margin-top:18px;font-family:'Space Mono',monospace;font-size:12.5px;color:#ffffffc0;letter-spacing:.2em;animation:pdatesIn 1s 3.1s both;}
+.psub{margin-top:6px;font-size:10.5px;color:#ffffff70;letter-spacing:.28em;animation:pdatesIn 1s 3.25s both;}
 @keyframes pdatesIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-.pcta{position:absolute;left:28px;right:28px;bottom:calc(34px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;background:#fafafa;color:#0d0306;border:none;border-radius:999px;padding:18px 28px;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;letter-spacing:.02em;cursor:pointer;box-shadow:0 12px 32px #0008,0 0 0 1px #ffffff10;animation:pctaIn 1s 1.4s both;}
-@keyframes pctaIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-.pcta:active{transform:scale(.985);}
-.pcta::after{content:'';position:absolute;inset:0;border-radius:999px;box-shadow:0 0 0 0 #ffffff44;animation:pctapulse 2.2s ease-out infinite;}
-@keyframes pctapulse{0%{box-shadow:0 0 0 0 #ffffff55;}100%{box-shadow:0 0 0 22px #ffffff00;}}
-.pcta .parrow{font-size:18px;line-height:1;}
+
+/* Tap-anywhere hint at the bottom */
+.ptap{position:absolute;left:0;right:0;bottom:calc(48px + env(safe-area-inset-bottom));text-align:center;color:#ffffffb0;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.32em;font-weight:700;animation:pdatesIn 1s 3.5s both, ptapPulse 2.4s ease-in-out 3.5s infinite;}
+@keyframes ptapPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+.ptap::after{content:'';display:block;width:38px;height:38px;border:1px solid #ffffff44;border-radius:50%;margin:14px auto 0;position:relative;animation:ptapRing 2.4s ease-out 3.5s infinite;}
+@keyframes ptapRing{0%{box-shadow:0 0 0 0 #e30a1788;}100%{box-shadow:0 0 0 16px #e30a1700;}}
+.ptap .pdownarr{position:absolute;left:50%;transform:translateX(-50%);margin-top:-30px;color:#fff;font-size:20px;line-height:1;animation:ptapArr 1.6s ease-in-out infinite alternate 3.5s;}
+@keyframes ptapArr{from{transform:translate(-50%,-2px);}to{transform:translate(-50%,4px);}}
 
 /* Rider list stage */
 .plist{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:0;transform:translateY(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);pointer-events:none;}
@@ -219,12 +230,14 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 
 <div class="frame">
   <div class="picker" id="picker">
-    <div class="pstage" id="pwelcome">
+    <div class="pstage" id="pwelcome" onclick="showRiderList()">
      <div class="pflag"><img src="icon.png" alt="World Cup Trip"></div>
-     <div class="ptitle"><span>WORLD</span><span>CUP TRIP</span></div>
-     <div class="pdates">JUN 17 — 24 · 2026</div>
-     <div class="psub">NY · SF · PCH → LA</div>
-     <button class="pcta" id="pcta" onclick="showRiderList()"><span>Choose your rider</span><span class="parrow">→</span></button>
+     <div class="ptitlewrap">
+      <div class="ptitle"><span>WORLD</span><span class="pword2">CUP TRIP</span></div>
+      <div class="pdates">JUN 17 — 24 · 2026</div>
+      <div class="psub">NY · SF · PCH → LA</div>
+     </div>
+     <div class="ptap"><span class="pdownarr">↓</span>TAP ANYWHERE TO ENTER</div>
     </div>
     <div class="plist" id="plist">
      <button class="pclose" onclick="hideRiderList()">×</button>
