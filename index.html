@@ -68,6 +68,11 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .bprow .bpamt .bpstat{display:block;font-size:9px;letter-spacing:.06em;font-weight:700;margin-top:2px;}
 .bprow .bpamt .bpstat.ok{color:#4ad6c4;}.bprow .bpamt .bpstat.pen{color:#ffd166;}
 
+.bview{display:flex;gap:6px;background:#ffffff0c;border:1px solid #ffffff14;border-radius:999px;padding:4px;margin-bottom:14px;}
+.bvt{flex:1;background:none;border:none;color:#ffffff80;font-family:inherit;font-size:12px;font-weight:700;padding:9px 8px;border-radius:999px;cursor:pointer;transition:.2s;letter-spacing:.02em;}
+.bvt.on{background:#e30a17;color:#fff;}
+.bcat .bci.flame{background:#e30a1722;}
+
 .tabs{flex:none;display:flex;background:#f5efef;border-top:2px solid #e30a17;padding:9px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #000a;position:relative;z-index:10;}
 .tab{flex:1;background:none;border:none;color:#3a1418;padding:7px 2px 4px;font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s;}
 .tab.on{color:#e30a17;}
@@ -94,12 +99,15 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
     <div class="youpanel" id="fr-you">
       <div class="youpage">
         <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys">Riding the West Coast Run</div></div></div>
-        <div class="sectitle">YOUR BUDGET</div>
-        <div class="bhero" id="bHero"></div>
-        <div class="sectitle">BREAKDOWN</div>
-        <div class="bbreak" id="bBreak"></div>
-        <div class="sectitle">EVERYONE</div>
-        <div class="bppl" id="bPeople"></div>
+        <div class="bview">
+          <button class="bvt on" id="bvBudget" onclick="setBView('budget')">Budget</button>
+          <button class="bvt" id="bvSplit" onclick="setBView('split')">Splitwise</button>
+        </div>
+        <div id="bHero" class="bhero"></div>
+        <div class="sectitle" id="bSect1"></div>
+        <div id="bBreak" class="bbreak"></div>
+        <div class="sectitle" id="bSect2"></div>
+        <div id="bPeople" class="bppl"></div>
       </div>
     </div>
   </div>
@@ -122,83 +130,168 @@ const PEOPLE=[
 ];
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 let ME=PEOPLE[0];
+const money=n=>{const v=Math.abs(n);return"$"+(Math.round(v*100)/100).toLocaleString(undefined,{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2});};
 
-/* ---- SPLITWISE INTEGRATION ---- */
+/* ===== SPLITWISE LIVE ===== */
 const SW_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmonks";
 const SW_GROUP_ID=96375779;
-const money=n=>{const v=Math.abs(n);return"$"+(Math.round(v*100)/100).toLocaleString(undefined,{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2});};
-let SW_GROUP=null,SW_USER=null,SW_LOADING=false;
+let SW_GROUP=null,SW_USER=null,SW_EXPENSES=null,SW_LOADING=false;
 
 async function fetchSW(path){
  const url=`${SW_PROXY}?api=splitwise&path=${encodeURIComponent(path)}`;
- const r=await fetch(url);
- if(!r.ok)throw new Error(`SW ${r.status}`);
- return r.json();
+ const r=await fetch(url);if(!r.ok)throw new Error(`SW ${r.status}`);return r.json();
 }
 async function loadSplitwise(){
  if(SW_LOADING)return;SW_LOADING=true;
  try{
-  const[u,g]=await Promise.all([fetchSW("get_current_user"),fetchSW("get_group/"+SW_GROUP_ID)]);
-  SW_USER=u.user;SW_GROUP=g.group;
+  const[u,g,e]=await Promise.all([
+   fetchSW("get_current_user"),
+   fetchSW("get_group/"+SW_GROUP_ID),
+   fetchSW("get_expenses?group_id="+SW_GROUP_ID+"&limit=200"),
+  ]);
+  SW_USER=u.user;SW_GROUP=g.group;SW_EXPENSES=e.expenses||[];
  }catch(e){console.warn("SW fail",e);SW_GROUP=null;}
  SW_LOADING=false;
- buildBudget();
+ if(BVIEW==='budget')renderBudget();else renderSplit();
 }
 
-function buildBudget(){
+/* Category detection from description prefix (e.g. "SD/Airbnb", "TR/Tickets") */
+function categorize(desc){
+ if(!desc)return 'Other';
+ const m=desc.match(/^([A-Za-z]+)\s*[\/:\-]/);
+ if(m){const p=m[1].toLowerCase();
+  const map={sd:'San Diego',sf:'San Francisco',la:'LA / Santa Monica',mo:'Monterey',mont:'Monterey',sb:'Santa Barbara',bs:'Big Sur',sc:'Santa Clara',tr:'Match Tickets',ticket:'Match Tickets',car:'Cars',rental:'Cars'};
+  if(map[p])return map[p];
+  return m[1].toUpperCase();
+ }
+ const d=desc.toLowerCase();
+ if(/wrangler|suv|rental|car/.test(d))return 'Cars';
+ if(/hotel|airbnb|stay/.test(d))return 'Stays';
+ if(/ticket|match/.test(d))return 'Match Tickets';
+ if(/dinner|lunch|food|coffee|breakfast/.test(d))return 'Food';
+ return 'Other';
+}
+
+/* Sum each Splitwise member's owed_share, grouped by category */
+function memberTotals(){
+ if(!SW_EXPENSES)return null;
+ const totals={};
+ SW_EXPENSES.forEach(exp=>{
+  if(exp.deleted_at)return;
+  const cat=categorize(exp.description);
+  (exp.users||[]).forEach(u=>{
+   const owed=parseFloat(u.owed_share)||0;
+   const id=u.user_id||(u.user&&u.user.id);
+   if(!id)return;
+   if(!totals[id])totals[id]={total:0,byCat:{}};
+   totals[id].total+=owed;
+   totals[id].byCat[cat]=(totals[id].byCat[cat]||0)+owed;
+  });
+ });
+ return totals;
+}
+
+/* Map a PEOPLE entry to its Splitwise member by first name */
+function findSWMember(personName){
+ if(!SW_GROUP)return null;
+ const members=SW_GROUP.members||[];
+ const target=personName.toLowerCase().trim();
+ return members.find(m=>(m.first_name||"").toLowerCase()===target.split(' ')[0])||null;
+}
+
+/* ===== BUDGET VIEW (uses Splitwise expenses when available) ===== */
+function renderBudget(){
+ document.getElementById('bSect1').textContent='BREAKDOWN BY CATEGORY';
+ document.getElementById('bSect2').textContent='EVERYONE';
+ const hero=document.getElementById('bHero');
+ const br=document.getElementById('bBreak');
+ const pp=document.getElementById('bPeople');
+ const totals=memberTotals();
+ if(!totals){
+  hero.innerHTML=`<div class="blab">YOUR PROJECTED TOTAL - ${ME.name.toUpperCase()}</div>
+   <div class="btot">Loading...</div>
+   <div class="bsub">Calculating from Splitwise</div>`;
+  br.innerHTML="";pp.innerHTML="";
+  return;
+ }
+ const swMe=findSWMember(ME.name);
+ const meTotal=swMe&&totals[swMe.id]?totals[swMe.id]:{total:0,byCat:{}};
+ hero.innerHTML=`<div class="blab">YOUR PROJECTED TOTAL - ${ME.name.toUpperCase()}</div>
+   <div class="btot">${money(meTotal.total)}</div>
+   <div class="bsub">${swMe?'live from Splitwise':'matched on first name — not found'}</div>`;
+ const cats=Object.entries(meTotal.byCat).sort((a,b)=>b[1]-a[1]);
+ br.innerHTML=cats.length?cats.map(([cat,amt])=>`
+   <div class="bcat">
+    <div class="bci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
+    <div class="bcm"><b>${cat}</b><small>your share</small></div>
+    <div class="bcv">${money(amt)}</div>
+   </div>`).join(""):'<div class="bcat"><div class="bcm"><b>No expenses for you yet</b><small>Once Splitwise has entries you owe on, they show here</small></div></div>';
+ const members=(SW_GROUP&&SW_GROUP.members)||[];
+ pp.innerHTML=members.map(m=>{
+  const t=totals[m.id]||{total:0};
+  return `<div class="bprow">
+   <span class="bpav" style="background:${ACC[m.id%6]}">${inits(m.first_name||"?")}</span>
+   <div class="bpn">${m.first_name||""} ${m.last_name||""}<small>${m.email||""}</small></div>
+   <div class="bpamt">${money(t.total)}<span class="bpstat ok">PROJECTED</span></div>
+  </div>`;
+ }).join("");
+}
+
+/* ===== SPLITWISE VIEW (live balance + settle-up) ===== */
+function renderSplit(){
+ document.getElementById('bSect1').textContent='WHO OWES WHOM';
+ document.getElementById('bSect2').textContent='EVERYONE';
  const hero=document.getElementById('bHero');
  const br=document.getElementById('bBreak');
  const pp=document.getElementById('bPeople');
  if(!SW_GROUP){
-  if(hero)hero.innerHTML=`<div class="blab">YOUR RUNNING TOTAL</div>
-   <div class="btot">Loading…</div>
-   <div class="bsub">Pulling live from Splitwise</div>`;
-  if(br)br.innerHTML="";if(pp)pp.innerHTML="";
-  return;
+  hero.innerHTML=`<div class="blab">SPLITWISE</div><div class="btot">Loading...</div><div class="bsub">Pulling live from your group</div>`;
+  br.innerHTML="";pp.innerHTML="";return;
  }
  const members=SW_GROUP.members||[];
- const me=members.find(m=>SW_USER&&m.id===SW_USER.id)||members[0];
+ const me=members.find(m=>SW_USER&&m.id===SW_USER.id)||findSWMember(ME.name)||members[0];
  const myBalance=me?(me.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0):0;
  const owesMe=myBalance>0;
  const debts=SW_GROUP.simplified_debts||[];
- // Hero
- if(hero){
-  const status=Math.abs(myBalance)<0.01?"all settled":owesMe?"you are owed":"you owe";
-  hero.innerHTML=`<div class="blab">YOUR BALANCE · ${(me&&me.first_name||"YOU").toUpperCase()}</div>
+ const status=Math.abs(myBalance)<0.01?"all settled":owesMe?"you are owed":"you owe";
+ hero.innerHTML=`<div class="blab">SPLITWISE - ${(me&&me.first_name||"YOU").toUpperCase()}</div>
    <div class="btot" style="color:${Math.abs(myBalance)<0.01?'#4ad6c4':owesMe?'#4ad6c4':'#ff6b6b'}">${money(myBalance)}</div>
-   <div class="bsub">${status} · <b>${SW_GROUP.name}</b></div>`;
- }
- // Settle-up
- if(br){
-  if(!debts.length){
-   br.innerHTML=`<div class="bcat"><div class="bcm"><b>All settled</b><small>No one owes anyone in this group</small></div></div>`;
-  }else{
-   br.innerHTML=debts.map(d=>{
-    const from=members.find(m=>m.id===d.from);
-    const to=members.find(m=>m.id===d.to);
-    if(!from||!to)return"";
-    return `<div class="bcat">
-     <div class="bci" style="background:${ACC[from.id%6]}33;color:#fff;font-family:'Space Mono',monospace;font-weight:700;font-size:10px">${inits(from.first_name||"?")}</div>
-     <div class="bcm"><b>${from.first_name} → ${to.first_name}</b><small>${d.currency_code||"USD"}</small></div>
-     <div class="bcv">${money(parseFloat(d.amount))}</div>
-    </div>`;}).join("");
-  }
- }
- // Members
- if(pp){
-  pp.innerHTML=members.map(m=>{
-   const bal=(m.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0);
-   const isMe=SW_USER&&m.id===SW_USER.id;
-   const status=Math.abs(bal)<0.01?"SETTLED":bal>0?"OWED":"OWES";
-   const cls=Math.abs(bal)<0.01?"ok":bal>0?"ok":"pen";
-   return `<div class="bprow">
-    <span class="bpav" style="background:${ACC[m.id%6]}">${inits(m.first_name||"?")}</span>
-    <div class="bpn">${m.first_name||""} ${m.last_name||""}${isMe?' (you)':''}<small>${m.email||""}</small></div>
-    <div class="bpamt">${money(bal)}<span class="bpstat ${cls}">${status}</span></div>
+   <div class="bsub">${status} - <b>${SW_GROUP.name}</b></div>`;
+ if(!debts.length){
+  br.innerHTML=`<div class="bcat"><div class="bcm"><b>All settled</b><small>No one owes anyone in this group</small></div></div>`;
+ }else{
+  br.innerHTML=debts.map(d=>{
+   const from=members.find(m=>m.id===d.from);const to=members.find(m=>m.id===d.to);
+   if(!from||!to)return"";
+   return `<div class="bcat">
+    <div class="bci" style="background:${ACC[from.id%6]}33;font-family:'Space Mono',monospace;font-weight:700;font-size:10px;color:#fff">${inits(from.first_name||"?")}</div>
+    <div class="bcm"><b>${from.first_name} to ${to.first_name}</b><small>${d.currency_code||"USD"}</small></div>
+    <div class="bcv">${money(parseFloat(d.amount))}</div>
    </div>`;}).join("");
  }
+ pp.innerHTML=members.map(m=>{
+  const bal=(m.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0);
+  const isMe=SW_USER&&m.id===SW_USER.id;
+  const stat=Math.abs(bal)<0.01?"SETTLED":bal>0?"OWED":"OWES";
+  const cls=Math.abs(bal)<0.01?"ok":bal>0?"ok":"pen";
+  return `<div class="bprow">
+   <span class="bpav" style="background:${ACC[m.id%6]}">${inits(m.first_name||"?")}</span>
+   <div class="bpn">${m.first_name||""} ${m.last_name||""}${isMe?' (you)':''}<small>${m.email||""}</small></div>
+   <div class="bpamt">${money(bal)}<span class="bpstat ${cls}">${stat}</span></div>
+  </div>`;}).join("");
 }
 
+/* ===== TOGGLE ===== */
+let BVIEW='budget';
+function setBView(v){
+ BVIEW=v;
+ document.getElementById('bvBudget').classList.toggle('on',v==='budget');
+ document.getElementById('bvSplit').classList.toggle('on',v==='split');
+ if(v==='budget')renderBudget();else renderSplit();
+ if(!SW_GROUP)loadSplitwise();
+}
+
+/* ===== PICKER + TABS ===== */
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
@@ -206,6 +299,7 @@ function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').cl
 function syncRider(){
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
  document.getElementById('youName').textContent=ME.name;
+ if(BVIEW==='budget')renderBudget();else renderSplit();
 }
 function reloadTrip(){
  document.getElementById('fr-trip').src='section-trip.html?rider='+ME.id;
@@ -222,11 +316,11 @@ function showTab(id){
    if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
  document.getElementById('fr-you').classList.toggle('on',id==='you');
  if(!isFrame)loaderEl.classList.remove('on');
- if(id==='you'&&!SW_GROUP)loadSplitwise();
+ if(id==='you'){setBView(BVIEW);if(!SW_GROUP)loadSplitwise();}
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
 document.getElementById('fr-trip').src='section-trip.html?rider=0';
 syncRider();
-buildBudget();
+renderBudget();
 loadSplitwise();
 </script>
