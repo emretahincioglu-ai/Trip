@@ -674,6 +674,16 @@ const SQUAD=[
 
 const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-06-19T20:00:00-07:00"),REVEAL=new Date("2026-06-15T23:59:00-07:00");
 let ME=PEOPLE[0], curCity=0, paniniCollected=1;
+/* CRITICAL: bind ME to ?rider= URL param so the iframe shows the picked person, not Emre.
+   Must run BEFORE any rendering (carousel, overview, topbar). */
+(function bindRiderFromURL(){
+ try{
+  const r=new URLSearchParams(window.location.search).get('rider');
+  if(r==null)return;
+  const idx=parseInt(r,10);
+  if(idx>=0 && idx<PEOPLE.length) ME=PEOPLE[idx];
+ }catch(e){}
+})();
 
 /* ---- picker ---- */
 const peopleEl=document.getElementById('people');
@@ -791,6 +801,21 @@ function renderCarousel(){
   el.innerHTML=`<div class="cg" style="background:${photoBg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${c.dates}</div><div class="teaser">${teaser}</div><span class="go">More ›</span></div>`;
   el.onclick=()=>openCity(i);car.appendChild(el);});
 }
+/* Sync everything with current ME (from URL or default) */
+(function bootSyncWithRider(){
+ try{
+  /* topbar avatar + name */
+  const av=document.getElementById('av');
+  if(av){av.textContent=inits(ME.name);av.style.background=ACC[ME.id%6];}
+  const rn=document.getElementById('riderName');if(rn)rn.textContent=ME.name;
+  /* Budget tab labels */
+  const yav=document.getElementById('youAv');
+  if(yav){yav.textContent=inits(ME.name);yav.style.background=ACC[ME.id%6];}
+  const yn=document.getElementById('youName');if(yn)yn.textContent=ME.name;
+ }catch(e){console.warn('boot sync',e);}
+ try{buildNext();}catch(e){}
+ try{buildYouList();}catch(e){}
+}());
 renderCarousel();
 if(typeof renderOverview==='function')renderOverview();
 

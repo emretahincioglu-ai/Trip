@@ -626,7 +626,8 @@ function syncRider(){
  if(BVIEW==='budget')renderBudget();else renderSplit();
 }
 function setFrameURL(f,url){
- try{if(f.contentWindow&&f.src&&f.src!=='about:blank'&&f.src!==''){f.contentWindow.location.replace(url);return;}}catch(e){}
+ /* Always set src — guarantees iframe navigates even if contentWindow access is denied.
+    We rely on the pageshow handler + replaceState to keep the picker dismissed on swipe-back. */
  f.src=url;
 }
 function reloadTrip(){
