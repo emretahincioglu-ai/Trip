@@ -253,7 +253,22 @@ const TRANSPORT=[
  {name:"Full-size SUV (SB -> LAX)", total:179.82},
 ];
 const TICKETS={Emre:1040, KD:1040, Ali:1040, "Ali K":1040, Mekin:1040, Kaan:500};
-const FLIGHTS={Emre:null, KD:null, Ali:null, "Ali K":null, Mekin:null, Kaan:null};
+/* Flight prices entered per-rider via the Flight Detail screen.
+   Storage: wcr_fpg_<riderId> = JSON array of {id, legs:[legName...], price}. */
+function getMyFlightTotal(){
+ try{
+  const raw=localStorage.getItem(`wcr_fpg_${ME.id}`);
+  if(!raw)return 0;
+  return JSON.parse(raw).reduce((s,g)=>s+(g.price||0),0);
+ }catch(e){return 0;}
+}
+function getMyFlightLegsCount(){
+ try{
+  const raw=localStorage.getItem(`wcr_fpg_${ME.id}`);
+  if(!raw)return 0;
+  return JSON.parse(raw).reduce((s,g)=>s+(g.legs?g.legs.length:0),0);
+ }catch(e){return 0;}
+}
 
 /* Per-person hotel list (used both for total + detail screen) */
 function personHotels(name){
@@ -303,9 +318,15 @@ function personProjected(name){
  const t=TICKETS[name]||0;
  total+=t;
  breakdown.push({cat:"Match Ticket", note:"your Türkiye vs Paraguay seat", amt:t, status:"booked", id:"ticket"});
- const f=FLIGHTS[name];
- if(f!=null){total+=f;breakdown.push({cat:"Flight", note:"yours", amt:f, status:"booked", id:"flight"});}
- else breakdown.push({cat:"Flight", note:"price TBD - add when booked", amt:0, status:"pending", id:"flight"});
+ // Flight - sum from per-rider price groups in localStorage
+ const flightTotal=getMyFlightTotal();
+ const flightLegs=getMyFlightLegsCount();
+ if(flightTotal>0){
+  total+=flightTotal;
+  breakdown.push({cat:"Flight", note:`${flightLegs} leg${flightLegs!==1?'s':''} entered`, amt:flightTotal, status:"booked", id:"flight"});
+ } else {
+  breakdown.push({cat:"Flight", note:"open Flight Details to add your prices", amt:0, status:"pending", id:"flight"});
+ }
  return{total, breakdown};
 }
 
@@ -577,6 +598,9 @@ function setBView(v){
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
+/* Refresh budget when a flight price gets entered inside the iframe */
+window.addEventListener('storage',e=>{if(e.key&&e.key.indexOf('wcr_fpg_')===0&&BVIEW==='budget')renderBudget();});
+window.addEventListener('message',e=>{if(e&&e.data&&e.data.cmd==='flightPriceUpdated'&&BVIEW==='budget')renderBudget();});
 function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');reloadTrip();
  try{history.replaceState({app:'picked',rider:id},'');}catch(e){}}
 window.addEventListener('pageshow',()=>{

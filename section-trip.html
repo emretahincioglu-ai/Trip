@@ -146,6 +146,45 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .fd-leg{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid #ffffff12;}.fd-leg:last-child{border:none;}
 .fd-leg .l .code{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;}.fd-leg .l .ap{font-size:12px;color:#ffffffa0;}.fd-leg .l .tg{font-size:11px;color:#ffffff80;margin-top:4px;}
 .fd-leg .r{text-align:right;}.fd-leg .r .t{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#5ab0ff;}.fd-leg .r .d{font-size:11px;color:#ffffff90;}
+.fd-priceadd{cursor:pointer;border-color:#ffd16677 !important;background:#ffd16615 !important;}
+.fd-priceadd:hover{border-color:#ffd166 !important;}
+.fd-priceset{cursor:pointer;}
+.fd-priceset:hover{border-color:#e30a17 !important;}
+/* Multi-select flight price sheet */
+.fp2{position:fixed;inset:0;z-index:60;background:#000a;backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;}
+.fp2.on{display:flex;}
+.fp2-card{width:100%;max-width:460px;max-height:88vh;display:flex;flex-direction:column;background:#1f0f12;border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid #e30a1755;border-bottom:none;animation:fpslide .28s cubic-bezier(.22,1,.36,1);}
+@keyframes fpslide{from{transform:translateY(100%);}to{transform:none;}}
+.fp2-head{padding:22px 22px 8px;flex:none;}
+.fp2-h{font-family:'Inter',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.02em;margin-bottom:4px;}
+.fp2-s{font-size:12.5px;color:#ffffffa0;line-height:1.45;}
+.fp2-body{flex:1;overflow-y:auto;padding:14px 18px 4px;-ms-overflow-style:none;scrollbar-width:none;}
+.fp2-body::-webkit-scrollbar{display:none;}
+.fp2-leg{display:flex;align-items:center;gap:12px;width:100%;background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;color:#fff;font-family:inherit;text-align:left;transition:.15s;}
+.fp2-leg:hover{border-color:#ffd16677;}
+.fp2-leg.on{border-color:#ffd166;background:#ffd16614;}
+.fp2-leg.priced{border-color:#e30a17;background:#e30a1714;}
+.fp2-leg .chk{width:22px;height:22px;border-radius:50%;border:2px solid #ffffff30;display:flex;align-items:center;justify-content:center;flex:none;background:transparent;transition:.15s;color:#fff;font-weight:800;font-size:13px;}
+.fp2-leg.on .chk{background:#ffd166;border-color:#ffd166;color:#1a0c0e;}
+.fp2-leg.priced .chk{background:#e30a17;border-color:#e30a17;}
+.fp2-leg .info{flex:1;min-width:0;}
+.fp2-leg .info b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.005em;}
+.fp2-leg .info small{display:block;font-size:11.5px;color:#ffffffa0;font-family:'Space Mono',monospace;letter-spacing:.04em;margin-top:2px;}
+.fp2-leg .ptag{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#ffd166;flex:none;}
+.fp2-leg.priced .ptag{color:#fff;}
+.fp2-grouptag{display:inline-block;font-size:9px;background:#e30a17;color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:.08em;font-weight:800;margin-left:6px;vertical-align:middle;}
+.fp2-foot{flex:none;padding:14px 18px calc(20px + env(safe-area-inset-bottom));border-top:1px solid #ffffff10;background:#1f0f12;}
+.fp2-status{font-size:12px;color:#ffffffa0;text-align:center;margin-bottom:10px;font-weight:700;letter-spacing:.04em;}
+.fp2-status b{color:#ffd166;}
+.fp2-input{display:none;width:100%;background:#3a0e16;border:1px solid #ffd166;border-radius:12px;padding:14px 16px;color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.01em;margin-bottom:10px;}
+.fp2-input.on{display:block;}
+.fp2-input::placeholder{color:#ffffff50;font-weight:600;}
+.fp2-input:focus{outline:none;border-color:#fff;}
+.fp2-actions{display:flex;gap:10px;}
+.fp2-btn{flex:1;background:none;border:1px solid #ffffff22;color:#fff;font-family:inherit;font-weight:700;font-size:14px;padding:13px;border-radius:12px;cursor:pointer;}
+.fp2-btn.prim{background:#ffd166;border-color:#ffd166;color:#1a0c0e;}
+.fp2-btn.prim:disabled{opacity:.35;cursor:not-allowed;}
+.fp2-btn.danger{flex:0 0 auto;padding:13px 16px;color:#ff6b6b;}
 .fd-meta{display:flex;gap:10px;margin:14px 16px 0;}.fd-chip{flex:1;background:#28141a;border:1px solid #ffffff14;border-radius:12px;padding:10px 12px;text-align:center;}.fd-chip small{font-size:9px;letter-spacing:.12em;color:#ffffff88;display:block;}.fd-chip b{font-size:14px;}.fd-chip b.ok{color:#4ad6c4;}
 .lhero{height:160px;position:relative;background:linear-gradient(150deg,#3a0e16,#28141a 60%,#1f0f12);}.lhero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,#25060e);}
 .lhero .lt{position:absolute;left:18px;bottom:14px;}.lhero .ln2{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px;}.lhero .ls{font-size:12px;color:#ffffffcc;}
@@ -459,6 +498,20 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
     </div>
   </div>
 </div>
+<div class="fp2" id="fp2">
+ <div class="fp2-card">
+  <div class="fp2-head">
+   <div class="fp2-h">Price your flights</div>
+   <div class="fp2-s">Tap the legs that came on ONE ticket. Round-trip = pick 2. Multi-leg = pick more. One-way = pick 1.</div>
+  </div>
+  <div class="fp2-body" id="fp2List"></div>
+  <div class="fp2-foot">
+   <div class="fp2-status" id="fp2Status"></div>
+   <input class="fp2-input" id="fp2Input" type="number" inputmode="decimal" step="0.01" placeholder="$0.00 total paid">
+   <div class="fp2-actions" id="fp2Actions"></div>
+  </div>
+ </div>
+</div>
 <div class="placesheet" id="placesheet"><div class="psheet-inner"><div class="psheet-scroll" id="placesheetScroll"></div></div></div>
 
 <script>
@@ -626,7 +679,9 @@ let ME=PEOPLE[0], curCity=0, paniniCollected=1;
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
-function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');}
+function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');
+ try{maybeShowFlightPricesOnboarding();}catch(e){}
+}
 /* rider lock — no swapping after pick */
 function syncRider(){const a=document.getElementById('av');a.textContent=inits(ME.name);a.style.background=ACC[ME.id%6];
  document.getElementById('riderName').textContent=ME.name;
@@ -684,6 +739,13 @@ function runShatter(){
  const bigPrev=dayK(days+1,big.total);
  animateShatter(big,bigK,bigPrev);
 }
+/* When loaded with ?rider=N inside the iframe, also trigger flight-price onboarding */
+(function autoOnboarding(){
+ const sp=new URLSearchParams(window.location.search);
+ const r=sp.get('rider');
+ if(r==null)return;
+ setTimeout(()=>{try{maybeShowFlightPricesOnboarding();}catch(e){}},800);
+})();
 /* If we're loaded with ?screen=gameday, auto-open the Game Day screen (Match Day tab) */
 (function autoOpenScreen(){
  const sp=new URLSearchParams(window.location.search);
@@ -1052,6 +1114,134 @@ document.getElementById('cityBack').onclick=()=>{
   if(history.state&&history.state.sub==='city'){try{history.back();}catch(e){}}}};
 function resetBg(){bg.style.background="#25060e";}
 
+
+/* ===== Flight prices (per-rider, grouped, persisted in localStorage) =====
+   Storage: wcr_fpg_<riderId> = JSON array of {id, legs:[legName...], price}
+   One leg can only belong to one group at a time. */
+function fpKey(riderId){return `wcr_fpg_${riderId}`;}
+function loadFlightGroups(riderId){try{return JSON.parse(localStorage.getItem(fpKey(riderId))||'[]');}catch(e){return [];}}
+function saveFlightGroups(riderId,groups){
+ localStorage.setItem(fpKey(riderId),JSON.stringify(groups));
+ try{parent&&parent.postMessage({cmd:'flightPriceUpdated'},'*');}catch(e){}
+}
+function getGroupForLeg(riderId,leg){return loadFlightGroups(riderId).find(g=>g.legs.includes(leg))||null;}
+function getLegSharePrice(riderId,leg){const g=getGroupForLeg(riderId,leg);if(!g)return null;return g.price/g.legs.length;}
+function getMyFlightTotal(riderId){return loadFlightGroups(riderId).reduce((s,g)=>s+(g.price||0),0);}
+function legHasPrice(riderId,leg){return !!getGroupForLeg(riderId,leg);}
+
+/* On first rider load, auto-open the price sheet if nothing entered yet */
+function maybeShowFlightPricesOnboarding(){
+ const seenKey=`wcr_fpg_seen_${ME.id}`;
+ if(localStorage.getItem(seenKey))return;
+ if(loadFlightGroups(ME.id).length)return;
+ if(!(ME.flights||[]).length)return;
+ setTimeout(()=>openFp2(),400);
+ localStorage.setItem(seenKey,'1');
+}
+window.maybeShowFlightPricesOnboarding=maybeShowFlightPricesOnboarding;
+
+/* Multi-select sheet state */
+let _fp2Selected=new Set();
+let _fp2EnterPrice=false;
+
+function openFp2(){
+ _fp2Selected=new Set(); _fp2EnterPrice=false;
+ renderFp2();
+ document.getElementById('fp2').classList.add('on');
+}
+function closeFp2(){document.getElementById('fp2').classList.remove('on');buildFlight();}
+function toggleFp2Leg(leg){
+ // If leg is in an existing group, tapping it opens that group for edit
+ const grp=getGroupForLeg(ME.id,leg);
+ if(grp&&!_fp2EnterPrice){
+  // Select the whole group for edit
+  _fp2Selected=new Set(grp.legs);
+  _fp2EnterPrice=true;
+  renderFp2(grp.price);
+  return;
+ }
+ if(_fp2Selected.has(leg))_fp2Selected.delete(leg); else _fp2Selected.add(leg);
+ renderFp2();
+}
+function fp2GoPrice(){
+ if(!_fp2Selected.size)return;
+ _fp2EnterPrice=true;
+ renderFp2();
+}
+function fp2BackToPick(){_fp2EnterPrice=false;renderFp2();}
+function fp2Save(){
+ const v=parseFloat(document.getElementById('fp2Input').value);
+ if(!isFinite(v)||v<=0)return;
+ let groups=loadFlightGroups(ME.id);
+ // Remove any existing groups that contain selected legs
+ groups=groups.filter(g=>!g.legs.some(l=>_fp2Selected.has(l)));
+ groups.push({id:Date.now(),legs:[..._fp2Selected],price:v});
+ saveFlightGroups(ME.id,groups);
+ _fp2Selected=new Set(); _fp2EnterPrice=false;
+ renderFp2();
+}
+function fp2ClearGroup(){
+ let groups=loadFlightGroups(ME.id);
+ groups=groups.filter(g=>!g.legs.some(l=>_fp2Selected.has(l)));
+ saveFlightGroups(ME.id,groups);
+ _fp2Selected=new Set(); _fp2EnterPrice=false;
+ renderFp2();
+}
+
+function renderFp2(prefillPrice){
+ const list=document.getElementById('fp2List');
+ const flights=ME.flights||[];
+ list.innerHTML=flights.map(f=>{
+  const grp=getGroupForLeg(ME.id,f.leg);
+  const selected=_fp2Selected.has(f.leg);
+  const cls=selected?'on':(grp?'priced':'');
+  const check=selected?'✓':(grp?'$':'');
+  const route=`${f.from||'?'} → ${f.to||'?'}`;
+  const sub=`${f.date||''} · ${f.airline||'flight'} ${f.num||''}`.trim();
+  let priceTag='';
+  if(grp){
+   const share=grp.price/grp.legs.length;
+   priceTag=`<span class="ptag">$${share.toFixed(2)}${grp.legs.length>1?` <span class="fp2-grouptag">${grp.legs.length}-LEG</span>`:''}</span>`;
+  }
+  return `<button class="fp2-leg ${cls}" onclick="toggleFp2Leg('${f.leg}')">
+   <span class="chk">${check}</span>
+   <span class="info"><b>${route}</b><small>${sub}</small></span>
+   ${priceTag}
+  </button>`;
+ }).join('');
+ const status=document.getElementById('fp2Status');
+ const input=document.getElementById('fp2Input');
+ const actions=document.getElementById('fp2Actions');
+ const isEditing=_fp2Selected.size&&loadFlightGroups(ME.id).some(g=>g.legs.some(l=>_fp2Selected.has(l)));
+ if(_fp2EnterPrice){
+  status.innerHTML=_fp2Selected.size===1?'<b>1 leg</b> selected':`<b>${_fp2Selected.size} legs</b> grouped — enter the total you paid`;
+  input.classList.add('on');
+  if(prefillPrice!=null)input.value=prefillPrice;
+  setTimeout(()=>input.focus(),100);
+  actions.innerHTML=`
+   ${isEditing?'<button class="fp2-btn danger" onclick="fp2ClearGroup()">Remove</button>':''}
+   <button class="fp2-btn" onclick="fp2BackToPick()">‹ Back</button>
+   <button class="fp2-btn prim" onclick="fp2Save()">Save</button>`;
+ } else {
+  input.classList.remove('on');input.value='';
+  const n=_fp2Selected.size;
+  status.innerHTML=n?`<b>${n}</b> selected — tap "Set price" to enter the total`:'Tap one or more legs that you paid for together';
+  actions.innerHTML=`
+   <button class="fp2-btn" onclick="closeFp2()">Done</button>
+   <button class="fp2-btn prim" onclick="fp2GoPrice()" ${n?'':'disabled'}>Set price ›</button>`;
+ }
+}
+
+/* legacy single-leg entry point — opens the multi-select sheet pre-selecting that leg */
+function promptFlightPrice(leg){
+ openFp2();
+ const grp=getGroupForLeg(ME.id,leg);
+ if(grp){_fp2Selected=new Set(grp.legs);_fp2EnterPrice=true;renderFp2(grp.price);}
+ else{_fp2Selected=new Set([leg]);renderFp2();}
+}
+window.promptFlightPrice=promptFlightPrice;window.openFp2=openFp2;window.closeFp2=closeFp2;
+window.toggleFp2Leg=toggleFp2Leg;window.fp2GoPrice=fp2GoPrice;window.fp2BackToPick=fp2BackToPick;
+window.fp2Save=fp2Save;window.fp2ClearGroup=fp2ClearGroup;
 function openS(id){
  if(id==='flight')buildFlight();
  if(id==='lodging')buildLodging();
@@ -1100,11 +1290,22 @@ function buildFlight(){
    body+=`<div style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:22px;margin:4px 4px 14px">${ME.name}'s flight${flights.length>1?'s':''}</div>`;
    flights.forEach(f=>{
      if(f.unknown){
+       const ust=getLegSharePrice(ME.id,f.leg);
+       const upr = ust!=null
+         ? `<div class="fd-chip fd-priceset" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b>$${(+ust).toFixed(2)}</b></div>`
+         : `<div class="fd-chip fd-priceadd" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b class="ok">Tap to add</b></div>`;
        body+=`<div class="fd-card" style="border:1px dashed #5ab0ff55"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.date} · flight details unknown</div>
-        <div style="text-align:center;padding:14px;color:#9fd0ff;font-size:13px">✈️ We don't have this flight yet —<br>add the details when you have them.</div></div>`;
+        <div style="text-align:center;padding:10px 14px 6px;color:#9fd0ff;font-size:13px">✈️ We don\'t have this flight yet — drop the details when you have them.</div>
+        <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>—</b></div><div class="fd-chip"><small>SEAT</small><b>—</b></div>${upr}</div></div>`;
        return;
      }
-     const priceRow = f.price!=null ? `<div class="fd-chip"><small>PRICE</small><b>$${f.price}</b></div>` : `<div class="fd-chip"><small>PRICE</small><b class="ok">Add it</b></div>`;
+     const stored=getLegSharePrice(ME.id,f.leg);
+     const showPrice = f.price!=null ? f.price : stored;
+     const grpInfo=getGroupForLeg(ME.id,f.leg);
+     const grpHint=grpInfo&&grpInfo.legs.length>1?`<span style="font-size:8px;letter-spacing:.08em;color:#ffd166;font-weight:800;display:block;margin-top:2px">${grpInfo.legs.length}-LEG TICKET</span>`:'';
+     const priceRow = showPrice!=null
+       ? `<div class="fd-chip fd-priceset" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b>$${(+showPrice).toFixed(2)}</b>${grpHint}</div>`
+       : `<div class="fd-chip fd-priceadd" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b class="ok">Tap to add</b></div>`;
      body+=`<div class="fd-card"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.airline} ${f.num} · ${f.date}</div>
       <div class="fd-leg"><div class="l"><div class="code">${f.from}</div><div class="ap">${f.fromCity}</div></div><div class="r"><div class="t">${f.dep||'— : —'}</div><div class="d">${f.date}</div></div></div>
       <div class="fd-leg"><div class="l"><div class="code">${f.to}</div><div class="ap">${f.toCity}</div></div><div class="r"><div class="t">${f.arr||'— : —'}</div><div class="d">${f.date}</div></div></div>
