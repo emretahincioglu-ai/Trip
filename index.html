@@ -92,7 +92,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 
   <div class="stage">
     <div class="loader on" id="loader"><div class="ring"></div></div>
-    <iframe class="fr on" id="fr-trip" src="section-trip.html"></iframe>
+    <iframe class="fr on" id="fr-trip"></iframe>
     <iframe class="fr" id="fr-matchday" data-src="section-trip.html?screen=gameday"></iframe>
     <iframe class="fr" id="fr-wc" data-src="section-worldcup.html"></iframe>
     <iframe class="fr" id="fr-games" data-src="section-games.html"></iframe>
@@ -265,16 +265,33 @@ function setBView(v){
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
-function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');reloadTrip();}
+function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');reloadTrip();
+ try{history.replaceState({app:'picked',rider:id},'');}catch(e){}}
+window.addEventListener('popstate',()=>{
+ // Swipe-back inside the iframe could surface the picker. Keep it dismissed and snap to Home.
+ if(history.state&&history.state.app==='picked'){
+  document.getElementById('picker').classList.add('gone');
+  try{showTab('trip');}catch(e){}
+ }
+});
+window.addEventListener('pageshow',()=>{
+ if(history.state&&history.state.app==='picked'){
+  document.getElementById('picker').classList.add('gone');
+ }
+});
 function syncRider(){
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
  document.getElementById('youName').textContent=ME.name;
  if(BVIEW==='budget')renderBudget();else renderSplit();
 }
+function setFrameURL(f,url){
+ try{if(f.contentWindow&&f.src&&f.src!=='about:blank'&&f.src!==''){f.contentWindow.location.replace(url);return;}}catch(e){}
+ f.src=url;
+}
 function reloadTrip(){
- document.getElementById('fr-trip').src='section-trip.html?rider='+ME.id;
+ setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider='+ME.id);
  const fm=document.getElementById('fr-matchday');
- if(fm.src && fm.src!=='about:blank') fm.src='section-trip.html?rider='+ME.id+'&screen=gameday';
+ if(fm.src && fm.src!=='about:blank') setFrameURL(fm,'section-trip.html?rider='+ME.id+'&screen=gameday');
 }
 const loaderEl=document.getElementById('loader');
 const IFRAME_KEYS=['trip','matchday','wc','games'];
@@ -283,13 +300,13 @@ function showTab(id){
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
  const isFrame=IFRAME_KEYS.includes(id);
  IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.classList.toggle('on',k===id);
-   if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
+   if(k===id&&(!f.src||f.src==='about:blank')&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
  document.getElementById('fr-you').classList.toggle('on',id==='you');
  if(!isFrame)loaderEl.classList.remove('on');
  if(id==='you')setBView(BVIEW);
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
-document.getElementById('fr-trip').src='section-trip.html?rider=0';
+setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider=0');
 syncRider();
 renderBudget();
 </script>

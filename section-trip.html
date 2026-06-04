@@ -136,6 +136,9 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .you{display:inline-flex;align-items:center;gap:7px;margin:6px 0 14px;padding:8px 13px;border-radius:999px;font-size:12.5px;font-weight:700;}.you::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;}
 .map{height:190px;position:relative;overflow:hidden;background:#0d1a2e;}.map svg{width:100%;height:100%;}
 .fd-card{margin:-30px 16px 0;position:relative;z-index:2;background:#28141a;border:1px solid #ffffff18;border-radius:18px;padding:16px;}
+.fd-card + .fd-card{margin-top:14px;}
+.fd-card + .fd-meta{margin-top:14px;}
+.fd-meta + .fd-card{margin-top:14px;}
 .fd-route{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:22px;}.fd-no{font-family:'Space Mono',monospace;font-size:11px;color:#9fd0ff;margin-top:2px;}
 .fd-leg{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid #ffffff12;}.fd-leg:last-child{border:none;}
 .fd-leg .l .code{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;}.fd-leg .l .ap{font-size:12px;color:#ffffffa0;}.fd-leg .l .tg{font-size:11px;color:#ffffff80;margin-top:4px;}
@@ -724,10 +727,10 @@ function renderOverview(){
  const fl=(ME.flights||[]).length;
  const hotels=Object.keys(LODGING).length;
  const types=[
-  {id:'overFlights',ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>',name:'Flights',sub:`${fl} leg${fl!==1?'s':''} · ${ME.name}'s journey`,count:fl,bg:'#ffffff'},
-  {id:'overStays',  ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>',name:'Stays',  sub:`${hotels} booked · ${4-hotels} to go`,count:hotels,bg:'#ffffff'},
-  {id:'overCars',   ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>',name:'Cars',   sub:'2 Wranglers · 1 SUV',count:3,bg:'#ffffff'},
-  {id:'overRes',    ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',name:'Bookings',sub:'Dinners & reservations',count:1,bg:'#ffffff'},
+  {id:'overFlights',ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>',name:'Flights',sub:`${fl} leg${fl!==1?'s':''} · ${ME.name}'s journey`,count:fl,bg:'linear-gradient(150deg,#3a0e16,#28141a)'},
+  {id:'overStays',  ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>',name:'Stays',  sub:`${hotels} booked · ${4-hotels} to go`,count:hotels,bg:'linear-gradient(150deg,#3a0e16,#28141a)'},
+  {id:'overCars',   ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>',name:'Cars',   sub:'2 Wranglers · 1 SUV',count:3,bg:'linear-gradient(150deg,#3a0e16,#28141a)'},
+  {id:'overRes',    ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',name:'Bookings',sub:'Dinners & reservations',count:1,bg:'linear-gradient(150deg,#3a0e16,#28141a)'},
  ];
  document.getElementById('viewOver').innerHTML=`<div class="ovgrid">`+types.map(t=>`
    <div class="ovcard" onclick="openOverview('${t.id}')"><div class="ovg" style="background:${t.bg}"></div>
@@ -1136,21 +1139,6 @@ function renderPGrid(){const g=document.getElementById('pgrid');if(!g)return;g.i
 /* ---- YOU ---- */
 function buildYouList(){const l=document.getElementById('youList');l.innerHTML="";
  PEOPLE.forEach(p=>{const el=document.createElement('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
-  el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
-  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
-
-/* ---- tabs ---- */
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
- const id=t.dataset.tab;
- document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
- document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
- if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
-   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
-ment('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
   el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
   el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
 
