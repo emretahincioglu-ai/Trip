@@ -20,6 +20,8 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 /* PICKER — cinematic */
 .picker{position:absolute;inset:0;z-index:30;background:#0d0306;overflow:hidden;transition:opacity .5s,transform .5s;}
 .picker.gone{opacity:0;transform:scale(1.06);pointer-events:none;}
+.picker.gone *, .picker.gone .plist, .picker.gone .pwelcome, .picker.gone .pclose, .picker.gone .pbtn, .picker.gone .pcta{pointer-events:none !important;}
+.picker.dead{display:none !important;}
 .picker::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:140%;height:140%;background:radial-gradient(circle,#e30a1755 0%,#3a0e16 30%,#0d0306 70%);opacity:.6;animation:pglow 6s ease-in-out infinite alternate;}
 @keyframes pglow{from{opacity:.5;transform:translateX(-50%) scale(1);}to{opacity:.75;transform:translateX(-50%) scale(1.08);}}
 .pstage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px calc(40px + env(safe-area-inset-bottom));}
@@ -664,8 +666,17 @@ window.showRiderList=showRiderList;window.hideRiderList=hideRiderList;
 /* Refresh budget when a flight price gets entered inside the iframe */
 window.addEventListener('storage',e=>{if(e.key&&e.key.indexOf('wcr_fpg_')===0&&BVIEW==='budget')renderBudget();});
 window.addEventListener('message',e=>{if(e&&e.data&&e.data.cmd==='flightPriceUpdated'&&BVIEW==='budget')renderBudget();});
-function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');reloadTrip();
- try{history.replaceState({app:'picked',rider:id},'');}catch(e){}}
+function pick(id){
+ ME=PEOPLE[id];
+ syncRider();
+ const picker=document.getElementById('picker');
+ const list=document.getElementById('plist');
+ if(list)list.classList.remove('on'); // collapse the rider list so its buttons stop being tappable
+ picker.classList.add('gone');
+ setTimeout(()=>picker.classList.add('dead'),600); // fully remove from hit-testing after the fade
+ reloadTrip();
+ try{history.replaceState({app:'picked',rider:id},'');}catch(e){}
+}
 window.addEventListener('pageshow',()=>{
  if(history.state&&history.state.app==='picked'){
   document.getElementById('picker').classList.add('gone');
