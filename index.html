@@ -250,6 +250,7 @@ const HOTELS_SHARED=[
 const TRANSPORT=[
  {name:"Wrangler 1 (SC -> SB)", total:410},
  {name:"Wrangler 2 (SC -> SB)", total:398},
+ {name:"Full-size SUV (SB -> LAX)", total:179.82},
 ];
 const TICKETS={Emre:1040, KD:1040, Ali:1040, "Ali K":1040, Mekin:1040, Kaan:500};
 const FLIGHTS={Emre:null, KD:null, Ali:null, "Ali K":null, Mekin:null, Kaan:null};
@@ -298,7 +299,7 @@ function personProjected(name){
  }
  const transport=TRANSPORT.reduce((s,t)=>s+t.total,0)/6;
  total+=transport;
- breakdown.push({cat:"Transportation", note:"2 Wranglers · tap for breakdown", amt:transport, status:"booked", id:"transport", drill:true});
+ breakdown.push({cat:"Transportation", note:`${TRANSPORT.length} vehicles · tap for breakdown`, amt:transport, status:"booked", id:"transport", drill:true});
  const t=TICKETS[name]||0;
  total+=t;
  breakdown.push({cat:"Match Ticket", note:"your Türkiye vs Paraguay seat", amt:t, status:"booked", id:"ticket"});
@@ -384,7 +385,7 @@ function closeAddSheet(){document.getElementById('bsheet').classList.remove('on'
 window.openAddSheet=openAddSheet;window.pickAddCategory=pickAddCategory;window.saveAddExpense=saveAddExpense;window.closeAddSheet=closeAddSheet;window.deleteCustom=deleteCustom;
 
 /* ===== BUDGET VIEW (by category, with wow hero + drill-ins) ===== */
-const CAT_COLORS={hotels:"#9b6bff",transport:"#5ab0ff",ticket:"#fafafa",flight:"#4ad6c4"};
+const CAT_COLORS={hotels:"#9b6bff",transport:"#5ab0ff",ticket:"#ff9f43",flight:"#4ad6c4"};
 let _budgetAnim=null;
 function animateCount(el,from,to,ms){
  if(_budgetAnim)cancelAnimationFrame(_budgetAnim);
