@@ -709,7 +709,7 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  const id=t.dataset.tab;
  if(id==='trip'){
   closeTripSubScreens();
-  // Nudge the iframe to re-show the flight-price onboarding (it self-skips if prices entered)
+  // Iframe self-throttles the popup (60s cooldown after Done), so this is safe
   try{
    const f=document.getElementById('fr-trip');
    if(f&&f.contentWindow)f.contentWindow.postMessage({cmd:'showFlightPriceOnboarding'},'*');
