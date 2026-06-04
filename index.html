@@ -27,8 +27,12 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 /* Welcome stage */
 .pwelcome{transition:opacity .35s,transform .35s;}
 .pwelcome.gone{opacity:0;transform:translateY(-10px);pointer-events:none;}
-.pflag{font-size:72px;line-height:1;margin-bottom:18px;animation:pflagIn 1.4s cubic-bezier(.22,1,.36,1) both;filter:drop-shadow(0 8px 24px #e30a1788);}
-@keyframes pflagIn{0%{opacity:0;transform:scale(.4);}60%{opacity:1;transform:scale(1.05);}100%{opacity:1;transform:scale(1);}}
+.pflag{width:128px;height:128px;border-radius:30px;overflow:hidden;margin-bottom:22px;position:relative;animation:pflagIn 1.6s cubic-bezier(.22,1,.36,1) both, pflagFloat 4.5s ease-in-out 1.6s infinite alternate;box-shadow:0 16px 44px #e30a1799,0 0 0 1px #ffffff10,inset 0 0 0 1px #ffffff14;}
+.pflag img{width:100%;height:100%;object-fit:cover;display:block;}
+.pflag::after{content:'';position:absolute;inset:-5px;border-radius:32px;border:2px solid #e30a17;opacity:0;pointer-events:none;animation:pflagRing 2.4s ease-out 1.6s infinite;}
+@keyframes pflagIn{0%{opacity:0;transform:scale(.35) rotate(-8deg);filter:blur(8px);}55%{opacity:1;transform:scale(1.08) rotate(3deg);filter:blur(0);}100%{opacity:1;transform:scale(1) rotate(0);filter:blur(0);}}
+@keyframes pflagFloat{from{transform:translateY(0) rotate(0);}to{transform:translateY(-7px) rotate(.6deg);}}
+@keyframes pflagRing{0%{opacity:0;transform:scale(1);}35%{opacity:.85;}100%{opacity:0;transform:scale(1.22);}}
 .ptitle{text-align:center;font-family:'Inter',-apple-system,sans-serif;font-weight:900;font-size:52px;line-height:.9;color:#fafafa;animation:ptitleIn 1.2s .35s cubic-bezier(.22,1,.36,1) both;letter-spacing:-.02em;}
 @keyframes ptitleIn{from{opacity:0;letter-spacing:.18em;transform:translateY(8px);}to{opacity:1;letter-spacing:-.02em;transform:none;}}
 .ptitle span{display:block;}
@@ -214,7 +218,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 <div class="frame">
   <div class="picker" id="picker">
     <div class="pstage" id="pwelcome">
-     <div class="pflag">🇹🇷</div>
+     <div class="pflag"><img src="icon.png" alt="World Cup Trip"></div>
      <div class="ptitle"><span>WORLD</span><span>CUP TRIP</span></div>
      <div class="pdates">JUN 17 — 24 · 2026</div>
      <div class="psub">NY · SF · PCH → LA</div>

@@ -694,12 +694,28 @@ let ME=PEOPLE[0], curCity=0, paniniCollected=1;
   if(idx>=0 && idx<PEOPLE.length) ME=PEOPLE[idx];
  }catch(e){}
 })();
+/* LOCK ME for the lifetime of this iframe load. Any code that tries to reassign
+   ME after this will trigger a console warning and the assignment is reversed. */
+(function lockRider(){
+ const lockedId=ME.id;
+ let _me=ME;
+ try{
+  Object.defineProperty(window,'ME',{
+   get(){return _me;},
+   set(v){
+    if(!v||v.id===_me.id)return;
+    console.warn('[ME-lock] blocked attempt to switch rider from',_me.name,'to',v&&v.name);
+   }
+  });
+ }catch(e){}
+})();
 
 /* ---- picker ---- */
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
-function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');
+function pick(id){
+ /* The iframe's internal picker is hidden — this is a no-op so nothing here can swap riders. */
  try{maybeShowFlightPricesOnboarding();}catch(e){}
 }
 /* rider lock — no swapping after pick */
@@ -1487,7 +1503,8 @@ function renderPGrid(){const g=document.getElementById('pgrid');if(!g)return;g.i
 function buildYouList(){const l=document.getElementById('youList');l.innerHTML="";
  PEOPLE.forEach(p=>{const el=document.createElement('div');el.className='prow'+(p.id===ME.id?' me':'');el.style.color=ACC[p.id%6];
   el.innerHTML=`<span class="av" style="background:${ACC[p.id%6]}">${inits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
-  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
+  /* rider switching disabled — rider is locked by parent picker */
+  l.appendChild(el);});}
 
 /* ---- tabs ---- */
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
