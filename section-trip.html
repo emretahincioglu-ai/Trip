@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hidden;}
-#bg{position:fixed;inset:0;z-index:0;background:radial-gradient(130% 80% at 70% -5%,#b91c2c22,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f;transition:background 1s ease;}
+#bg{position:fixed;inset:0;z-index:0;background:radial-gradient(130% 80% at 70% -5%,#d6282822,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f;transition:background 1s ease;}
 .frame{position:relative;z-index:1;height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;}
 
 /* PICKER */
@@ -83,7 +83,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .ccard .topr{position:absolute;top:14px;left:14px;right:14px;z-index:1;display:flex;justify-content:space-between;}
 .ccard .num{font-family:'Space Mono',monospace;font-size:11px;background:#0006;backdrop-filter:blur(6px);padding:4px 9px;border-radius:8px;}.ccard .wx{font-size:12px;font-weight:600;background:#0006;backdrop-filter:blur(6px);padding:4px 10px;border-radius:999px;}
 .ccard .bot{position:absolute;left:16px;right:16px;bottom:16px;z-index:1;}.ccard .cn{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:32px;line-height:.95;}.ccard .cdt{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffd0;margin-top:3px;}.ccard .teaser{font-size:13px;margin-top:8px;}.ccard .go{margin-top:11px;display:inline-block;font-size:12px;font-weight:700;background:#fff;color:#12131f;padding:7px 14px;border-radius:999px;}
-.badge{position:absolute;top:46px;left:14px;z-index:1;background:#b91c2c;font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:6px;}
+.badge{position:absolute;top:46px;left:14px;z-index:1;background:#d62828;font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:6px;}
 
 /* city + subscreens */
 .screen{position:fixed;inset:0;z-index:10;width:100vw;transform:translateY(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;background:#0a0b14;}
@@ -101,20 +101,20 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .flightbanner .tn{font-family:'Space Mono',monospace;font-size:10px;color:#9fd0ff;text-align:center;letter-spacing:.1em;margin-bottom:6px;}
 .flightbanner .fl{display:flex;align-items:center;gap:10px;}.flightbanner .ap{flex:1;}.flightbanner .ap.r{text-align:right;}.flightbanner .code{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px;line-height:1;}.flightbanner .c2{font-size:10px;color:#ffffffa0;}.flightbanner .tt{font-family:'Space Mono',monospace;font-size:11px;color:#5ab0ff;margin-top:2px;}.flightbanner .ln{color:#5ab0ff;}.flightbanner .more{text-align:center;font-size:11px;color:#9fd0ff;margin-top:8px;font-weight:600;}
 .ith{display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;}.ith b{font-size:16px;}.ith small{font-family:'Space Mono',monospace;font-size:11px;color:#ffffff90;}
-.it{display:flex;gap:12px;padding:10px 0;align-items:flex-start;border-top:1px solid #ffffff10;}.it:first-of-type{border:none;}.it .g{width:3px;height:28px;border-radius:2px;flex:none;align-self:center;font-size:0;color:transparent;overflow:hidden;}.it .mid{flex:1;}.it .mid b{font-size:14px;display:block;}.it .mid small{font-size:12px;color:#ffffff90;}.it .tm{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffa0;padding-top:3px;}.it.match .mid b{color:#e4495a;}
+.it{display:flex;gap:12px;padding:10px 0;align-items:flex-start;border-top:1px solid #ffffff10;}.it:first-of-type{border:none;}.it .g{width:3px;height:28px;border-radius:2px;flex:none;align-self:center;font-size:0;color:transparent;overflow:hidden;}.it .mid{flex:1;}.it .mid b{font-size:14px;display:block;}.it .mid small{font-size:12px;color:#ffffff90;}.it .tm{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffa0;padding-top:3px;}.it.match .mid b{color:#ef4444;}
 .itog{display:flex;gap:4px;background:#ffffff14;border-radius:999px;padding:3px;}
 .itb{background:none;border:none;color:#ffffff90;font-family:inherit;font-size:11px;font-weight:700;padding:5px 13px;border-radius:999px;cursor:pointer;}
 .itb.on{background:#fff;color:#12131f;}
 .mapbox{width:100%;height:72vh;min-height:480px;border-radius:18px;overflow:hidden;margin-top:6px;background:#0a0e1a;box-shadow:0 16px 40px #0009;position:relative;}
-.mappin{width:30px;height:30px;border-radius:50% 50% 50% 0;background:#b91c2c;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 3px 12px #000a;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pindrop .5s cubic-bezier(.3,1.5,.5,1) backwards;}
+.mappin{width:30px;height:30px;border-radius:50% 50% 50% 0;background:#d62828;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 3px 12px #000a;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pindrop .5s cubic-bezier(.3,1.5,.5,1) backwards;}
 .mappin span{transform:rotate(45deg);font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;}
 .mappin.food{background:#4ad6c4;}.mappin.bed{background:#9b6bff;}.mappin.match{background:#ffd447;}
 @keyframes pindrop{from{opacity:0;transform:rotate(-45deg) translateY(-30px) scale(.5)}to{opacity:1;transform:rotate(-45deg) translateY(0) scale(1)}}
 .mappop{font-family:'DM Sans',sans-serif;}
 .mappop b{font-size:14px;}.mappop .ps{font-size:12px;color:#666;display:block;margin:2px 0 7px;}
-.mappop a{display:inline-block;background:#b91c2c;color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;}
+.mappop a{display:inline-block;background:#d62828;color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;}
 .maptag{position:absolute;top:12px;left:12px;z-index:2;background:#000000aa;backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:700;padding:7px 13px;border-radius:999px;font-family:'Space Mono',monospace;letter-spacing:.05em;}
-.viewall{color:#e4495a;font-size:13px;font-weight:600;padding:12px 0;}
+.viewall{color:#ef4444;font-size:13px;font-weight:600;padding:12px 0;}
 .exp{background:#12131fcc;backdrop-filter:blur(10px);border:1px solid #ffffff16;border-radius:16px;padding:14px;margin-top:6px;}.exp.hidden .ev{filter:blur(7px);}
 .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}.eh b{font-size:14px;}.eye{background:#ffffff14;border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;}
 .erow{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid #ffffff10;font-size:13.5px;}.erow:first-of-type{border:none;}.erow .ev{font-family:'Space Mono',monospace;font-weight:700;}
@@ -141,8 +141,8 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .wclive{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#ff5e5e;}
 .wclive .dot{width:8px;height:8px;border-radius:50%;background:#ff5e5e;animation:blink 1.2s infinite;}@keyframes blink{50%{opacity:.3}}
 .sectitle{font-size:11px;letter-spacing:.2em;color:#ffffff88;margin:22px 2px 12px;}
-.feat{border-radius:20px;overflow:hidden;position:relative;border:1px solid #b91c2c55;}
-.feat .fg{position:absolute;inset:0;background:linear-gradient(135deg,#6b2aa0,#b91c2c 80%);}
+.feat{border-radius:20px;overflow:hidden;position:relative;border:1px solid #d6282855;}
+.feat .fg{position:absolute;inset:0;background:linear-gradient(135deg,#6b2aa0,#d62828 80%);}
 .feat .fc{position:relative;z-index:1;padding:18px;}
 .feat .tag{font-size:10px;letter-spacing:.18em;font-weight:800;opacity:.9;display:flex;justify-content:space-between;}
 .feat .scoreline{display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px;}
@@ -154,7 +154,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .trow{display:grid;grid-template-columns:20px 1fr 26px 26px 26px 32px;gap:6px;align-items:center;padding:10px 13px;font-size:13px;border-top:1px solid #ffffff0d;}
 .trow:first-child{border:none;}.trow.head{font-size:10px;letter-spacing:.08em;color:#ffffff77;font-weight:700;}
 .trow .pos{font-family:'Space Mono',monospace;color:#ffffff99;}.trow .tm{display:flex;align-items:center;gap:7px;font-weight:600;}
-.trow.us{background:linear-gradient(90deg,#b91c2c22,transparent);}.trow .num{text-align:center;font-family:'Space Mono',monospace;color:#ffffffcc;}.trow .pts{text-align:center;font-family:'Space Mono',monospace;font-weight:700;}
+.trow.us{background:linear-gradient(90deg,#d6282822,transparent);}.trow .num{text-align:center;font-family:'Space Mono',monospace;color:#ffffffcc;}.trow .pts{text-align:center;font-family:'Space Mono',monospace;font-weight:700;}
 .fxcard{background:#12101e;border:1px solid #ffffff14;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .fxcard .ft{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;}.fxcard .fsc{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;}.fxcard .fstat{font-size:10px;color:#ffffff77;letter-spacing:.06em;}
 .databanner{margin-top:18px;background:#ffffff0c;border:1px dashed #ffffff22;border-radius:12px;padding:12px 14px;font-size:12px;color:#ffffff99;line-height:1.5;}.databanner b{color:#fff;}
@@ -213,7 +213,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .playtour{position:absolute;top:14px;left:14px;z-index:3;background:#fff;color:#12131f;border:none;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:800;padding:9px 14px 9px 13px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px #0008;letter-spacing:.06em;transition:.2s;}
 .playtour:hover{transform:translateY(-1px);background:#ffd447;}
 .playtour:active{transform:scale(.96);}
-.playtour.playing{background:#b91c2c;color:#fff;}
+.playtour.playing{background:#d62828;color:#fff;}
 .playtour .pic{display:inline-block;width:0;height:0;border-left:8px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent;}
 .playtour.playing .pic{width:8px;height:9px;border:none;background:linear-gradient(90deg,currentColor 0 35%,transparent 35% 65%,currentColor 65%);}
 
@@ -238,20 +238,20 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 
 /* map toggle button (above the list) */
 .maptoggle{width:100%;background:#15172a;border:1px solid #ffffff18;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-family:inherit;font-size:14px;font-weight:600;transition:.18s;margin:6px 0 0;}
-.maptoggle:hover,.maptoggle:active{background:#1c1f2e;border-color:#b91c2c55;}
+.maptoggle:hover,.maptoggle:active{background:#1c1f2e;border-color:#d6282855;}
 .maptoggle .mti{font-size:20px;line-height:1;}
 .maptoggle .mtl{flex:1;text-align:left;}
-.maptoggle .mtchev{color:#e4495a;font-size:20px;font-weight:700;transition:transform .25s;line-height:1;}
-.maptoggle.open{background:#1c1f2e;border-color:#b91c2c88;}
+.maptoggle .mtchev{color:#ef4444;font-size:20px;font-weight:700;transition:transform .25s;line-height:1;}
+.maptoggle.open{background:#1c1f2e;border-color:#d6282888;}
 .maptoggle.open .mtchev{transform:rotate(90deg);}
-.maptoggle.open .mtl{color:#e4495a;}
+.maptoggle.open .mtl{color:#ef4444;}
 #mapWrap{overflow:hidden;animation:mwopen .3s ease;}
 @keyframes mwopen{from{max-height:0;opacity:.3}to{max-height:1000px;opacity:1}}
 
 /* itinerary list clickable */
 .it.clickable{cursor:pointer;border-radius:8px;transition:background .2s;padding-left:4px;padding-right:4px;margin:0 -4px;}
 .it.clickable:hover{background:#ffffff08;}
-.it.on{background:linear-gradient(90deg,#b91c2c26,#b91c2c08);box-shadow:inset 3px 0 0 #e4495a;}
+.it.on{background:linear-gradient(90deg,#d6282826,#d6282808);box-shadow:inset 3px 0 0 #ef4444;}
 
 /* PLACE SHEET */
 .placesheet{position:fixed;inset:0;z-index:25;background:#0a0b14;transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
@@ -277,7 +277,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .pact{flex:1;background:#ffffff14;border:1px solid #ffffff1c;border-radius:14px;padding:11px 4px;text-align:center;color:#fff;text-decoration:none;font-family:inherit;cursor:pointer;transition:.15s;font-size:11.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .pact:hover{background:#ffffff22;transform:translateY(-1px);}
 .pact .pai{font-size:18px;line-height:1;}
-.pact.primary{background:#b91c2c;border-color:#b91c2c;}
+.pact.primary{background:#d62828;border-color:#d62828;}
 .pact.primary:hover{background:#ff7956;}
 .pact.disabled{opacity:.38;pointer-events:none;}
 .psheet-section{margin-top:22px;}
@@ -288,8 +288,8 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 .psheet-line .pli{width:22px;flex:none;color:#ffffff88;font-size:14px;}
 .psheet-line .plt{flex:1;}
 .psheet-line .plt b{font-size:13.5px;display:block;font-weight:600;}
-.psheet-trip{background:linear-gradient(135deg,#b91c2c24,#7c3aed24);border:1px solid #b91c2c55;border-radius:14px;padding:14px 16px;margin-top:18px;}
-.psheet-trip .kt{font-size:10px;letter-spacing:.18em;color:#e4495a;font-weight:700;margin-bottom:5px;}
+.psheet-trip{background:linear-gradient(135deg,#d6282824,#7c3aed24);border:1px solid #d6282855;border-radius:14px;padding:14px 16px;margin-top:18px;}
+.psheet-trip .kt{font-size:10px;letter-spacing:.18em;color:#ef4444;font-weight:700;margin-bottom:5px;}
 .psheet-trip .kv{font-size:13.5px;line-height:1.5;}
 .psheet-trip .kv b{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:20px;display:block;margin-bottom:3px;font-weight:400;letter-spacing:.02em;}
 
@@ -299,7 +299,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 #gameday .gdhero .tov .ttl{font-size:22px;letter-spacing:.04em;margin-top:14px;}
 #gameday .gdbody{padding:18px 16px 60px;background:#0a0b14;}
 .gdcard{background:#15172a;border:1px solid #ffffff14;border-radius:16px;padding:16px;margin-bottom:14px;}
-.gdcard .gdk{font-size:10px;letter-spacing:.2em;color:#e4495a;font-weight:800;margin-bottom:10px;}
+.gdcard .gdk{font-size:10px;letter-spacing:.2em;color:#ef4444;font-weight:800;margin-bottom:10px;}
 .gdrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #ffffff10;font-size:13.5px;}
 .gdrow:first-of-type{border:none;}
 .gdrow span{color:#ffffffa0;}
@@ -324,7 +324,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
     <div class="scrollarea" id="tripScroll">
       <div class="home">
         <div class="topbar" id="topbar">
-          <div class="rider" id="riderBtn" title="Switch rider"><span class="av" id="av">EM</span><div><small>RIDING AS · TAP TO SWITCH</small><b id="riderName">Emre</b></div></div>
+          <div class="rider"><span class="av" id="av">EM</span><div><small>RIDING AS</small><b id="riderName">Emre</b></div></div>
           <div class="flags"></div>
         </div>
         <div class="nextup" id="nextup"></div>
@@ -436,7 +436,7 @@ body{font-family:'DM Sans',sans-serif;background:#07080f;color:#fff;overflow:hid
 
 <script>
 const ACC=["#ff6b4a","#ffb347","#ff4d8d","#4ad6c4","#7c8cff","#ffd447"];
-const G={sun:["#ffd166","☀️"],flight:["#5ab0ff","✈️"],drive:["#e4495a","🚗"],bed:["#c08cff","🛏️"],place:["#4ad6c4","📍"],food:["#ff9f6b","🍽️"],match:["#b91c2c","⚽"],train:["#7c8cff","🚆"]};
+const G={sun:["#ffd166","☀️"],flight:["#5ab0ff","✈️"],drive:["#ef4444","🚗"],bed:["#c08cff","🛏️"],place:["#4ad6c4","📍"],food:["#ff9f6b","🍽️"],match:["#d62828","⚽"],train:["#7c8cff","🚆"]};
 const PEOPLE=[
  {id:0,name:"Emre",  origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale",
   flights:[
@@ -578,7 +578,7 @@ const LODGING={
  3:{name:"Portola Hotel & Spa at Monterey Bay",addr:"Two Portola Plaza, Monterey, CA 93940",dates:"Jun 20–21",ci:"Jun 20 · 3:00 PM",co:"Jun 21 · 11:00 AM",conf:"72073355187522",total:634.75,rooms:"2× Portola Room, Two Queen Beds"},
 };
 const GAMES=[
- {id:"panini",name:"Panini Sticker Book",sub:"Collect the squad",icon:"🎴",bg:"linear-gradient(150deg,#b91c2c,#b3279a)",live:true},
+ {id:"panini",name:"Panini Sticker Book",sub:"Collect the squad",icon:"🎴",bg:"linear-gradient(150deg,#d62828,#b3279a)",live:true},
  {id:"bingo",name:"Football Bingo",sub:"Match-day card",icon:"🎱",bg:"linear-gradient(150deg,#4cbf9a,#1f5a72)",live:false},
  {id:"predict",name:"Score Predictions",sub:"Call the games",icon:"🎯",bg:"linear-gradient(150deg,#7c8cff,#3a2a8c)",live:false},
  {id:"bracket",name:"Bracket Challenge",sub:"Pick the winner",icon:"🏆",bg:"linear-gradient(150deg,#ffd166,#ff7e54)",live:false},
@@ -600,7 +600,7 @@ const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
 function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');}
-document.getElementById('riderBtn').onclick=()=>document.getElementById('picker').classList.remove('gone');
+/* rider lock — no swapping after pick */
 function syncRider(){const a=document.getElementById('av');a.textContent=inits(ME.name);a.style.background=ACC[ME.id%6];
  document.getElementById('riderName').textContent=ME.name;
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
@@ -714,8 +714,9 @@ function renderOverview(){
      <div class="ovtop"><span class="ovic">${t.ic}</span><span class="ovcount">${t.count}</span></div>
      <div class="ovbot"><div class="ovname">${t.name}</div><div class="ovsub">${t.sub}</div></div></div>`).join("")+`</div>`;
 }
+let _showAllFlights=false;
 function openOverview(which){
- if(which==='overFlights')return openS('flight');
+ if(which==='overFlights'){_showAllFlights=true;return openS('flight');}
  if(which==='overStays')return openAllStays();
  if(which==='overCars')return openS('cars');
  if(which==='overRes')return openS('res');
@@ -758,7 +759,7 @@ function openCity(i){curCity=i;const c=CITIES[i];
  document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${c.dates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
  let flag="";
  if(c.flightIn)flag=`<div class="you" style="color:#5ab0ff">${ME.originCode==="SFO"?"You're already in SF":`You fly in from ${ME.origin}`}</div>`;
- else if(c.match)flag=`<div class="you" style="color:#e4495a">Match day · everyone at Levi's</div>`;
+ else if(c.match)flag=`<div class="you" style="color:#ef4444">Match day · everyone at Levi's</div>`;
  const costRows=SHARED.filter(s=>s.city===i&&s.total>0).map(s=>[s.label+" (÷6)",money(share(s))]);
  const flightBanner=buildFlightBanner(c);
  // map item index -> stop index (only items with coords get a stop index)
@@ -770,7 +771,7 @@ function openCity(i){curCity=i;const c=CITIES[i];
   <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
   ${hasCoords?`<button class="maptoggle" id="mapToggle" type="button" onclick="toggleMap()"><span class="mti">🗺️</span><span class="mtl">View Stops on Map</span><span class="mtchev">›</span></button><div id="mapWrap" style="display:none;margin-top:10px"><div id="mapbox" class="mapbox"></div></div>`:''}
   <div id="itinList" style="margin-top:14px">
-  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#e4495a;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
+  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ef4444;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
   <div class="viewall">View all days ›</div>
   </div>
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
@@ -857,12 +858,12 @@ function initMap(){
  mapInstance.on('style.load',()=>{
    if(!mapInstance.getSource('route')){
      mapInstance.addSource('route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[stops[0][4]]}}});
-     mapInstance.addLayer({id:'route',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#b91c2c','line-width':4,'line-opacity':1}});
+     mapInstance.addLayer({id:'route',type:'line',source:'route',slot:'top',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#d62828','line-width':4,'line-opacity':1}});
    }
  });
 
  mapInstance.on('load',()=>{
-   const MK={place:['#4ad6c4','📸'],food:['#ff9f6b','🍴'],bed:['#c08cff','🛏️'],match:['#ffd447','⚽'],drive:['#e4495a','🚗'],train:['#7c8cff','🚆'],flight:['#5ab0ff','✈️']};
+   const MK={place:['#4ad6c4','📸'],food:['#ff9f6b','🍴'],bed:['#c08cff','🛏️'],match:['#ffd447','⚽'],drive:['#ef4444','🚗'],train:['#7c8cff','🚆'],flight:['#5ab0ff','✈️']};
    stops.forEach((it,idx)=>{
      const [type,name,sub,time,coords]=it;
      const g=MK[type]||['#4ad6c4','📍'];
@@ -1005,7 +1006,7 @@ function openPlaceSheet(idx){
 function closePlaceSheet(){const el=document.getElementById('placesheet');if(el)el.classList.remove('on');}
 window.openPlaceSheet=openPlaceSheet;window.closePlaceSheet=closePlaceSheet;
 document.getElementById('cityBack').onclick=()=>{document.getElementById('city').classList.remove('on');resetBg();};
-function resetBg(){bg.style.background="radial-gradient(130% 80% at 70% -5%,#b91c2c22,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f";}
+function resetBg(){bg.style.background="radial-gradient(130% 80% at 70% -5%,#d6282822,transparent 50%),radial-gradient(120% 90% at 20% 0%,#7c3aed2e,transparent 55%),#07080f";}
 
 function openS(id){if(id==='flight')buildFlight();if(id==='lodging')buildLodging();if(id==='cars')buildCars();if(id==='res')buildReservations();document.getElementById(id).classList.add('on');}
 function closeS(id){document.getElementById(id).classList.remove('on');}
@@ -1020,8 +1021,10 @@ function relevantFlights(c,flights){
 function buildFlight(){
  const c=CITIES[curCity];
  const allFlights=ME.flights||[];
- const flights=relevantFlights(c,allFlights);
- let body=`<div class="back" onclick="closeS('flight')">‹ ${c.name}</div>`;
+ const flights=_showAllFlights?allFlights:relevantFlights(c,allFlights);
+ const backLabel=_showAllFlights?'Home':c.name;
+ _showAllFlights=false;
+ let body=`<div class="back" onclick="closeS('flight')">‹ ${backLabel}</div>`;
  if(!flights.length){
    const msg=c.sdLeg?`No flight to San Diego on your itinerary, ${ME.name}.`:c.flightIn?`No direct flight to SF on your itinerary, ${ME.name}.`:c.flightOut?`No return flight on your itinerary yet.`:`No flights here.`;
    body+=`<div class="ph"><b>No flight for this stop</b>${msg}</div>`;
