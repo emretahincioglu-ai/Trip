@@ -775,8 +775,7 @@ function buildFlightBanner(c){
  return "";
 }
 function openCity(i){curCity=i;const c=CITIES[i];
- const heroBg=c.photo?`url('${c.photo}') center/cover no-repeat`:c.bg;
- document.getElementById('cityBg').style.background=heroBg;bg.style.background=c.bg;
+ document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
  document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${c.dates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
  let flag="";
  if(c.flightIn)flag=`<div class="you" style="color:#5ab0ff">${ME.originCode==="SFO"?"You're already in SF":`You fly in from ${ME.origin}`}</div>`;
