@@ -1,59 +1,74 @@
 // ============================================================
 // SUPABASE EDGE FUNCTION — "sportmonks"
-// This runs ON Supabase's servers (not in the browser), so your
-// SportMonks token stays secret and there is no CORS problem.
+// Now proxies BOTH SportMonks AND Splitwise.
 //
-// HOW TO DEPLOY (you know Supabase, so this is quick):
-//  1. In your Supabase project: Edge Functions → Create function → name it "sportmonks"
-//  2. Paste this whole file as the function code.
-//  3. Add your token as a secret (Settings → Edge Functions → Secrets, or CLI):
-//        SPORTMONKS_TOKEN = your_token_here
-//  4. Deploy. Your function URL becomes:
-//        https://YOURPROJECT.supabase.co/functions/v1/sportmonks
-//  5. Put that URL + your anon key into wcr-data.js (SM_PROXY / SM_ANON).
+// DEPLOY STEPS (same function, just paste this updated code):
+//  1. Supabase project → Edge Functions → sportmonks → Edit
+//  2. Replace with this file
+//  3. Add the second secret (Settings → Edge Functions → Secrets):
+//        SPLITWISE_TOKEN = your_splitwise_api_key
+//     (SPORTMONKS_TOKEN already exists from before)
+//  4. Deploy
 //
-// The frontend calls:  {function}?path=fixtures?filters=...
-// and this adds the base URL + token, then returns the JSON.
+// FRONTEND CALLS:
+//   ?path=fixtures?filters=...           → SportMonks (backward compat, default)
+//   ?api=splitwise&path=get_group/12345  → Splitwise
+//   ?api=splitwise&path=get_current_user → Splitwise
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
-const BASE = "https://api.sportmonks.com/v3/football/";
+const SM_BASE = "https://api.sportmonks.com/v3/football/";
+const SW_BASE = "https://secure.splitwise.com/api/v3.0/";
 
-// CORS headers so your GitHub Pages site is allowed to call this
 const cors = {
-  "Access-Control-Allow-Origin": "*",            // tighten to your domain later if you want
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, content-type",
 };
 
 serve(async (req) => {
-  // browser preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: cors });
   }
 
-  const token = Deno.env.get("SPORTMONKS_TOKEN");
-  if (!token) {
-    return new Response(JSON.stringify({ error: "SPORTMONKS_TOKEN secret not set" }),
-      { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
-  }
-
-  // read the requested SportMonks path
   const url = new URL(req.url);
+  const api = (url.searchParams.get("api") || "sportmonks").toLowerCase();
   const path = url.searchParams.get("path");
+
   if (!path) {
     return new Response(JSON.stringify({ error: "missing ?path=" }),
       { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
   }
 
-  // build the real SportMonks URL (add token, handle existing ? in path)
-  const sep = path.includes("?") ? "&" : "?";
-  const target = `${BASE}${path}${sep}api_token=${token}`;
-
   try {
+    if (api === "splitwise") {
+      const token = Deno.env.get("SPLITWISE_TOKEN");
+      if (!token) {
+        return new Response(JSON.stringify({ error: "SPLITWISE_TOKEN secret not set" }),
+          { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+      }
+      const target = `${SW_BASE}${path}`;
+      const r = await fetch(target, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const body = await r.text();
+      return new Response(body, {
+        status: r.status,
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+
+    // default: sportmonks
+    const token = Deno.env.get("SPORTMONKS_TOKEN");
+    if (!token) {
+      return new Response(JSON.stringify({ error: "SPORTMONKS_TOKEN secret not set" }),
+        { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+    }
+    const sep = path.includes("?") ? "&" : "?";
+    const target = `${SM_BASE}${path}${sep}api_token=${token}`;
     const r = await fetch(target);
-    const body = await r.text(); // pass through as-is
+    const body = await r.text();
     return new Response(body, {
       status: r.status,
       headers: { ...cors, "Content-Type": "application/json" },
@@ -63,3 +78,5 @@ serve(async (req) => {
       { status: 502, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });
+</content>
+</invoke>

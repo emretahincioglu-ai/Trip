@@ -123,6 +123,82 @@ const PEOPLE=[
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 let ME=PEOPLE[0];
 
+/* ---- SPLITWISE INTEGRATION ---- */
+const SW_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmonks";
+const SW_GROUP_ID=96375779;
+const money=n=>{const v=Math.abs(n);return"$"+(Math.round(v*100)/100).toLocaleString(undefined,{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2});};
+let SW_GROUP=null,SW_USER=null,SW_LOADING=false;
+
+async function fetchSW(path){
+ const url=`${SW_PROXY}?api=splitwise&path=${encodeURIComponent(path)}`;
+ const r=await fetch(url);
+ if(!r.ok)throw new Error(`SW ${r.status}`);
+ return r.json();
+}
+async function loadSplitwise(){
+ if(SW_LOADING)return;SW_LOADING=true;
+ try{
+  const[u,g]=await Promise.all([fetchSW("get_current_user"),fetchSW("get_group/"+SW_GROUP_ID)]);
+  SW_USER=u.user;SW_GROUP=g.group;
+ }catch(e){console.warn("SW fail",e);SW_GROUP=null;}
+ SW_LOADING=false;
+ buildBudget();
+}
+
+function buildBudget(){
+ const hero=document.getElementById('bHero');
+ const br=document.getElementById('bBreak');
+ const pp=document.getElementById('bPeople');
+ if(!SW_GROUP){
+  if(hero)hero.innerHTML=`<div class="blab">YOUR RUNNING TOTAL</div>
+   <div class="btot">Loading…</div>
+   <div class="bsub">Pulling live from Splitwise</div>`;
+  if(br)br.innerHTML="";if(pp)pp.innerHTML="";
+  return;
+ }
+ const members=SW_GROUP.members||[];
+ const me=members.find(m=>SW_USER&&m.id===SW_USER.id)||members[0];
+ const myBalance=me?(me.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0):0;
+ const owesMe=myBalance>0;
+ const debts=SW_GROUP.simplified_debts||[];
+ // Hero
+ if(hero){
+  const status=Math.abs(myBalance)<0.01?"all settled":owesMe?"you are owed":"you owe";
+  hero.innerHTML=`<div class="blab">YOUR BALANCE · ${(me&&me.first_name||"YOU").toUpperCase()}</div>
+   <div class="btot" style="color:${Math.abs(myBalance)<0.01?'#4ad6c4':owesMe?'#4ad6c4':'#ff6b6b'}">${money(myBalance)}</div>
+   <div class="bsub">${status} · <b>${SW_GROUP.name}</b></div>`;
+ }
+ // Settle-up
+ if(br){
+  if(!debts.length){
+   br.innerHTML=`<div class="bcat"><div class="bcm"><b>All settled</b><small>No one owes anyone in this group</small></div></div>`;
+  }else{
+   br.innerHTML=debts.map(d=>{
+    const from=members.find(m=>m.id===d.from);
+    const to=members.find(m=>m.id===d.to);
+    if(!from||!to)return"";
+    return `<div class="bcat">
+     <div class="bci" style="background:${ACC[from.id%6]}33;color:#fff;font-family:'Space Mono',monospace;font-weight:700;font-size:10px">${inits(from.first_name||"?")}</div>
+     <div class="bcm"><b>${from.first_name} → ${to.first_name}</b><small>${d.currency_code||"USD"}</small></div>
+     <div class="bcv">${money(parseFloat(d.amount))}</div>
+    </div>`;}).join("");
+  }
+ }
+ // Members
+ if(pp){
+  pp.innerHTML=members.map(m=>{
+   const bal=(m.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0);
+   const isMe=SW_USER&&m.id===SW_USER.id;
+   const status=Math.abs(bal)<0.01?"SETTLED":bal>0?"OWED":"OWES";
+   const cls=Math.abs(bal)<0.01?"ok":bal>0?"ok":"pen";
+   return `<div class="bprow">
+    <span class="bpav" style="background:${ACC[m.id%6]}">${inits(m.first_name||"?")}</span>
+    <div class="bpn">${m.first_name||""} ${m.last_name||""}${isMe?' (you)':''}<small>${m.email||""}</small></div>
+    <div class="bpamt">${money(bal)}<span class="bpstat ${cls}">${status}</span></div>
+   </div>`;}).join("");
+ }
+}
+
 const peopleEl=document.getElementById('people');
 PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b.style.setProperty('--c',ACC[p.id%6]);
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
@@ -130,77 +206,7 @@ function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').cl
 function syncRider(){
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
  document.getElementById('youName').textContent=ME.name;
- buildBudget();
 }
-
-/* ---- BUDGET DATA ---- */
-const HOTELS=[
- {name:"Residence Inn Sunnyvale",dates:"Jun 19–20",total:370.76,booked:true},
- {name:"Portola Hotel Monterey",dates:"Jun 20–21",total:634.75,booked:true},
- {name:"Santa Barbara hotel",dates:"Jun 21–22",total:0,booked:false},
- {name:"Santa Monica hotel",dates:"Jun 22–23",total:0,booked:false},
-];
-const CARS=[
- {name:"2× Jeep Wrangler",dates:"Jun 20–22",total:807.56,booked:true},
- {name:"Full-size SUV",dates:"Jun 22–23",total:179.82,booked:true},
-];
-const FLIGHTS_PRICE={0:null,1:null,2:null,3:null,4:null,5:null};
-const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
-
-function personTotals(meId){
- const hotelShare=HOTELS.reduce((s,h)=>s+(h.booked?h.total:0),0)/PEOPLE.length;
- const hotelPending=HOTELS.reduce((s,h)=>s+(!h.booked?1:0),0);
- const carsShare=CARS.reduce((s,c)=>s+(c.booked?c.total:0),0)/PEOPLE.length;
- const flightPrice=FLIGHTS_PRICE[meId];
- const flightStatus=flightPrice==null?'pending':'locked';
- return{hotelShare,hotelPending,carsShare,flightPrice,flightStatus,knownTotal:hotelShare+carsShare+(flightPrice||0)};
-}
-
-function buildBudget(){
- const t=personTotals(ME.id);
- const hero=document.getElementById('bHero');
- if(hero){
-  const pendingCount=t.hotelPending+(t.flightStatus==='pending'?1:0);
-  hero.innerHTML=`<div class="blab">YOUR RUNNING TOTAL · ${ME.name.toUpperCase()}</div>
-   <div class="btot">${money(t.knownTotal)}</div>
-   <div class="bsub">${t.knownTotal>0?'locked in':'no prices yet'}${pendingCount?` · <b>${pendingCount} pending</b>`:''}</div>`;
- }
- const br=document.getElementById('bBreak');
- if(br){
-  const totalHotelPending=HOTELS.filter(h=>!h.booked).length;
-  br.innerHTML=`
-   <div class="bcat">
-    <div class="bci"><svg viewBox="0 0 24 24"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg></div>
-    <div class="bcm"><b>Hotels</b><small>${HOTELS.filter(h=>h.booked).length} booked · ${totalHotelPending} pending · split ÷6</small></div>
-    <div class="bcv">${money(t.hotelShare)}${totalHotelPending?`<span class="bpend">+${totalHotelPending} TBD</span>`:''}</div>
-   </div>
-   <div class="bcat">
-    <div class="bci"><svg viewBox="0 0 24 24"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></div>
-    <div class="bcm"><b>Cars</b><small>2 Wranglers + 1 SUV · split ÷6</small></div>
-    <div class="bcv">${money(t.carsShare)}</div>
-   </div>
-   <div class="bcat">
-    <div class="bci"><svg viewBox="0 0 24 24"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg></div>
-    <div class="bcm"><b>Flight</b><small>${ME.origin} → SF · your legs</small></div>
-    <div class="bcv">${t.flightPrice!=null?money(t.flightPrice):'—'}${t.flightStatus==='pending'?`<span class="bpend">ADD PRICE</span>`:''}</div>
-   </div>
-   <div class="bcat">
-    <div class="bci"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
-    <div class="bcm"><b>Reservations</b><small>Dinners & bookings · ÷n</small></div>
-    <div class="bcv">$0<span class="bpend">SOON</span></div>
-   </div>`;
- }
- const pp=document.getElementById('bPeople');
- if(pp){
-  pp.innerHTML=PEOPLE.map(p=>{const pt=personTotals(p.id);const isMe=p.id===ME.id;
-   return `<div class="bprow">
-    <span class="bpav" style="background:${ACC[p.id%6]}">${inits(p.name)}</span>
-    <div class="bpn">${p.name}${isMe?' (you)':''}<small>${p.origin}</small></div>
-    <div class="bpamt">${money(pt.knownTotal)}<span class="bpstat ${pt.flightStatus==='pending'||pt.hotelPending?'pen':'ok'}">${pt.flightStatus==='pending'?'FLIGHT TBD':pt.hotelPending?'HOTELS TBD':'LOCKED'}</span></div>
-   </div>`;}).join("");
- }
-}
-
 function reloadTrip(){
  document.getElementById('fr-trip').src='section-trip.html?rider='+ME.id;
  const fm=document.getElementById('fr-matchday');
@@ -216,8 +222,11 @@ function showTab(id){
    if(k===id&&!f.src&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
  document.getElementById('fr-you').classList.toggle('on',id==='you');
  if(!isFrame)loaderEl.classList.remove('on');
+ if(id==='you'&&!SW_GROUP)loadSplitwise();
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
 document.getElementById('fr-trip').src='section-trip.html?rider=0';
 syncRider();
+buildBudget();
+loadSplitwise();
 </script>
