@@ -521,25 +521,30 @@ const PEOPLE=[
  {id:0,name:"Emre",  origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale",
   flights:[
    {leg:"to-sd", from:"EWR",fromCity:"Newark/NYC",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"UA 1826",airline:"United",dep:"4:59 PM",arr:"7:52 PM",seat:"",cls:"Economy",price:null},
+   {leg:"to-sf", from:"SAN",fromCity:"San Diego",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"UA 1763",airline:"United",dep:"1:39 PM",arr:"3:19 PM",seat:"36D",cls:"Economy (W)",price:null},
    {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
   ]},
  {id:1,name:"KD",    origin:"Already in SF",originCode:"SFO", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale",
   flights:[
+   {leg:"to-sf", from:"JFK",fromCity:"New York",to:"SFO",toCity:"San Francisco",date:"",num:"",airline:"",dep:"",arr:"",seat:"",cls:"",price:null,unknown:true},
    {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
   ]},
  {id:2,name:"Ali",   origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 1",roomNote:"2-bedroom penthouse · Sunnyvale",
   flights:[
    {leg:"to-sd", from:"EWR",fromCity:"Newark/NYC",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"UA 1826",airline:"United",dep:"4:59 PM",arr:"7:52 PM",seat:"",cls:"Economy",price:null},
+   {leg:"to-sf", from:"SAN",fromCity:"San Diego",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"UA 1763",airline:"United",dep:"1:39 PM",arr:"3:19 PM",seat:"",cls:"Economy (W)",price:null},
    {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
   ]},
  {id:3,name:"Ali K", origin:"San Diego",   originCode:"SAN", room:"Penthouse · BR 2",roomNote:"2-bedroom penthouse · Sunnyvale",
   flights:[
    {leg:"to-sd", from:"JFK",fromCity:"New York",to:"SAN",toCity:"San Diego",date:"Jun 12",num:"DL 685",airline:"Delta",dep:"8:29 PM",arr:"11:39 PM",seat:"",cls:"Main Basic",price:null},
+   {leg:"to-sf", from:"SAN",fromCity:"San Diego",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"UA 1763",airline:"United",dep:"1:39 PM",arr:"3:19 PM",seat:"",cls:"Economy (W)",price:null},
    {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"EWR",toCity:"New York",date:"Jun 23",num:"UA",airline:"United",dep:"9:00 PM",arr:"5:18 AM",seat:"",cls:"Economy",price:null},
   ]},
  {id:4,name:"Mekin", origin:"Chicago",     originCode:"ORD", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale",
   flights:[
-   {leg:"to-sf", from:"ORD",fromCity:"Chicago",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"",airline:"",dep:"",arr:"",seat:"",cls:"",price:null,unknown:true},
+   {leg:"to-sf", from:"ORD",fromCity:"Chicago",to:"SFO",toCity:"San Francisco",date:"Jun 17",num:"UA 2179",airline:"United",dep:"6:20 PM",arr:"9:18 PM",seat:"",cls:"Economy",price:null,conf:"GFNJVK"},
+   {leg:"home",  from:"LAX",fromCity:"Los Angeles",to:"ORD",toCity:"Chicago",date:"Jun 23",num:"UA 353",airline:"United",dep:"10:35 PM",arr:"4:51 AM",seat:"",cls:"Economy",price:null},
   ]},
  {id:5,name:"Kaan",  origin:"London",      originCode:"LHR", room:"Penthouse · sofa",roomNote:"Living area · Sunnyvale",
   flights:[
@@ -562,7 +567,7 @@ const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFrac
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
 const CITIES=[
- {n:"00",name:"San Diego",dates:"Jun 12–17",datesByRider:{5:"Jun 12–15"},wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-117.255,32.717,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
+ {n:"00",name:"San Diego",dates:"Jun 12–17",datesByRider:{5:"Jun 12–15"},wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-117.255,32.717,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",weatherDays:[{d:"Fri Jun 12",hi:24,lo:19,c:"Sunny · Beach",ic:"sun"},{d:"Sat Jun 13",hi:24,lo:19,c:"Sunny",ic:"sun"},{d:"Sun Jun 14",hi:25,lo:19,c:"Sunny",ic:"sun"},{d:"Mon Jun 15",hi:24,lo:19,c:"Marine layer AM",ic:"cloudsun"},{d:"Tue Jun 16",hi:25,lo:19,c:"Sunny",ic:"sun"},{d:"Wed Jun 17",hi:24,lo:19,c:"Sunny · Fly out PM",ic:"sun"}],
   seenBy:[0,2,3,5], // Emre, Ali, Ali K, Kaan
   flightIn:true, sdLeg:true,
   items:[["flight","Arrive San Diego","SD crew lands",""],["place","San Diego days","Beaches · Gaslamp",""],["flight","Kaan → Arizona","Jun 15 · leaves early","Jun 15"],["flight","Fly up to SF","Jun 17",""]]},
@@ -1332,26 +1337,16 @@ function buildFlight(){
    body+=`<div style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:22px;margin:4px 4px 14px">${ME.name}'s flight${flights.length>1?'s':''}</div>`;
    flights.forEach(f=>{
      if(f.unknown){
-       const ust=getLegSharePrice(ME.id,f.leg);
-       const upr = ust!=null
-         ? `<div class="fd-chip fd-priceset" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b>$${(+ust).toFixed(2)}</b></div>`
-         : `<div class="fd-chip fd-priceadd" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b class="ok">Tap to add</b></div>`;
-       body+=`<div class="fd-card" style="border:1px dashed #5ab0ff55"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.date} · flight details unknown</div>
-        <div style="text-align:center;padding:10px 14px 6px;color:#9fd0ff;font-size:13px">✈️ We don\'t have this flight yet — drop the details when you have them.</div>
-        <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>—</b></div><div class="fd-chip"><small>SEAT</small><b>—</b></div>${upr}</div></div>`;
+       body+=`<div class="fd-card" style="border:1px dashed #5ab0ff55"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.date||'date TBD'} · flight details unknown</div>
+        <div style="text-align:center;padding:14px;color:#9fd0ff;font-size:13px">✈️ We don\'t have this flight yet —<br>drop the details when you have them.</div></div>`;
        return;
      }
-     const stored=getLegSharePrice(ME.id,f.leg);
-     const showPrice = f.price!=null ? f.price : stored;
-     const grpInfo=getGroupForLeg(ME.id,f.leg);
-     const grpHint=grpInfo&&grpInfo.legs.length>1?`<span style="font-size:8px;letter-spacing:.08em;color:#ffd166;font-weight:800;display:block;margin-top:2px">${grpInfo.legs.length}-LEG TICKET</span>`:'';
-     const priceRow = showPrice!=null
-       ? `<div class="fd-chip fd-priceset" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b>$${(+showPrice).toFixed(2)}</b>${grpHint}</div>`
-       : `<div class="fd-chip fd-priceadd" onclick="promptFlightPrice('${f.leg}')"><small>PRICE</small><b class="ok">Tap to add</b></div>`;
+     /* Pricing intentionally hidden here — Budget tab is the single source of truth.
+        Flight Detail stays informational; the price modal still auto-opens elsewhere. */
      body+=`<div class="fd-card"><div class="fd-route">${f.fromCity} → ${f.toCity}</div><div class="fd-no">${f.airline} ${f.num} · ${f.date}</div>
       <div class="fd-leg"><div class="l"><div class="code">${f.from}</div><div class="ap">${f.fromCity}</div></div><div class="r"><div class="t">${f.dep||'— : —'}</div><div class="d">${f.date}</div></div></div>
       <div class="fd-leg"><div class="l"><div class="code">${f.to}</div><div class="ap">${f.toCity}</div></div><div class="r"><div class="t">${f.arr||'— : —'}</div><div class="d">${f.date}</div></div></div>
-      <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>${f.num||'—'}</b></div><div class="fd-chip"><small>SEAT</small><b>${f.seat||'—'}</b></div>${priceRow}</div></div>`;
+      <div class="fd-meta"><div class="fd-chip"><small>FLIGHT</small><b>${f.num||'—'}</b></div><div class="fd-chip"><small>SEAT</small><b>${f.seat||'—'}</b></div></div></div>`;
    });
  }
  document.getElementById('flightScroll').innerHTML=body;
@@ -1386,14 +1381,82 @@ function buildReservations(){
  body+=`<div class="lcard" style="border:1px dashed #ffffff33"><div class="v" style="font-size:15px">More dinners to book</div><div class="vs">Monterey · Santa Barbara · Santa Monica — add as you reserve</div></div></div>`;
  document.getElementById('resScroll').innerHTML=body;
 }
-const GROUP_D=[{pos:1,name:"Türkiye",flag:"🇹🇷",p:0,w:0,d:0,pts:0,us:true},{pos:2,name:"Paraguay",flag:"🇵🇾",p:0,w:0,d:0,pts:0},{pos:3,name:"Team C",flag:"⚪",p:0,w:0,d:0,pts:0},{pos:4,name:"Team D",flag:"⚪",p:0,w:0,d:0,pts:0}];
-const standingsHTML=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+GROUP_D.map(t=>`<div class="trow ${t.us?'us':''}"><span class="pos">${t.pos}</span><span class="tm">${t.flag} ${t.name}</span><span class="num">${t.p}</span><span class="num">${t.w}</span><span class="num">${t.d}</span><span class="pts">${t.pts}</span></div>`).join("");
-document.getElementById('standings').innerHTML=standingsHTML;
-const gds=document.getElementById('gdStandings');if(gds)gds.innerHTML=`<div class="table">${standingsHTML}</div>`;
-const FIX=[{a:"🇹🇷 Türkiye",b:"🇵🇾 Paraguay",sc:"— : —",stat:"FRI JUN 19 · 8:00 PM"},{a:"⚪ Team C",b:"⚪ Team D",sc:"— : —",stat:"FRI JUN 19 · 5:00 PM"},{a:"🇹🇷 Türkiye",b:"⚪ Team C",sc:"— : —",stat:"TUE JUN 23"},{a:"🇵🇾 Paraguay",b:"⚪ Team D",sc:"— : —",stat:"TUE JUN 23"}];
-const fixturesHTML=FIX.map(f=>`<div class="fxcard"><div class="ft">${f.a}</div><div style="text-align:center"><div class="fsc">${f.sc}</div><div class="fstat">${f.stat}</div></div><div class="ft" style="justify-content:flex-end">${f.b}</div></div>`).join("");
-document.getElementById('fixtures').innerHTML=fixturesHTML;
-const gdf=document.getElementById('gdFixtures');if(gdf)gdf.innerHTML=fixturesHTML;
+/* ===== Match Day Group D — live via SportMonks ===== */
+const GD_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmonks";
+const GD_SEASON=26618;
+const GD_TR_RX=/T(ü|u)rkiye|Turkey|Paraguay|Australia|USA|United States/i;
+
+async function gdFetch(path){const url=`${GD_PROXY}?path=${encodeURIComponent(path)}`;const r=await fetch(url);if(!r.ok)throw new Error('SM '+r.status);return r.json();}
+
+function gdShortDate(d){try{return new Date(d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();}catch(e){return '';}}
+function gdShortTime(d){try{return new Date(d).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'America/Los_Angeles'});}catch(e){return '';}}
+function gdFlagImg(url,name){return url?`<img src="${url}" alt="${name||''}" style="width:22px;height:16px;object-fit:cover;border-radius:2px;display:inline-block;vertical-align:middle;background:#ffffff10" loading="lazy">`:'<span style="width:22px;height:16px;display:inline-block;background:#ffffff20;border-radius:2px;vertical-align:middle"></span>';}
+
+async function loadMatchDayGroupD(){
+ try{
+  const [sRes,fRes]=await Promise.all([
+   gdFetch(`standings/seasons/${GD_SEASON}?include=participant;group;details.type`),
+   gdFetch(`fixtures?filters=fixtureSeasons:${GD_SEASON}&include=participants;stage;venue;state;scores&per_page=200&sortBy=starting_at`)
+  ]);
+  /* Standings: Group D */
+  const stRows=(sRes.data||[]).filter(s=>s.group&&/Group D/i.test(s.group.name));
+  stRows.sort((a,b)=>(a.position||0)-(b.position||0));
+  if(stRows.length){
+   const html=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>`+
+    stRows.map(s=>{
+     const det={};(s.details||[]).forEach(d=>{const t=(d.type&&(d.type.name||d.type.code))||String(d.type_id);det[t]=d.value;});
+     const num=k=>{const v=det[k];return typeof v==='number'?v:parseInt(v)||0;};
+     const p=num('Matches Played')||0,w=num('Wins')||0,dr=num('Draws')||0;
+     const nm=(s.participant&&s.participant.name)||'?';
+     const fl=(s.participant&&(s.participant.image_path||s.participant.country_image_path))||'';
+     const us=/T(ü|u)rkiye|Turkey/i.test(nm)?'us':'';
+     return `<div class="trow ${us}"><span class="pos">${s.position||'-'}</span><span class="tm">${gdFlagImg(fl,nm)} ${nm}</span><span class="num">${p}</span><span class="num">${w}</span><span class="num">${dr}</span><span class="pts">${s.points||0}</span></div>`;
+    }).join('');
+   const gds=document.getElementById('gdStandings');if(gds)gds.innerHTML=`<div class="table">${html}</div>`;
+  }
+  /* Fixtures: any with Türkiye/Paraguay/Australia/USA in Group D */
+  const all=fRes.data||[];
+  const fxRows=all.filter(f=>{
+   const names=(f.participants||[]).map(p=>p.name||'');
+   const inGroupD=names.some(n=>GD_TR_RX.test(n))&&f.stage&&/Group/i.test(f.stage.name||'');
+   return inGroupD;
+  });
+  if(fxRows.length){
+   const html=fxRows.map(f=>{
+    const teams=f.participants||[];
+    const home=teams.find(t=>t.meta&&t.meta.location==='home')||teams[0]||{};
+    const away=teams.find(t=>t.meta&&t.meta.location==='away')||teams[1]||{};
+    let score='— : —';
+    if(Array.isArray(f.scores)&&f.scores.length){
+     const sh=f.scores.find(s=>s.score&&s.description==='CURRENT'&&s.participant_id===home.id);
+     const sa=f.scores.find(s=>s.score&&s.description==='CURRENT'&&s.participant_id===away.id);
+     if(sh&&sa)score=`${sh.score.goals} - ${sa.score.goals}`;
+    }
+    const st=f.state&&(f.state.short_name||f.state.name)||'';
+    const stat=st==='FT'?'FT':`${gdShortDate(f.starting_at)} · ${gdShortTime(f.starting_at)}`;
+    const isTr=GD_TR_RX.test(home.name||'')&&/T(ü|u)rkiye|Turkey/i.test(home.name)||/T(ü|u)rkiye|Turkey/i.test(away.name||'');
+    return `<div class="fxcard" ${isTr?'style="border-color:#e30a17;background:linear-gradient(90deg,#e30a1722,transparent)"':''}>
+     <div class="ft">${gdFlagImg(home.image_path,home.name)} ${home.name||'TBD'}</div>
+     <div style="text-align:center"><div class="fsc">${score}</div><div class="fstat">${stat}</div></div>
+     <div class="ft" style="justify-content:flex-end">${away.name||'TBD'} ${gdFlagImg(away.image_path,away.name)}</div>
+    </div>`;
+   }).join('');
+   const gdf=document.getElementById('gdFixtures');if(gdf)gdf.innerHTML=html;
+  }
+ }catch(e){console.warn('matchday api fail',e);
+  /* hardcoded fallback so we don't show a blank card */
+  const fallback=`<div class="trow head"><span></span><span>TEAM</span><span class="num">P</span><span class="num">W</span><span class="num">D</span><span class="pts">PTS</span></div>
+   <div class="trow us"><span class="pos">1</span><span class="tm">🇹🇷 Türkiye</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>
+   <div class="trow"><span class="pos">2</span><span class="tm">🇺🇸 USA</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>
+   <div class="trow"><span class="pos">3</span><span class="tm">🇵🇾 Paraguay</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>
+   <div class="trow"><span class="pos">4</span><span class="tm">🇦🇺 Australia</span><span class="num">0</span><span class="num">0</span><span class="num">0</span><span class="pts">0</span></div>`;
+  const gds=document.getElementById('gdStandings');if(gds)gds.innerHTML=`<div class="table">${fallback}</div>`;
+ }
+}
+/* kick off the API load */
+loadMatchDayGroupD();
+/* refresh every 60s while the iframe is alive */
+setInterval(loadMatchDayGroupD,60000);
 
 /* ---- GAMES ---- */
 const gg=document.getElementById('gamegrid');
