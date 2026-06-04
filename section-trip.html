@@ -32,7 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .scrollarea{flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .scrollarea::-webkit-scrollbar{display:none;}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(max(env(safe-area-inset-top,0px),60px) + 14px) 18px 18px;background:#ffffff;border-radius:0 0 20px 20px;margin:0 -16px 16px;box-shadow:0 6px 18px #0009;border:1px solid #e30a1733;border-top:none;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(max(env(safe-area-inset-top,0px),70px) + 14px) 18px 26px;background:#ffffff;border-radius:0 0 22px 22px;margin:0 -16px 10px;box-shadow:0 6px 20px #0009;border:1px solid #e30a1733;border-top:none;}
 .topbar .rider small{color:#6a4a4c !important;}.topbar .rider b{color:#1a0c0e;}
 .topbar .av{border:1.5px solid #e30a17;}
 .topbar .flags{width:32px;height:32px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:transparent;font-size:24px;line-height:1;}
@@ -767,13 +767,28 @@ function shatter(P,rem){/* handled by animateShatter on load */}
 
 /* runShatter — called on Game Day open. Counts from KICK so it's the match countdown. */
 function runShatter(){
- /* Full reveal target = Jun 15 (squad photo fully unveiled by then) */
  const ms=Math.max(0,REVEAL-Date.now());
  const days=ms/864e5;
  const bigK=dayK(days,big.total);
  const bigPrev=dayK(days+1,big.total);
  animateShatter(big,bigK,bigPrev);
 }
+/* When gameday is in wallpaper mode (scrollTop near 0) hide the parent tab bar.
+   Reveal it the moment the user scrolls toward the match details. */
+function wireGameDayTabHide(){
+ const sc=document.getElementById('gdScroll');
+ if(!sc)return;
+ let lastHidden=null;
+ const update=()=>{
+  const hidden=sc.scrollTop<60;
+  if(hidden===lastHidden)return;
+  lastHidden=hidden;
+  try{parent&&parent.postMessage({cmd:'matchDayTabs',hidden},'*');}catch(e){}
+ };
+ sc.addEventListener('scroll',update,{passive:true});
+ setTimeout(update,400);
+}
+window.wireGameDayTabHide=wireGameDayTabHide;
 /* When loaded with ?rider=N inside the iframe, also trigger flight-price onboarding */
 (function autoOnboarding(){
  const sp=new URLSearchParams(window.location.search);
@@ -786,8 +801,7 @@ function runShatter(){
  const sp=new URLSearchParams(window.location.search);
  if(sp.get('screen')==='gameday'){
    setTimeout(()=>{
-     try{openS('gameday');runShatter();}catch(e){}
-     // hide the back arrow in tab-mode since the bottom tabs are the navigation
+     try{openS('gameday');runShatter();wireGameDayTabHide();}catch(e){}
      const gd=document.getElementById('gameday');
      if(gd){const bk=gd.querySelector('.back');if(bk)bk.style.display='none';}
    },150);

@@ -43,20 +43,20 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 
 /* Title — appears centered after icon docks */
 .ptitlewrap{position:absolute;left:0;right:0;top:46%;transform:translateY(-50%);text-align:center;padding:0 28px;}
-.ptitle{font-family:'Inter',-apple-system,sans-serif;font-weight:900;font-size:64px;line-height:.86;color:#fafafa;letter-spacing:-.03em;animation:ptitleIn 1.2s 2.6s cubic-bezier(.22,1,.36,1) both;}
+.ptitle{font-family:'Inter',-apple-system,sans-serif;font-weight:900;font-size:64px;line-height:.86;color:#fafafa;letter-spacing:-.03em;animation:ptitleIn 1.2s 3.4s cubic-bezier(.22,1,.36,1) both;}
 @keyframes ptitleIn{0%{opacity:0;letter-spacing:.22em;transform:translateY(14px) scale(.96);}60%{opacity:1;letter-spacing:-.04em;transform:translateY(0) scale(1.02);}100%{opacity:1;letter-spacing:-.03em;transform:translateY(0) scale(1);}}
 .ptitle span{display:block;}
 .ptitle .pword2{background:linear-gradient(95deg,#e30a17,#ff6b4a 55%,#fafafa 110%);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.pdates{margin-top:18px;font-family:'Space Mono',monospace;font-size:12.5px;color:#ffffffc0;letter-spacing:.2em;animation:pdatesIn 1s 3.1s both;}
-.psub{margin-top:6px;font-size:10.5px;color:#ffffff70;letter-spacing:.28em;animation:pdatesIn 1s 3.25s both;}
+.pdates{margin-top:18px;font-family:'Space Mono',monospace;font-size:12.5px;color:#ffffffc0;letter-spacing:.2em;animation:pdatesIn 1s 3.9s both;}
+.psub{margin-top:6px;font-size:10.5px;color:#ffffff70;letter-spacing:.28em;animation:pdatesIn 1s 4.05s both;}
 @keyframes pdatesIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
 /* Tap-anywhere hint at the bottom */
-.ptap{position:absolute;left:0;right:0;bottom:calc(48px + env(safe-area-inset-bottom));text-align:center;color:#ffffffb0;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.32em;font-weight:700;animation:pdatesIn 1s 3.5s both, ptapPulse 2.4s ease-in-out 3.5s infinite;}
+.ptap{position:absolute;left:0;right:0;bottom:calc(48px + env(safe-area-inset-bottom));text-align:center;color:#ffffffb0;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.32em;font-weight:700;animation:pdatesIn 1s 4.3s both, ptapPulse 2.4s ease-in-out 4.3s infinite;}
 @keyframes ptapPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
-.ptap::after{content:'';display:block;width:38px;height:38px;border:1px solid #ffffff44;border-radius:50%;margin:14px auto 0;position:relative;animation:ptapRing 2.4s ease-out 3.5s infinite;}
+.ptap::after{content:'';display:block;width:38px;height:38px;border:1px solid #ffffff44;border-radius:50%;margin:14px auto 0;position:relative;animation:ptapRing 2.4s ease-out 4.3s infinite;}
 @keyframes ptapRing{0%{box-shadow:0 0 0 0 #e30a1788;}100%{box-shadow:0 0 0 16px #e30a1700;}}
-.ptap .pdownarr{position:absolute;left:50%;transform:translateX(-50%);margin-top:-30px;color:#fff;font-size:20px;line-height:1;animation:ptapArr 1.6s ease-in-out infinite alternate 3.5s;}
+.ptap .pdownarr{position:absolute;left:50%;transform:translateX(-50%);margin-top:-30px;color:#fff;font-size:20px;line-height:1;animation:ptapArr 1.6s ease-in-out infinite alternate 4.3s;}
 @keyframes ptapArr{from{transform:translate(-50%,-2px);}to{transform:translate(-50%,4px);}}
 
 /* Rider list stage */
@@ -98,7 +98,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .youpanel{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;}
 .youpanel.on{display:flex;}
 .youpage{padding:18px 16px 30px;}
-.youhero{display:flex;align-items:center;gap:14px;background:#3a0e16;border:1px solid #0000000f;border-radius:18px;padding:18px;margin-bottom:18px;}
+.youhero{display:flex;align-items:center;gap:14px;background:#3a0e16;border:1px solid #0000000f;border-radius:18px;padding:calc(max(env(safe-area-inset-top,0px),60px) + 18px) 18px 18px;margin-bottom:18px;}
 .youhero .ya{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:#0e0f1a;}
 .youhero .yn{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;}.youhero .ys{font-size:12px;color:#ffffff99;}
 .sectitle{font-size:11px;letter-spacing:.2em;color:#ffffff88;margin:6px 2px 12px;}
@@ -220,7 +220,8 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .bvt.on{background:#e30a17;color:#fff;}
 .bcat .bci.flame{background:#e30a1722;}
 
-.tabs{flex:none;display:flex;background:#f5efef;border-top:2px solid #e30a17;padding:9px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #000a;position:relative;z-index:10;}
+.tabs{flex:none;display:flex;background:#f5efef;border-top:2px solid #e30a17;padding:9px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #000a;position:relative;z-index:10;transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.tabs.matchday-hide{transform:translateY(100%);}
 .tab{flex:1;background:none;border:none;color:#3a1418;padding:7px 2px 4px;font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s;}
 .tab.on{color:#e30a17;}
 .tab .ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
@@ -678,6 +679,16 @@ function hideRiderList(){
 window.showRiderList=showRiderList;window.hideRiderList=hideRiderList;
 /* Refresh budget when a flight price gets entered inside the iframe */
 window.addEventListener('storage',e=>{if(e.key&&e.key.indexOf('wcr_fpg_')===0&&BVIEW==='budget')renderBudget();});
+/* Listen for the Match Day iframe telling us it's on the wallpaper (hide tabs)
+   or scrolled past it (show tabs). Only honor while Match Day tab is active. */
+window.addEventListener('message',e=>{
+ if(!e||!e.data||e.data.cmd!=='matchDayTabs')return;
+ const tabsEl=document.querySelector('.tabs');
+ if(!tabsEl)return;
+ const onMatchDay=document.querySelector('.tab.on')&&document.querySelector('.tab.on').dataset.tab==='matchday';
+ if(!onMatchDay){tabsEl.classList.remove('matchday-hide');return;}
+ tabsEl.classList.toggle('matchday-hide',!!e.data.hidden);
+});
 window.addEventListener('message',e=>{if(e&&e.data&&e.data.cmd==='flightPriceUpdated'&&BVIEW==='budget')renderBudget();});
 function pick(id){
  ME=PEOPLE[id];
@@ -718,6 +729,8 @@ const loaderEl=document.getElementById('loader');
 const IFRAME_KEYS=['trip','matchday','wc'];
 IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
 function showTab(id){
+ const tabsEl=document.querySelector('.tabs');
+ if(tabsEl&&id!=='matchday')tabsEl.classList.remove('matchday-hide');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
  const isFrame=IFRAME_KEYS.includes(id);
  IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);if(!f)return;f.classList.toggle('on',k===id);
