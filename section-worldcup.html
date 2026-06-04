@@ -60,10 +60,10 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .fix:hover{border-color:#e30a1755;}
 .fix .ft{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}
 .fix .team{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;min-width:0;}
-.fix .team .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fix .team .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;}
 .fix .score{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.01em;min-width:48px;text-align:center;color:#fff;}
 .fix .score.tbd{color:#ffffff50;font-size:13px;font-weight:600;}
-.fix .meta{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:#ffffff80;font-weight:700;text-align:right;min-width:62px;}
+.fix .meta{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:#ffffff80;font-weight:700;text-align:right;min-width:54px;max-width:90px;line-height:1.4;}
 .fix .meta b{display:block;font-size:10.5px;color:#fff;font-weight:800;}
 .fix.us{border-color:#e30a17;background:linear-gradient(90deg,#e30a1722,#3a0e16 50%);}
 .fix.us .meta b{color:#e30a17;}
@@ -145,6 +145,21 @@ async function smFetch(path){
  return r.json();
 }
 
+/* short display names for long countries */
+const SHORT_NAMES={
+ "United States":"USA","United States of America":"USA",
+ "Korea Republic":"S. Korea","South Korea":"S. Korea","Republic of Korea":"S. Korea",
+ "Czech Republic":"Czechia",
+ "Bosnia and Herzegovina":"Bosnia","Bosnia & Herz.":"Bosnia","Bosnia & Herzegovina":"Bosnia",
+ "South Africa":"S. Africa",
+ "Saudi Arabia":"Saudi","United Arab Emirates":"UAE",
+ "Costa Rica":"C. Rica","Cote D'Ivoire":"Ivory Coast",
+ "New Zealand":"N. Zealand","Cape Verde":"Cape Verde",
+ "DR Congo":"DR Congo","Democratic Republic of the Congo":"DR Congo",
+ "United Kingdom":"England","England":"England","Türkiye":"Türkiye","Turkey":"Türkiye",
+};
+function shortName(n){return SHORT_NAMES[n]||n;}
+
 /* ===== Data caches ===== */
 let STANDINGS=null, FIXTURES=null;
 
@@ -177,13 +192,14 @@ async function loadStandings(){
    const gf=num('Goals For')||num('overall_goals_for')||0;
    const ga=num('Goals Against')||num('overall_goals_against')||0;
    const gd=num('Goal Difference')||num('overall_goal_difference')||(gf-ga);
+   const rawName=(s.participant&&s.participant.name)||'?';
    out[gname].push({
     pos:s.position||0,
-    name:(s.participant&&s.participant.name)||'?',
+    name:shortName(rawName),
     flag:(s.participant&&(s.participant.image_path||s.participant.country_image_path))||'',
     p,w,d:dr,l,gd,
     pts:s.points||num('Points')||0,
-    us:TR_NAME_RX.test((s.participant&&s.participant.name)||'')
+    us:TR_NAME_RX.test(rawName)
    });
   });
   /* sort each group by position */
@@ -213,6 +229,7 @@ async function loadFixtures(){
    const isFt=st==='FT'||st==='AET'||st==='PEN';
    const stageName=(f.stage&&f.stage.name)||'';
    const venueName=(f.venue&&((f.venue.name||'')+(f.venue.city_name?' · '+f.venue.city_name:'')))||'';
+   const cityOnly=(f.venue&&(f.venue.city_name||f.venue.name||''))||'';
    const us=TR_NAME_RX.test(home.name||'')||TR_NAME_RX.test(away.name||'');
    return {
     id:f.id,
@@ -221,7 +238,7 @@ async function loadFixtures(){
     time:shortTime(f.starting_at),
     a:home.name,af:home.image_path,
     b:away.name,bf:away.image_path,
-    g:stageName,venue:venueName,
+    g:stageName,venue:venueName,city:cityOnly,
     score, live:isLive, ft:isFt, status:isLive?'LIVE':(isFt?'FT':stageName.replace(/Group Stage/i,'GROUP STAGE')),
     us
    };
@@ -234,15 +251,27 @@ function fixHTML(f){
  const cls=`${f.us?'us':''} ${f.live?'live':''}`;
  const score=f.score||(f.ft?'FT':'- : -');
  const scClass=f.score?'':'tbd';
+ const a=shortName(f.a||'TBD'), b=shortName(f.b||'TBD');
  return `<div class="fix ${cls}">
   <div class="ft">
-   <div class="team">${flagImg(f.af,f.a)}<span class="tname">${f.a||'TBD'}</span></div>
-   <div class="team">${flagImg(f.bf,f.b)}<span class="tname">${f.b||'TBD'}</span></div>
+   <div class="team">${flagImg(f.af,a)}<span class="tname">${a}</span></div>
+   <div class="team">${flagImg(f.bf,b)}<span class="tname">${b}</span></div>
   </div>
   <div class="score ${scClass}">${score}</div>
-  <div class="meta"><b>${f.status||''}</b>${f.time}<br>${f.venue||''}</div>
+  <div class="meta"><b>${f.status||''}</b>${f.time}<br>${f.city||''}</div>
  </div>`;
 }
+
+/* ===== Tab switching ===== */
+function setPane(p){
+ document.querySelectorAll('.tab2').forEach(x=>x.classList.toggle('on',x.dataset.pane===p));
+ document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.id==='pane-'+p));
+}
+document.addEventListener('click',function(e){
+ const t=e.target.closest('.tab2');if(!t)return;
+ e.preventDefault();
+ setPane(t.dataset.pane);
+},true);
 
 function renderToday(){
  const host=document.getElementById('pane-today');
@@ -256,11 +285,6 @@ function renderToday(){
  }
  html+=`<div class="sec">UPCOMING · NEXT ${upcoming.length}</div>
   <div class="fixlist">${upcoming.length?upcoming.map(fixHTML).join(''):'<div class="loading" style="padding:14px">No upcoming fixtures yet.</div>'}</div>`;
- const trFixtures=FIXTURES.filter(f=>f.us);
- if(trFixtures.length){
-  html+=`<div class="sec" style="margin-top:24px">🇹🇷 YOUR TEAM</div>
-   <div class="fixlist">${trFixtures.slice(0,3).map(fixHTML).join('')}</div>`;
- }
  host.innerHTML=html;
 }
 

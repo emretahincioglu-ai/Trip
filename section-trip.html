@@ -672,7 +672,7 @@ const SQUAD=[
  {name:"KAAN",pos:"ST",c:"#ffd447",flag:"🇹🇷",num:9,rare:true},
 ];
 
-const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-06-19T20:00:00-07:00");
+const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-06-19T20:00:00-07:00"),REVEAL=new Date("2026-06-15T23:59:00-07:00");
 let ME=PEOPLE[0], curCity=0, paniniCollected=1;
 
 /* ---- picker ---- */
@@ -708,7 +708,12 @@ const big=makePuzzle(document.getElementById('puzzleBig'),7,11,160);
 const cardP=makePuzzle(document.getElementById('puzzleCard'),6,4,40);
 
 /* Day-based shatter math: more bricks fall as kickoff nears (acceleration curve) */
-function dayK(daysRem,total){const rem=Math.max(0,Math.min(WINDOW,daysRem));return Math.round(Math.pow(1-rem/WINDOW,1.7)*total);}
+function dayK(daysRem,total){
+ /* 14-day reveal arc - shatter ramps from 0 to full over 2 weeks */
+ const W=14;
+ const rem=Math.max(0,Math.min(W,daysRem));
+ return Math.round(Math.pow(1-rem/W,1.7)*total);
+}
 
 /* Sequential animation:
    - Bricks shattered on PREVIOUS days fade fast (in 1.4s total)
@@ -733,7 +738,8 @@ function shatter(P,rem){/* handled by animateShatter on load */}
 
 /* runShatter — called on Game Day open. Counts from KICK so it's the match countdown. */
 function runShatter(){
- const ms=Math.max(0,KICK-Date.now());
+ /* Full reveal target = Jun 15 (squad photo fully unveiled by then) */
+ const ms=Math.max(0,REVEAL-Date.now());
  const days=ms/864e5;
  const bigK=dayK(days,big.total);
  const bigPrev=dayK(days+1,big.total);
