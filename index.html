@@ -652,7 +652,14 @@ function showTab(id){
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  const id=t.dataset.tab;
- if(id==='trip')closeTripSubScreens();
+ if(id==='trip'){
+  closeTripSubScreens();
+  // Nudge the iframe to re-show the flight-price onboarding (it self-skips if prices entered)
+  try{
+   const f=document.getElementById('fr-trip');
+   if(f&&f.contentWindow)f.contentWindow.postMessage({cmd:'showFlightPriceOnboarding'},'*');
+  }catch(e){}
+ }
  showTab(id);
 });
 setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider=0');

@@ -562,10 +562,15 @@ const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFrac
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
 const CITIES=[
- {n:"00",name:"San Diego",dates:"Jun 12–17",wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-117.255,32.717,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
+ {n:"00",name:"San Diego",dates:"Jun 12–17",datesByRider:{5:"Jun 12–15"},wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-117.255,32.717,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
   seenBy:[0,2,3,5], // Emre, Ali, Ali K, Kaan
   flightIn:true, sdLeg:true,
   items:[["flight","Arrive San Diego","SD crew lands",""],["place","San Diego days","Beaches · Gaslamp",""],["flight","Kaan → Arizona","Jun 15 · leaves early","Jun 15"],["flight","Fly up to SF","Jun 17",""]]},
+ /* Arizona — Kaan-only stop between SD and SF */
+ {n:"00B",name:"Arizona",dates:"Jun 15–17",wx:"24°/38°",bg:"linear-gradient(180deg,#2a1c0e 0%,#28141a 55%,#1f0f12 100%)",loc:[-112.074,33.448],day:"Mon, Jun 15",flag:"🌵",teaser:"Quick stop home · then SF",
+  seenBy:[5], // Kaan only
+  weatherDays:[{d:"Mon Jun 15",hi:38,lo:24,c:"Hot · Desert",ic:"sun"},{d:"Tue Jun 16",hi:39,lo:25,c:"Sunny",ic:"sun"},{d:"Wed Jun 17",hi:39,lo:25,c:"Hot · Fly out PM",ic:"sun"}],
+  items:[["flight","Land Phoenix","AA 625 from San Diego","8:02a"],["place","Rest · family · Arizona days","",""],["flight","Phoenix → San Francisco","AA 686","8:22p"]]},
  {n:"01",name:"San Francisco",dates:"Jun 17–19",wx:"17°/22°",bg:"linear-gradient(180deg,#1f1a26 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-122.43,37.79,12.5,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-122.43,37.79],weatherDays:[{d:"Wed Jun 17",hi:21,lo:14,c:"Cloudy AM · Sunny PM",ic:"cloudsun"},{d:"Thu Jun 18",hi:22,lo:15,c:"Sunny",ic:"sun"},{d:"Fri Jun 19",hi:22,lo:15,c:"Sunny · Light Wind",ic:"sun"}],day:"Wed, Jun 17",flag:"🌉",teaser:"Everyone lands · the city",flightIn:true,
   mapCenter:[-122.43,37.79],mapZoom:11.4,
   items:[
@@ -796,9 +801,10 @@ function renderCarousel(){
  CITIES.forEach((c,i)=>{if(!citySeen(c))return;
   const el=document.createElement('div');el.className='ccard';
   let teaser=c.teaser;
-  if(c.sdLeg&&ME.id===5)teaser="Until Jun 15 · then Arizona"; // Kaan leaves early
+  if(c.sdLeg&&ME.id===5)teaser="Until Jun 15 · then Arizona";
+  const dates=(c.datesByRider&&c.datesByRider[ME.id])||c.dates;
   const photoBg=c.photo?`url('${c.photo}') center/cover no-repeat,${c.bg}`:c.bg;
-  el.innerHTML=`<div class="cg" style="background:${photoBg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${c.dates}</div><div class="teaser">${teaser}</div><span class="go">More ›</span></div>`;
+  el.innerHTML=`<div class="cg" style="background:${photoBg}"></div><div class="topr"><span class="num">STOP ${c.n}</span><span class="wx">☀️ ${c.wx}</span></div>${c.match?'<span class="badge">MATCH DAY</span>':''}<div class="bot"><div class="cn">${c.name}</div><div class="cdt">${dates}</div><div class="teaser">${teaser}</div><span class="go">More ›</span></div>`;
   el.onclick=()=>openCity(i);car.appendChild(el);});
 }
 /* Sync everything with current ME (from URL or default) */
@@ -854,10 +860,10 @@ function openAllStays(){
  const keys=Object.keys(LODGING);let body=`<div class="back" onclick="closeS('lodging')">‹ Back</div>
   <div class="fhero" style="padding-bottom:6px"><div class="hf">🛏️</div><div class="hn" style="font-size:38px">All Stays</div><div class="hd">Every hotel on the trip</div></div>
   <div style="padding:6px 18px 40px">`;
- keys.forEach(k=>{const L=LODGING[k];const c=CITIES[k];const cost=L.total/PEOPLE.length;
+ keys.forEach(k=>{const L=LODGING[k];const c=CITIES[k];
    body+=`<div class="lcard"><div class="v" style="font-size:17px">${L.name.split(' ').slice(0,4).join(' ')}</div><div class="vs" style="margin-bottom:8px">${c?c.name+' · ':''}${L.dates||''}</div>
     <div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>CHECK-IN</small><b>${L.ci.split(' · ')[0]}</b><div class="sub">${L.ci.split(' · ')[1]||''}</div></div><div class="lcell"><small>CHECK-OUT</small><b>${L.co.split(' · ')[0]}</b><div class="sub">${L.co.split(' · ')[1]||''}</div></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#ffffff90">Conf ${L.conf}</span><span style="font-family:'Space Mono',monospace;font-weight:700">${money(cost)} <span style="color:#ffffff70;font-weight:400">/ you</span></span></div></div>`;});
+    <div style="font-size:13px;color:#ffffff90">Conf ${L.conf}</div></div>`;});
  [["Santa Barbara","Jun 21–22"],["Santa Monica","Jun 22–23"]].forEach(m=>{body+=`<div class="lcard" style="border:1px dashed #ffffff33"><div class="v" style="font-size:16px">${m[0]} hotel</div><div class="vs">${m[1]} · not booked yet</div></div>`;});
  body+=`</div>`;document.getElementById('lodgingScroll').innerHTML=body;document.getElementById('lodging').classList.add('on');
 }
@@ -891,7 +897,8 @@ window.WX_ICONS={
 };
 function openCity(i){curCity=i;const c=CITIES[i];
  document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
- document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${c.dates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
+ const cityDates=(c.datesByRider&&c.datesByRider[ME.id])||c.dates;
+ document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${cityDates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
  let flag="";
  if(c.match)flag=`<div class="you" style="color:#e30a17">Match day · everyone at Levi's</div>`;
  const costRows=SHARED.filter(s=>s.city===i&&s.total>0).map(s=>[s.label+" (÷6)",money(share(s))]);
@@ -1162,12 +1169,12 @@ function legHasPrice(riderId,leg){return !!getGroupForLeg(riderId,leg);}
 
 /* On first rider load, auto-open the price sheet if nothing entered yet */
 function maybeShowFlightPricesOnboarding(){
- const seenKey=`wcr_fpg_seen_${ME.id}`;
- if(localStorage.getItem(seenKey))return;
+ /* Show again every time Home tab is opened until they've entered at least one price.
+    No persistent "seen" flag — closing is acknowledged within this session only. */
  if(loadFlightGroups(ME.id).length)return;
  if(!(ME.flights||[]).length)return;
- setTimeout(()=>openFp2(),400);
- localStorage.setItem(seenKey,'1');
+ if(document.getElementById('fp2').classList.contains('on'))return; /* already open */
+ setTimeout(()=>openFp2(),300);
 }
 window.maybeShowFlightPricesOnboarding=maybeShowFlightPricesOnboarding;
 
@@ -1296,8 +1303,12 @@ window.addEventListener('popstate',function(){
 });
 // Parent shell can ask us to close every sub-screen (e.g. Home tab tapped)
 window.addEventListener('message',function(e){
- if(e&&e.data&&e.data.cmd==='closeAll'){
+ if(!e||!e.data)return;
+ if(e.data.cmd==='closeAll'){
   document.querySelectorAll('.screen.on, .placesheet.on').forEach(s=>s.classList.remove('on'));
+ }
+ if(e.data.cmd==='showFlightPriceOnboarding'){
+  try{maybeShowFlightPricesOnboarding();}catch(err){}
  }
 });
 
@@ -1347,24 +1358,20 @@ function buildFlight(){
 }
 function buildLodging(){const c=CITIES[curCity];const L=LODGING[curCity];
  if(!L){document.getElementById('lodgingScroll').innerHTML=`<div class="back" onclick="closeS('lodging')">‹ ${c.name}</div><div class="ph"><b>Lodging</b>Hotel for ${c.name} not added yet — drop the receipt and I'll fill it in.</div>`;return;}
- const cost=L.total/PEOPLE.length;
  document.getElementById('lodgingScroll').innerHTML=`<div class="back" onclick="closeS('lodging')">‹ ${c.name}</div>
  <div class="lhero"><div class="lt"><div class="ln2">${L.name.split(' ').slice(0,3).join(' ')}</div><div class="ls">${c.name}</div></div></div>
  <div class="lbody"><div class="lgrid"><div class="lcell"><small>CHECK-IN</small><b>${L.ci.split(' · ')[0]}</b><div class="sub">${L.ci.split(' · ')[1]}</div></div><div class="lcell"><small>CHECK-OUT</small><b>${L.co.split(' · ')[0]}</b><div class="sub">${L.co.split(' · ')[1]}</div></div><div class="lcell"><small>GUESTS</small><b>6</b><div class="sub">group</div></div></div>
   <div class="yourroom"><div class="k">YOUR ROOM</div><div class="v">${ME.room}</div><div class="vs">${ME.roomNote}</div></div>
   <div class="lcard"><div class="k">ROOMS</div><div class="v">${L.rooms}</div></div>
   <div class="lcard"><div class="k">ADDRESS</div><div class="v">${L.name}</div><div class="vs">${L.addr}</div><span class="lbtn">Directions ›</span></div>
-  <div class="lcard"><div class="k">CONFIRMATION</div><div class="v">${L.conf}</div></div>
-  <div class="lcard"><div class="k">YOUR COST SHARE</div><div class="v">${money(cost)}</div><div class="vs">${money(L.total)} total ÷ 6</div></div></div>`;}
+  <div class="lcard"><div class="k">CONFIRMATION</div><div class="v">${L.conf}</div></div></div>`;}
 function buildCars(){const cars=[
   {name:"Jeep Wrangler #1",type:"Open-air 4WD · 4 passengers",pick:"Jun 20 · 9:30 AM",drop:"Jun 22 · 9:30 AM",total:410.07,conf:"73452524856605"},
   {name:"Jeep Wrangler #2",type:"Open-air 4WD · 4 passengers",pick:"Jun 20 · 9:30 AM",drop:"Jun 22 · 9:30 AM",total:397.49,conf:"73463265910668"},
   {name:"Full-size SUV",type:"7 passengers · Tahoe class",pick:"Jun 22 · 6:30 PM",drop:"Jun 23 · 6:15 PM",total:179.82,conf:"73425481040001"}];
- const grand=cars.reduce((s,c)=>s+c.total,0);
  document.getElementById('carsScroll').innerHTML=`<div class="back" onclick="closeS('cars')">‹ Back</div>
   <div class="fhero" style="padding-bottom:6px"><div class="hf">🚗</div><div class="hn" style="font-size:38px">Cars</div><div class="hd">Wranglers for the coast · SUV to LA</div></div>
-  <div style="padding:6px 18px 40px">${cars.map(c=>`<div class="lcard"><div class="v" style="font-size:17px">${c.name}</div><div class="vs" style="margin-bottom:8px">${c.type}</div><div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>PICK-UP</small><b>${c.pick.split(' · ')[0]}</b><div class="sub">${c.pick.split(' · ')[1]}</div></div><div class="lcell"><small>DROP-OFF</small><b>${c.drop.split(' · ')[0]}</b><div class="sub">${c.drop.split(' · ')[1]}</div></div></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#ffffff90">Conf ${c.conf}</span><span style="font-family:'Space Mono',monospace;font-weight:700">${money(c.total)}</span></div></div>`).join("")}
-  <div class="lcard" style="border-color:#ff8a4d55"><div class="k">YOUR SHARE OF CARS</div><div class="v" style="color:#ff8a4d">${money(grand/PEOPLE.length)}</div><div class="vs">${money(grand)} total ÷ 6</div></div></div>`;}
+  <div style="padding:6px 18px 40px">${cars.map(c=>`<div class="lcard"><div class="v" style="font-size:17px">${c.name}</div><div class="vs" style="margin-bottom:8px">${c.type}</div><div class="lgrid" style="margin:0 0 10px"><div class="lcell"><small>PICK-UP</small><b>${c.pick.split(' · ')[0]}</b><div class="sub">${c.pick.split(' · ')[1]}</div></div><div class="lcell"><small>DROP-OFF</small><b>${c.drop.split(' · ')[0]}</b><div class="sub">${c.drop.split(' · ')[1]}</div></div></div><div style="font-size:13px;color:#ffffff90">Conf ${c.conf}</div></div>`).join("")}</div>`;}
 
 function buildReservations(){
  const RES=[
