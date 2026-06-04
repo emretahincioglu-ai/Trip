@@ -44,21 +44,47 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .prow .av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#0e0f1a;}
 .prow .pn{flex:1;font-weight:600;color:#fff;}.prow .pv{font-size:11px;color:#ffffff80;}
 
-/* BUDGET tab content */
-.bhero{background:linear-gradient(135deg,#3a0e16 0%,#e30a17 200%);border:1px solid #e30a1755;border-radius:18px;padding:18px 20px;margin-bottom:18px;box-shadow:0 6px 20px #0008,inset 0 1px 0 #ffffff10;}
-.bhero .blab{font-size:10px;letter-spacing:.18em;color:#ffffffa0;font-weight:700;}
-.bhero .btot{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:900;font-size:36px;letter-spacing:-.02em;margin:6px 0 4px;color:#fff;}
-.bhero .bsub{font-size:12px;color:#ffffffc0;}
-.bhero .bsub b{color:#e30a17;font-weight:700;}
-.bbreak{display:flex;flex-direction:column;gap:9px;margin-bottom:18px;}
-.bcat{background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;}
-.bcat .bci{width:36px;height:36px;border-radius:10px;background:#ffffff10;display:flex;align-items:center;justify-content:center;flex:none;}
-.bcat .bci svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
-.bcat .bcm{flex:1;}
-.bcat .bcm b{font-size:14px;display:block;font-weight:700;}
-.bcat .bcm small{font-size:11.5px;color:#ffffffa0;display:block;margin-top:1px;}
-.bcat .bcv{text-align:right;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
+/* BUDGET tab content - WOW edition */
+.bhero{position:relative;background:linear-gradient(135deg,#3a0e16 0%,#5a0c14 60%,#e30a17 180%);border:1px solid #e30a1799;border-radius:20px;padding:20px 22px 18px;margin-bottom:16px;overflow:hidden;box-shadow:0 10px 30px #0009,inset 0 1px 0 #ffffff14;}
+.bhero::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,#e30a1733 0%,transparent 70%);pointer-events:none;}
+.bhero .blab{font-size:10px;letter-spacing:.22em;color:#ffffffb0;font-weight:800;position:relative;z-index:1;}
+.bhero .btot{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:900;font-size:44px;letter-spacing:-.025em;margin:6px 0 8px;color:#fff;position:relative;z-index:1;line-height:1;}
+.bhero .btot .bcent{font-size:24px;color:#ffffffcc;}
+.bhero .bbar{display:flex;height:9px;border-radius:6px;overflow:hidden;background:#ffffff10;margin:10px 0 9px;position:relative;z-index:1;box-shadow:inset 0 1px 2px #0004;}
+.bhero .bseg{height:100%;transition:width .6s ease;}
+.bhero .bsub{font-size:12px;color:#ffffffd0;position:relative;z-index:1;display:flex;align-items:center;gap:8px;}
+.bhero .bsub b{color:#fff;font-weight:800;}
+.bhero .bdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e30a17;animation:bpulse 1.4s infinite;}
+@keyframes bpulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.bbreak{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.bcat{background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:14px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;position:relative;}
+.bcat:hover{border-color:#e30a1788;}
+.bcat:active{transform:scale(.985);}
+.bcat.tappable::after{content:'›';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#ffffff66;font-size:22px;font-weight:300;}
+.bcat .bci{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#e30a1722,#e30a1708);border:1px solid #e30a1733;display:flex;align-items:center;justify-content:center;flex:none;}
+.bcat .bci svg{width:20px;height:20px;stroke:#e30a17;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.bcat .bcm{flex:1;min-width:0;}
+.bcat .bcm b{font-size:14.5px;display:block;font-weight:700;}
+.bcat .bcm small{font-size:11.5px;color:#ffffffa0;display:block;margin-top:2px;}
+.bcat .bcm .bcbar{display:block;margin-top:7px;height:4px;background:#ffffff10;border-radius:3px;overflow:hidden;}
+.bcat .bcm .bcbar i{display:block;height:100%;background:linear-gradient(90deg,#e30a17,#ff6b4a);border-radius:3px;transition:width .6s ease;}
+.bcat .bcv{text-align:right;font-family:'Space Mono',monospace;font-weight:700;font-size:14.5px;padding-right:14px;}
 .bcat .bcv .bpend{display:block;font-size:9px;color:#ffd166;letter-spacing:.06em;font-weight:700;margin-top:2px;}
+/* Budget detail drill-in */
+.bdback{display:inline-flex;align-items:center;gap:6px;color:#e30a17;font-size:13px;font-weight:700;margin:0 0 14px;cursor:pointer;letter-spacing:.02em;}
+.bdback:hover{color:#ff4d5a;}
+.bdh{font-size:11px;letter-spacing:.22em;color:#ffffff88;margin:2px 2px 8px;font-weight:800;}
+.bdhead{background:linear-gradient(135deg,#3a0e16,#28141a);border:1px solid #e30a1755;border-radius:16px;padding:16px 18px;margin-bottom:16px;}
+.bdhead .l{font-size:10px;letter-spacing:.2em;color:#ffffffa0;font-weight:800;}
+.bdhead .t{font-family:'Inter',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.02em;margin:4px 0 2px;}
+.bdhead .s{font-size:12px;color:#ffffffb0;}
+.bditem{background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:14px 16px;margin-bottom:8px;}
+.bditem .name{font-size:14px;font-weight:700;display:block;}
+.bditem .meta{font-size:11.5px;color:#ffffff90;margin-top:3px;display:block;}
+.bditem .nums{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;padding-top:10px;border-top:1px solid #ffffff10;}
+.bditem .nums .nl{font-size:10px;letter-spacing:.14em;color:#ffffff80;font-weight:700;}
+.bditem .nums .nv{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
+.bditem .nums .your .nv{color:#ffd166;font-size:16px;}
 .bppl{display:flex;flex-direction:column;gap:8px;}
 .bprow{display:flex;align-items:center;gap:11px;background:#3a0e16;border:1px solid #ffffff12;border-radius:13px;padding:11px 13px;}
 .bprow .bpav{width:30px;height:30px;border-radius:50%;color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;flex:none;}
@@ -68,6 +94,19 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .bprow .bpamt .bpstat{display:block;font-size:9px;letter-spacing:.06em;font-weight:700;margin-top:2px;}
 .bprow .bpamt .bpstat.ok{color:#4ad6c4;}.bprow .bpamt .bpstat.pen{color:#ffd166;}
 
+/* Splitwise transaction rows - text only, no avatars */
+.swtx{display:flex;align-items:center;justify-content:space-between;background:#3a0e16;border:1px solid #e30a1755;border-radius:13px;padding:13px 16px;margin-bottom:8px;}
+.swtx-r b{font-size:14px;font-weight:700;display:block;}
+.swtx-r small{display:block;font-size:11px;color:#ffffff80;margin-top:2px;letter-spacing:.02em;}
+.swtx-ar{color:#e30a17;font-weight:700;margin:0 4px;}
+.swtx-amt{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:#fafafa;}
+.swhd{font-size:11px;letter-spacing:.2em;color:#ffffff88;margin:22px 2px 10px;font-weight:700;}
+.swppl{display:flex;flex-direction:column;gap:6px;}
+.swp{display:flex;align-items:center;justify-content:space-between;background:#3a0e16;border:1px solid #ffffff10;border-radius:12px;padding:11px 14px;}
+.swp-l b{font-size:13.5px;font-weight:700;}
+.swp-l small{display:block;font-size:10.5px;color:#ffffff80;letter-spacing:.04em;margin-top:1px;text-transform:uppercase;}
+.swp-you{font-size:9px;background:#e30a17;color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:.08em;font-weight:700;vertical-align:middle;margin-left:6px;}
+.swp-amt{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
 .bview{display:flex;gap:6px;background:#ffffff0c;border:1px solid #ffffff14;border-radius:999px;padding:4px;margin-bottom:14px;}
 .bvt{flex:1;background:none;border:none;color:#ffffff80;font-family:inherit;font-size:12px;font-weight:700;padding:9px 8px;border-radius:999px;cursor:pointer;transition:.2s;letter-spacing:.02em;}
 .bvt.on{background:#e30a17;color:#fff;}
@@ -146,34 +185,47 @@ const TRANSPORT=[
 const TICKETS={Emre:1040, KD:1040, Ali:1040, "Ali K":1040, Mekin:1040, Kaan:500};
 const FLIGHTS={Emre:null, KD:null, Ali:null, "Ali K":null, Mekin:null, Kaan:null};
 
+/* Per-person hotel list (used both for total + detail screen) */
+function personHotels(name){
+ const list=[];
+ const perNight=SD_TOTAL/SD_NIGHTS;
+ if(name==="Kaan"){
+  const sd=(perNight*SD_KAAN_NIGHTS)/4;
+  list.push({name:"San Diego (12 - 15)",sub:`3 nights · split /4 with the early crew`,total:perNight*SD_KAAN_NIGHTS,share:sd,note:"your share"});
+ } else if(SD_FULL.includes(name)){
+  const sd1=(perNight*SD_KAAN_NIGHTS)/4;
+  const sd2=(perNight*(SD_NIGHTS-SD_KAAN_NIGHTS))/3;
+  list.push({name:"San Diego (12 - 17)",sub:`5 nights · 3 split /4, 2 split /3`,total:SD_TOTAL,share:sd1+sd2,note:"your share"});
+ }
+ HOTELS_SHARED.forEach(h=>list.push({name:h.name,sub:"split /6 across the squad",total:h.total,share:h.total/6,note:"your share"}));
+ return list;
+}
 function personProjected(name){
  const breakdown=[];let total=0;
- // SD share (personal)
- const perNight=SD_TOTAL/SD_NIGHTS;
- let sdShare=0;
- if(name==="Kaan") sdShare=(perNight*SD_KAAN_NIGHTS)/4;
- else if(SD_FULL.includes(name)) sdShare=(perNight*SD_KAAN_NIGHTS)/4+(perNight*(SD_NIGHTS-SD_KAAN_NIGHTS))/3;
- // Hotels total = SD + all shared /6
- const sharedHotels=HOTELS_SHARED.reduce((s,h)=>s+h.total,0)/6;
- const hotelsTotal=sdShare+sharedHotels;
+ const hotels=personHotels(name);
+ const hotelsTotal=hotels.reduce((s,h)=>s+h.share,0);
  if(hotelsTotal>0){
   total+=hotelsTotal;
-  breakdown.push({cat:"Hotels", note:sdShare?`includes your San Diego nights`:`SF + Santa Clara + Carmel + SB - all /6`, amt:hotelsTotal, status:"booked"});
+  breakdown.push({cat:"Hotels", note:`${hotels.length} stays · tap for breakdown`, amt:hotelsTotal, status:"booked", id:"hotels", drill:true});
  }
- // Transportation /6
  const transport=TRANSPORT.reduce((s,t)=>s+t.total,0)/6;
  total+=transport;
- breakdown.push({cat:"Transportation", note:"2 Wranglers - split /6", amt:transport, status:"booked"});
- // Tickets
+ breakdown.push({cat:"Transportation", note:"2 Wranglers · tap for breakdown", amt:transport, status:"booked", id:"transport", drill:true});
  const t=TICKETS[name]||0;
  total+=t;
- breakdown.push({cat:"Match Ticket", note:name==="Kaan"?"your seat":"your seat", amt:t, status:"booked"});
- // Flight
+ breakdown.push({cat:"Match Ticket", note:"your Türkiye vs Paraguay seat", amt:t, status:"booked", id:"ticket"});
  const f=FLIGHTS[name];
- if(f!=null){total+=f;breakdown.push({cat:"Flight", note:"yours", amt:f, status:"booked"});}
- else breakdown.push({cat:"Flight", note:"price TBD", amt:0, status:"pending"});
+ if(f!=null){total+=f;breakdown.push({cat:"Flight", note:"yours", amt:f, status:"booked", id:"flight"});}
+ else breakdown.push({cat:"Flight", note:"price TBD - add when booked", amt:0, status:"pending", id:"flight"});
  return{total, breakdown};
 }
+
+const CAT_ICON={
+ hotels:'<svg viewBox="0 0 24 24"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>',
+ transport:'<svg viewBox="0 0 24 24"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>',
+ ticket:'<svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M9 6v12"/></svg>',
+ flight:'<svg viewBox="0 0 24 24"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>',
+};
 
 /* ===== SPLITWISE LIVE ===== */
 const SW_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmonks";
@@ -193,22 +245,93 @@ async function loadSplitwise(){
  if(BVIEW==='split')renderSplit();
 }
 
-/* ===== BUDGET VIEW (by category, no Everyone) ===== */
+/* ===== BUDGET VIEW (by category, with wow hero + drill-ins) ===== */
+const CAT_COLORS={hotels:"#e30a17",transport:"#ff6b4a",ticket:"#ffd166",flight:"#7c8cff"};
+let _budgetAnim=null;
+function animateCount(el,from,to,ms){
+ if(_budgetAnim)cancelAnimationFrame(_budgetAnim);
+ const t0=performance.now();
+ function step(now){
+  const k=Math.min(1,(now-t0)/ms);
+  const eased=1-Math.pow(1-k,3);
+  const v=from+(to-from)*eased;
+  const whole=Math.floor(v);
+  const cents=Math.round((v-whole)*100).toString().padStart(2,'0');
+  el.innerHTML=`$${whole.toLocaleString()}<span class="bcent">.${cents}</span>`;
+  if(k<1)_budgetAnim=requestAnimationFrame(step);
+ }
+ _budgetAnim=requestAnimationFrame(step);
+}
 function renderBudget(){
  document.getElementById('bSect1').textContent='YOUR BREAKDOWN';
  const mine=personProjected(ME.name);
  const hero=document.getElementById('bHero');
  const pendingItems=mine.breakdown.filter(b=>b.status==='pending').length;
+ const bookedItems=mine.breakdown.filter(b=>b.status==='booked'&&b.amt>0).length;
+ const totalKnown=mine.breakdown.reduce((s,b)=>s+(b.amt||0),0)||1;
+ const segs=mine.breakdown.filter(b=>b.amt>0).map(b=>
+   `<span class="bseg" style="width:${(b.amt/totalKnown*100).toFixed(2)}%;background:${CAT_COLORS[b.id]||'#e30a17'}"></span>`
+ ).join('');
  hero.innerHTML=`<div class="blab">YOUR PROJECTED TOTAL - ${ME.name.toUpperCase()}</div>
-   <div class="btot">${money(mine.total)}</div>
-   <div class="bsub">${pendingItems?`<b>${pendingItems} item${pendingItems>1?'s':''} pending</b>`:'all booked'} - exact splits</div>`;
- document.getElementById('bBreak').innerHTML=mine.breakdown.map(b=>`
-    <div class="bcat">
-    <div class="bci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
-    <div class="bcm"><b>${b.cat}</b><small>${b.note}</small></div>
+   <div class="btot" id="btotNum">$0<span class="bcent">.00</span></div>
+   <div class="bbar">${segs}</div>
+   <div class="bsub"><span class="bdot"></span>${pendingItems?`<b>${pendingItems} pending</b> · ${bookedItems} booked`:`<b>all ${bookedItems} items booked</b>`} · tap a category</div>`;
+ animateCount(document.getElementById('btotNum'),0,mine.total,750);
+ document.getElementById('bBreak').innerHTML=mine.breakdown.map(b=>{
+   const pct=b.amt?Math.min(100,b.amt/totalKnown*100):0;
+   const tap=b.drill?'tappable':'';
+   const click=b.drill?`onclick="openBudgetDetail('${b.id}')"`:'';
+   return `<div class="bcat ${tap}" ${click}>
+    <div class="bci">${CAT_ICON[b.id]||CAT_ICON.hotels}</div>
+    <div class="bcm"><b>${b.cat}</b><small>${b.note}</small><span class="bcbar"><i style="width:${pct}%;background:linear-gradient(90deg,${CAT_COLORS[b.id]||'#e30a17'},#ff6b4a)"></i></span></div>
     <div class="bcv">${b.amt?money(b.amt):'-'}${b.status==='pending'?'<span class="bpend">ADD PRICE</span>':''}</div>
+   </div>`;}).join("");
+}
+function openBudgetDetail(id){
+ if(id==='hotels')return renderHotelsDetail();
+ if(id==='transport')return renderTransportDetail();
+}
+function backToBudget(){renderBudget();}
+function renderHotelsDetail(){
+ document.getElementById('bSect1').textContent='';
+ const hero=document.getElementById('bHero');
+ const hotels=personHotels(ME.name);
+ const youTotal=hotels.reduce((s,h)=>s+h.share,0);
+ const groupTotal=hotels.reduce((s,h)=>s+h.total,0);
+ hero.innerHTML=`<div class="bdback" onclick="backToBudget()">‹ Back to Budget</div>
+  <div class="bdh">HOTELS · ${ME.name.toUpperCase()}</div>
+  <div class="bdhead"><div class="l">YOUR HOTEL TOTAL</div><div class="t">${money(youTotal)}</div><div class="s">${hotels.length} stays · ${money(groupTotal)} group total</div></div>`;
+ document.getElementById('bBreak').innerHTML=hotels.map(h=>`
+   <div class="bditem">
+    <span class="name">${h.name}</span>
+    <span class="meta">${h.sub}</span>
+    <div class="nums">
+     <div><div class="nl">GROUP TOTAL</div><div class="nv">${money(h.total)}</div></div>
+     <div class="your" style="text-align:right"><div class="nl">YOUR SHARE</div><div class="nv">${money(h.share)}</div></div>
+    </div>
    </div>`).join("");
 }
+function renderTransportDetail(){
+ document.getElementById('bSect1').textContent='';
+ const hero=document.getElementById('bHero');
+ const list=TRANSPORT.map(t=>({name:t.name,sub:"split /6 across the squad",total:t.total,share:t.total/6}));
+ const youTotal=list.reduce((s,h)=>s+h.share,0);
+ const groupTotal=list.reduce((s,h)=>s+h.total,0);
+ hero.innerHTML=`<div class="bdback" onclick="backToBudget()">‹ Back to Budget</div>
+  <div class="bdh">TRANSPORTATION · ${ME.name.toUpperCase()}</div>
+  <div class="bdhead"><div class="l">YOUR TRANSPORT TOTAL</div><div class="t">${money(youTotal)}</div><div class="s">${list.length} vehicles · ${money(groupTotal)} group total</div></div>`;
+ document.getElementById('bBreak').innerHTML=list.map(h=>`
+   <div class="bditem">
+    <span class="name">${h.name}</span>
+    <span class="meta">${h.sub}</span>
+    <div class="nums">
+     <div><div class="nl">GROUP TOTAL</div><div class="nv">${money(h.total)}</div></div>
+     <div class="your" style="text-align:right"><div class="nl">YOUR SHARE</div><div class="nv">${money(h.share)}</div></div>
+    </div>
+   </div>`).join("");
+}
+window.openBudgetDetail=openBudgetDetail;
+window.backToBudget=backToBudget;
 
 /* ===== SPLITWISE VIEW (hero = your balance, breakdown = simplified transactions) ===== */
 function renderSplit(){
@@ -224,34 +347,48 @@ function renderSplit(){
  const myBalance=me?(me.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0):0;
  const owesMe=myBalance>0;
  const debts=SW_GROUP.simplified_debts||[];
- // Hero = YOUR balance
  if(Math.abs(myBalance)<0.01){
   hero.innerHTML=`<div class="blab">YOU IN THIS GROUP</div>
-   <div class="btot" style="color:#4ad6c4">${money(0)}</div>
+   <div class="btot" style="color:#ffd166">${money(0)}</div>
    <div class="bsub">all settled - <b>${SW_GROUP.name}</b></div>`;
  } else if(owesMe){
   hero.innerHTML=`<div class="blab">YOU ARE OWED</div>
-   <div class="btot" style="color:#4ad6c4">${money(myBalance)}</div>
+   <div class="btot" style="color:#fafafa">${money(myBalance)}</div>
    <div class="bsub">net across the group - <b>${SW_GROUP.name}</b></div>`;
  } else {
   hero.innerHTML=`<div class="blab">YOU OWE</div>
    <div class="btot" style="color:#ff6b6b">${money(myBalance)}</div>
    <div class="bsub">net across the group - <b>${SW_GROUP.name}</b></div>`;
  }
- // Breakdown = simplified transactions
  document.getElementById('bSect1').textContent=debts.length?`${debts.length} TRANSACTION${debts.length>1?'S':''} TO SETTLE`:'ALL CLEAR';
+ let html="";
  if(!debts.length){
-  br.innerHTML=`<div class="bcat" style="border-color:#4ad6c455"><div class="bcm"><b>Done</b><small>The group is settled.</small></div></div>`;
+  html=`<div class="swtx"><div class="swtx-r"><b>Done</b><small>The group is settled.</small></div></div>`;
  }else{
-  br.innerHTML=debts.map(d=>{
+  html=debts.map(d=>{
    const from=members.find(m=>m.id===d.from);const to=members.find(m=>m.id===d.to);
    if(!from||!to)return"";
-   return `<div class="bcat" style="border-color:#e30a1755;">
-    <div class="bci" style="background:${ACC[from.id%6]}33;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;color:#fff;border:2px solid ${ACC[from.id%6]}">${inits(from.first_name||"?")}</div>
-    <div class="bcm"><b>${from.first_name} pays ${to.first_name}</b><small>${money(parseFloat(d.amount))} ${d.currency_code||"USD"}</small></div>
-    <div class="bci" style="background:${ACC[to.id%6]}33;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;color:#fff;border:2px solid ${ACC[to.id%6]}">${inits(to.first_name||"?")}</div>
+   const amt=parseFloat(d.amount);
+   return `<div class="swtx">
+    <div class="swtx-r"><b>${from.first_name} <span class="swtx-ar">→</span> ${to.first_name}</b><small>simplified payment</small></div>
+    <div class="swtx-amt">${money(amt)}</div>
    </div>`;}).join("");
  }
+ html+=`<div class="swhd">WHERE EVERYONE STANDS</div><div class="swppl">`;
+ html+=members.map(m=>{
+  const bal=(m.balance||[]).reduce((s,b)=>s+parseFloat(b.amount),0);
+  const isYou=SW_USER&&m.id===SW_USER.id;
+  let stateLab,stateCol;
+  if(Math.abs(bal)<0.01){stateLab='settled';stateCol='#ffd166';}
+  else if(bal>0){stateLab='is owed';stateCol='#fafafa';}
+  else{stateLab='owes';stateCol='#ff6b6b';}
+  return `<div class="swp">
+   <div class="swp-l"><b>${m.first_name}${isYou?' <span class="swp-you">YOU</span>':''}</b><small>${stateLab}</small></div>
+   <div class="swp-amt" style="color:${stateCol}">${money(bal)}</div>
+  </div>`;
+ }).join("");
+ html+=`</div>`;
+ br.innerHTML=html;
 }
 
 let BVIEW='budget';
@@ -267,18 +404,15 @@ PEOPLE.forEach(p=>{const b=document.createElement('button');b.className='pbtn';b
  b.innerHTML=`<span class="pa">${inits(p.name)}</span><b>${p.name}</b>`;b.onclick=()=>pick(p.id);peopleEl.appendChild(b);});
 function pick(id){ME=PEOPLE[id];syncRider();document.getElementById('picker').classList.add('gone');reloadTrip();
  try{history.replaceState({app:'picked',rider:id},'');}catch(e){}}
-window.addEventListener('popstate',()=>{
- // Swipe-back inside the iframe could surface the picker. Keep it dismissed and snap to Home.
- if(history.state&&history.state.app==='picked'){
-  document.getElementById('picker').classList.add('gone');
-  try{showTab('trip');}catch(e){}
- }
-});
 window.addEventListener('pageshow',()=>{
  if(history.state&&history.state.app==='picked'){
   document.getElementById('picker').classList.add('gone');
  }
 });
+function closeTripSubScreens(){
+ const f=document.getElementById('fr-trip');
+ try{f.contentWindow&&f.contentWindow.postMessage({cmd:'closeAll'},'*');}catch(e){}
+}
 function syncRider(){
  document.getElementById('youAv').textContent=inits(ME.name);document.getElementById('youAv').style.background=ACC[ME.id%6];
  document.getElementById('youName').textContent=ME.name;
@@ -305,7 +439,11 @@ function showTab(id){
  if(!isFrame)loaderEl.classList.remove('on');
  if(id==='you')setBView(BVIEW);
 }
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+ const id=t.dataset.tab;
+ if(id==='trip')closeTripSubScreens();
+ showTab(id);
+});
 setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider=0');
 syncRider();
 renderBudget();
