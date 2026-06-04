@@ -8,20 +8,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=DM+Sans:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hidden;}
-#bg{position:fixed;inset:0;z-index:0;background:#1a0c0e;transition:background 1s ease;}
-#bg::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:#e30a17;z-index:1;}
+body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hidden;}
+#bg{position:fixed;inset:0;z-index:0;background:#25060e;transition:background 1s ease;}
 .frame{position:relative;z-index:1;height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;}
 
 /* PICKER */
-.picker{position:absolute;inset:0;z-index:30;background:radial-gradient(120% 60% at 50% 0%,#2a0d10,#1a0c0e 60%);display:flex;flex-direction:column;justify-content:center;padding:40px 22px;transition:opacity .4s,transform .4s;}
+.picker{position:absolute;inset:0;z-index:30;background:radial-gradient(120% 60% at 50% 0%,#2a0d10,#25060e 60%);display:flex;flex-direction:column;justify-content:center;padding:40px 22px;transition:opacity .4s,transform .4s;}
 .picker.gone{opacity:0;transform:scale(1.04);pointer-events:none;}
 .picker .sub{text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffff99;text-transform:uppercase;}
 .picker h1{text-align:center;font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:50px;line-height:.92;margin:10px 0 6px;background:linear-gradient(95deg,#ffd447,#ff6b4a 45%,#ff4d8d);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .picker .dates{text-align:center;font-family:'Space Mono',monospace;color:#ffffffaa;font-size:12px;margin-bottom:34px;}
 .picker .who{text-align:center;font-size:11px;letter-spacing:.2em;color:#ffffff99;margin-bottom:16px;}
 .people{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
-.pbtn{display:flex;align-items:center;gap:11px;background:#2a1418;border:1px solid #ffffff14;border-radius:15px;padding:13px;cursor:pointer;color:#fff;text-align:left;transition:.16s;}
+.pbtn{display:flex;align-items:center;gap:11px;background:#3a0e16;border:1px solid #ffffff14;border-radius:15px;padding:13px;cursor:pointer;color:#fff;text-align:left;transition:.16s;}
 .pbtn:hover{transform:translateY(-2px);border-color:var(--c);}
 .pbtn .pa{width:40px;height:40px;border-radius:50%;background:var(--c);color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;flex:none;}
 .pbtn b{font-size:14px;font-weight:600;}
@@ -67,17 +66,19 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .vt{flex:1;background:none;border:none;color:#ffffff80;font-family:inherit;font-size:13px;font-weight:700;padding:9px;border-radius:999px;cursor:pointer;transition:.25s;}
 .vt.on{background:#fff;color:#28141a;}
 /* overview type cards */
-.ovgrid{display:flex;flex-direction:column;gap:12px;margin-top:14px;animation:ovin .4s ease;}
+.ovgrid{display:flex;flex-direction:column;gap:9px;margin-top:12px;animation:ovin .4s ease;}
 @keyframes ovin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.ovcard{position:relative;border-radius:18px;overflow:hidden;padding:18px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;box-shadow:0 12px 30px #0007;transition:transform .15s;}
-.ovcard:active{transform:scale(.97);}
+.ovcard{position:relative;border-radius:14px;overflow:hidden;padding:13px 14px;min-height:64px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:1px solid #ffffff14;box-shadow:0 4px 14px #0006,inset 0 1px 0 #ffffff08;transition:transform .15s,border-color .15s;}
+.ovcard:hover{border-color:#e30a1755;transform:translateY(-1px);}
+.ovcard:active{transform:scale(.98);}
 .ovcard .ovg{position:absolute;inset:0;z-index:0;opacity:.92;}
 .ovcard .ovtop{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;}
-.ovcard .ovic{font-size:30px;}
-.ovcard .ovcount{font-family:'Space Mono',monospace;font-size:12px;background:#0003;backdrop-filter:blur(4px);padding:5px 10px;border-radius:999px;font-weight:700;}
+.ovcard .ovic{display:flex;align-items:center;justify-content:center;}
+.ovcard .ovic svg{width:22px;height:22px;}
+.ovcard .ovcount{font-family:'Space Mono',monospace;font-size:11px;background:#0005;backdrop-filter:blur(4px);padding:3px 8px;border-radius:999px;font-weight:700;}
 .ovcard .ovbot{position:relative;z-index:1;}
-.ovcard .ovname{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;line-height:.95;}
-.ovcard .ovsub{font-size:12px;color:#ffffffce;margin-top:3px;}
+.ovcard .ovname{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:18px;line-height:1;margin-top:6px;}
+.ovcard .ovsub{font-size:11.5px;color:#ffffffb0;margin-top:2px;}
 .carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-ms-overflow-style:none;scrollbar-width:none;}.carousel::-webkit-scrollbar{display:none;}
 .ccard{flex:none;width:62%;scroll-snap-align:center;height:215px;border-radius:18px;overflow:hidden;position:relative;cursor:pointer;border:1px solid #ffffff14;transition:transform .15s,border-color .15s;}
 .ccard:hover{transform:translateY(-2px);border-color:#e30a1755;}
@@ -88,21 +89,28 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .badge{position:absolute;top:46px;left:14px;z-index:1;background:#e30a17;font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:6px;}
 
 /* city + subscreens */
-.screen{position:fixed;inset:0;z-index:10;width:100vw;transform:translateY(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;background:#1f0f12;}
+.screen{position:fixed;inset:0;z-index:10;width:100vw;transform:translateY(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;background:#2d070e;}
 .screen.on{transform:translateY(0);}
 .screen .fbg{position:absolute;inset:0;transition:background 1s ease;}
-.screen .fbg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0005,#1f0f12cc 52%,#1f0f12);}
+.screen .fbg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0005,#2d070ecc 52%,#2d070e);}
 .screen .inner{width:100%;max-width:460px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;position:relative;z-index:1;}
-.sub2{background:#1f0f12;z-index:12;}.sub2 .inner{background:#1f0f12;}
+.sub2{background:#2d070e;z-index:12;}.sub2 .inner{background:#2d070e;}
 .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none;}.scroll::-webkit-scrollbar{display:none;}
-.back{position:sticky;top:0;z-index:3;padding:16px 18px;font-weight:700;cursor:pointer;width:max-content;background:linear-gradient(180deg,#1f0f12cc,transparent);}
+.back{position:sticky;top:0;z-index:3;padding:16px 18px;font-weight:700;cursor:pointer;width:max-content;background:linear-gradient(180deg,#2d070ecc,transparent);}
 .fhero{padding:24px 20px 14px;}.fhero .hf{font-size:24px;}.fhero .hn{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:48px;line-height:.95;margin:4px 0;}.fhero .hd{font-family:'Space Mono',monospace;font-size:12px;color:#ffffffd0;}.fhero .hwx{display:inline-block;margin-top:10px;background:#0006;backdrop-filter:blur(6px);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;}
 .fbody{padding:6px 18px 50px;}
 .qa{display:flex;justify-content:space-between;gap:8px;margin:8px 0 16px;}.qa button{flex:1;background:none;border:none;color:#fff;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.15s;}.qa button:hover{transform:translateY(-1px);}.qa button:hover .qc{border-color:#e30a1755;}.qa .qc{width:54px;height:54px;border-radius:16px;background:#ffffff10;border:1px solid #ffffff18;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;transition:border-color .15s;}.qa .qc svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}.qa small{font-size:10px;color:#ffffffc0;letter-spacing:.02em;}
 .flightbanner{background:#28141acc;backdrop-filter:blur(10px);border:1px solid #5ab0ff44;border-radius:16px;padding:14px;margin-bottom:14px;cursor:pointer;}
 .flightbanner .tn{font-family:'Space Mono',monospace;font-size:10px;color:#9fd0ff;text-align:center;letter-spacing:.1em;margin-bottom:6px;}
 .flightbanner .fl{display:flex;align-items:center;gap:10px;}.flightbanner .ap{flex:1;}.flightbanner .ap.r{text-align:right;}.flightbanner .code{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px;line-height:1;}.flightbanner .c2{font-size:10px;color:#ffffffa0;}.flightbanner .tt{font-family:'Space Mono',monospace;font-size:11px;color:#5ab0ff;margin-top:2px;}.flightbanner .ln{color:#5ab0ff;}.flightbanner .more{text-align:center;font-size:11px;color:#9fd0ff;margin-top:8px;font-weight:600;}
-.ith{display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;}.ith b{font-size:16px;}.ith small{font-family:'Space Mono',monospace;font-size:11px;color:#ffffff90;}
+.ith{display:flex;justify-content:space-between;align-items:center;margin:14px 0 6px;}.ith b{font-size:16px;}.ith small{font-family:'Space Mono',monospace;font-size:11px;color:#ffffff90;}
+.wxrow{display:flex;gap:8px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;padding:4px 0 10px;margin:6px -16px 8px;padding-left:16px;padding-right:16px;}
+.wxrow::-webkit-scrollbar{display:none;}
+.wxchip{flex:none;min-width:108px;background:#3a0e16;border:1px solid #ffffff14;border-radius:12px;padding:10px 12px;box-shadow:0 2px 8px #0006,inset 0 1px 0 #ffffff08;}
+.wxchip .wxd{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:#ffffffb0;text-transform:uppercase;font-weight:700;}
+.wxchip .wxhi{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;font-size:22px;margin:4px 0 2px;letter-spacing:-.01em;}
+.wxchip .wxlo{color:#ffffff80;font-weight:600;font-size:14px;margin-left:1px;}
+.wxchip .wxc{font-size:10px;color:#ffffffc0;line-height:1.2;}
 .it{display:flex;gap:12px;padding:10px 0;align-items:flex-start;border-top:1px solid #ffffff10;}.it:first-of-type{border:none;}.it .g{width:3px;height:28px;border-radius:2px;flex:none;align-self:center;font-size:0;color:transparent;overflow:hidden;}.it .mid{flex:1;}.it .mid b{font-size:14px;display:block;}.it .mid small{font-size:12px;color:#ffffff90;}.it .tm{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffa0;padding-top:3px;}.it.match .mid b{color:#ff3b30;}
 .itog{display:flex;gap:4px;background:#ffffff14;border-radius:999px;padding:3px;}
 .itb{background:none;border:none;color:#ffffff90;font-family:inherit;font-size:11px;font-weight:700;padding:5px 13px;border-radius:999px;cursor:pointer;}
@@ -128,7 +136,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .fd-leg .l .code{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;}.fd-leg .l .ap{font-size:12px;color:#ffffffa0;}.fd-leg .l .tg{font-size:11px;color:#ffffff80;margin-top:4px;}
 .fd-leg .r{text-align:right;}.fd-leg .r .t{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#5ab0ff;}.fd-leg .r .d{font-size:11px;color:#ffffff90;}
 .fd-meta{display:flex;gap:10px;margin:14px 16px 0;}.fd-chip{flex:1;background:#28141a;border:1px solid #ffffff14;border-radius:12px;padding:10px 12px;text-align:center;}.fd-chip small{font-size:9px;letter-spacing:.12em;color:#ffffff88;display:block;}.fd-chip b{font-size:14px;}.fd-chip b.ok{color:#4ad6c4;}
-.lhero{height:160px;position:relative;background:linear-gradient(150deg,#caa07a,#6e4a5e 60%,#241a3a);}.lhero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,#1f0f12);}
+.lhero{height:160px;position:relative;background:linear-gradient(150deg,#caa07a,#6e4a5e 60%,#241a3a);}.lhero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,#2d070e);}
 .lhero .lt{position:absolute;left:18px;bottom:14px;}.lhero .ln2{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px;}.lhero .ls{font-size:12px;color:#ffffffcc;}
 .lbody{padding:14px 18px 40px;}
 .lgrid{display:flex;gap:10px;margin-bottom:14px;}.lcell{flex:1;background:#28141a;border:1px solid #ffffff14;border-radius:12px;padding:12px;}.lcell small{font-size:9px;letter-spacing:.1em;color:#ffffff88;display:block;}.lcell b{font-size:14px;}.lcell .sub{font-family:'Space Mono',monospace;font-size:11px;color:#ffffffb0;}
@@ -177,15 +185,15 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 
 /* YOU */
 .youpage{padding:18px 16px 30px;}
-.youhero{display:flex;align-items:center;gap:14px;background:#2a1418;border:1px solid #ffffff14;border-radius:18px;padding:18px;margin-bottom:18px;}
+.youhero{display:flex;align-items:center;gap:14px;background:#3a0e16;border:1px solid #ffffff14;border-radius:18px;padding:18px;margin-bottom:18px;}
 .youhero .ya{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:#0e0f1a;}
 .youhero .yn{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:26px;}.youhero .ys{font-size:12px;color:#ffffff99;}
 .peoplelist{display:flex;flex-direction:column;gap:8px;}
-.prow{display:flex;align-items:center;gap:12px;background:#2a1418;border:1px solid #ffffff12;border-radius:14px;padding:12px;cursor:pointer;transition:.14s;}
+.prow{display:flex;align-items:center;gap:12px;background:#3a0e16;border:1px solid #ffffff12;border-radius:14px;padding:12px;cursor:pointer;transition:.14s;}
 .prow:hover{border-color:#fff5;}.prow.me{outline:2px solid currentColor;}
 .prow .pn{flex:1;font-weight:600;color:#fff;}.prow .pv{font-size:11px;color:#ffffff80;}
 
-.tabs{flex:none;display:flex;background:#1f0f12ee;backdrop-filter:blur(12px);border-top:1px solid #ffffff14;padding:8px 6px calc(8px + env(safe-area-inset-bottom));}
+.tabs{flex:none;display:flex;background:#2d070eee;backdrop-filter:blur(12px);border-top:1px solid #ffffff14;padding:8px 6px calc(8px + env(safe-area-inset-bottom));}
 .tab{flex:1;background:none;border:none;color:#ffffff70;padding:6px 2px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;}.tab.on{color:#fff;}.tab .ic{font-size:18px;}
 </style>
 
@@ -207,7 +215,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .timepill{position:absolute;top:14px;right:14px;z-index:3;backdrop-filter:blur(14px);color:#fff;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:8px 13px;border-radius:999px;display:flex;align-items:center;gap:8px;letter-spacing:.06em;transition:background .8s,color .8s;box-shadow:0 6px 18px #0007;}
 .timepill .ti{font-size:14px;line-height:1;}
 .timepill.dawn{background:linear-gradient(135deg,#ff9a6acc,#7a3a63cc);}
-.timepill.day{background:#1f0f12cc;}
+.timepill.day{background:#2d070ecc;}
 .timepill.dusk{background:linear-gradient(135deg,#ff6b4acc,#6a2a8ccc);}
 .timepill.night{background:#000000dd;color:#9fd0ff;}
 
@@ -220,7 +228,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .playtour.playing .pic{width:8px;height:9px;border:none;background:linear-gradient(90deg,currentColor 0 35%,transparent 35% 65%,currentColor 65%);}
 
 /* timeline scrubber */
-.scrubber{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;background:#1f0f12d8;backdrop-filter:blur(14px);border:1px solid #ffffff1a;border-radius:16px;padding:9px 10px;box-shadow:0 10px 30px #0008;}
+.scrubber{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;background:#2d070ed8;backdrop-filter:blur(14px);border:1px solid #ffffff1a;border-radius:16px;padding:9px 10px;box-shadow:0 10px 30px #0008;}
 .scrubber .strip{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;}
 .scrubber .strip::-webkit-scrollbar{display:none;}
 .scrub{flex:none;min-width:60px;background:#ffffff10;border:1px solid transparent;border-radius:10px;padding:6px 9px;cursor:pointer;text-align:center;color:#ffffffc0;transition:.2s;}
@@ -239,7 +247,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .wmark.active .pin{box-shadow:0 4px 10px #000a,0 0 16px var(--mc);}
 
 /* map toggle button (above the list) */
-.maptoggle{width:100%;background:#2a1418;border:1px solid #ffffff18;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-family:inherit;font-size:14px;font-weight:600;transition:.18s;margin:6px 0 0;}
+.maptoggle{width:100%;background:#3a0e16;border:1px solid #ffffff18;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-family:inherit;font-size:14px;font-weight:600;transition:.18s;margin:6px 0 0;}
 .maptoggle:hover,.maptoggle:active{background:#1c1f2e;border-color:#e30a1755;}
 .maptoggle .mti{font-size:20px;line-height:1;}
 .maptoggle .mtl{flex:1;text-align:left;}
@@ -256,7 +264,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .it.on{background:linear-gradient(90deg,#e30a1726,#e30a1708);box-shadow:inset 3px 0 0 #ff3b30;}
 
 /* PLACE SHEET */
-.placesheet{position:fixed;inset:0;z-index:25;background:#1f0f12;transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
+.placesheet{position:fixed;inset:0;z-index:25;background:#2d070e;transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
 .placesheet.on{transform:translateY(0);}
 .psheet-inner{width:100%;max-width:460px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;}
 .psheet-scroll{flex:1;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;}
@@ -264,13 +272,13 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 .psheet-hero{position:relative;height:42vh;min-height:280px;background:#1c1f2e;overflow:hidden;}
 .psheet-hero img{width:100%;height:100%;object-fit:cover;animation:phin 1.1s ease;display:block;}
 @keyframes phin{from{transform:scale(1.18);opacity:0}to{transform:none;opacity:1}}
-.psheet-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0007 0 22%,transparent 55%,#1f0f12 100%);pointer-events:none;}
-.psheet-close,.psheet-share{position:absolute;top:14px;z-index:3;width:40px;height:40px;background:#1f0f12cc;backdrop-filter:blur(10px);border:1px solid #ffffff14;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.psheet-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0007 0 22%,transparent 55%,#2d070e 100%);pointer-events:none;}
+.psheet-close,.psheet-share{position:absolute;top:14px;z-index:3;width:40px;height:40px;background:#2d070ecc;backdrop-filter:blur(10px);border:1px solid #ffffff14;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
 .psheet-close{left:14px;}
 .psheet-share{right:14px;font-size:14px;}
 .psheet-close:hover,.psheet-share:hover{background:#1c1f2eee;}
 .psheet-tag{position:absolute;left:18px;bottom:16px;z-index:2;display:flex;gap:6px;flex-wrap:wrap;}
-.psheet-tag span{background:#1f0f12d0;backdrop-filter:blur(10px);color:#fff;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px;font-family:'Space Mono',monospace;letter-spacing:.04em;border:1px solid #ffffff1a;}
+.psheet-tag span{background:#2d070ed0;backdrop-filter:blur(10px);color:#fff;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:999px;font-family:'Space Mono',monospace;letter-spacing:.04em;border:1px solid #ffffff1a;}
 .psheet-body{padding:18px 20px 50px;}
 .psheet-name{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:32px;line-height:1;margin-bottom:8px;}
 .psheet-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:13px;color:#ffffffb0;margin-bottom:6px;}
@@ -299,8 +307,8 @@ body{font-family:'DM Sans',sans-serif;background:#1a0c0e;color:#fff;overflow:hid
 #gameday .gdhero{height:100dvh;}
 #gameday .gdhero .photo{background-image:url('./squad.jpg'),radial-gradient(circle at 50% 30%,#fff0c0 0 7%,#ffd166 15%,transparent 42%),linear-gradient(180deg,#ff8a3a,#ff5e6a 40%,#9a3a7a 66%,#1c2e5a 100%);background-size:cover,auto,auto;background-position:center,0 0,0 0;background-repeat:no-repeat;}
 #gameday .gdhero .tov .ttl{font-size:22px;letter-spacing:.04em;margin-top:14px;}
-#gameday .gdbody{padding:18px 16px 60px;background:#1f0f12;}
-.gdcard{background:#2a1418;border:1px solid #ffffff14;border-radius:16px;padding:16px;margin-bottom:14px;}
+#gameday .gdbody{padding:18px 16px 60px;background:#2d070e;}
+.gdcard{background:#3a0e16;border:1px solid #ffffff14;border-radius:16px;padding:16px;margin-bottom:14px;}
 .gdcard .gdk{font-size:10px;letter-spacing:.2em;color:#ff3b30;font-weight:800;margin-bottom:10px;}
 .gdrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #ffffff10;font-size:13.5px;}
 .gdrow:first-of-type{border:none;}
@@ -483,11 +491,11 @@ const money=n=>"$"+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFrac
 const inits=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
 const CITIES=[
- {n:"00",name:"San Diego",dates:"Jun 12–17",wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Sunset_Cliffs_Sunset%2C_San_Diego.jpg/1280px-Sunset_Cliffs_Sunset%2C_San_Diego.jpg",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
+ {n:"00",name:"San Diego",dates:"Jun 12–17",wx:"19°/24°",bg:"linear-gradient(180deg,#241a1c 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-117.255,32.717,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-117.255,32.717],day:"Fri, Jun 12",flag:"🏖️",teaser:"The early leg · before SF",
   seenBy:[0,2,3,5], // Emre, Ali, Ali K, Kaan
   flightIn:true, sdLeg:true,
   items:[["flight","Arrive San Diego","SD crew lands",""],["place","San Diego days","Beaches · Gaslamp",""],["flight","Kaan → Arizona","Jun 15 · leaves early","Jun 15"],["flight","Fly up to SF","Jun 17",""]]},
- {n:"01",name:"San Francisco",dates:"Jun 17–19",wx:"17°/22°",bg:"linear-gradient(180deg,#1f1a26 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GoldenGateBridge-001.jpg/1280px-GoldenGateBridge-001.jpg",loc:[-122.43,37.79],day:"Wed, Jun 17",flag:"🌉",teaser:"Everyone lands · the city",flightIn:true,
+ {n:"01",name:"San Francisco",dates:"Jun 17–19",wx:"17°/22°",bg:"linear-gradient(180deg,#1f1a26 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-122.43,37.79,12.5,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-122.43,37.79],weatherDays:[{d:"Wed Jun 17",hi:21,lo:14,c:"Cloudy AM · Sunny PM",ic:"cloudsun"},{d:"Thu Jun 18",hi:22,lo:15,c:"Sunny",ic:"sun"},{d:"Fri Jun 19",hi:22,lo:15,c:"Sunny · Light Wind",ic:"sun"}],day:"Wed, Jun 17",flag:"🌉",teaser:"Everyone lands · the city",flightIn:true,
   mapCenter:[-122.43,37.79],mapZoom:11.4,
   items:[
    ["flight","Everyone arrives SF","From SD · Chicago · AZ","",null],
@@ -502,7 +510,7 @@ const CITIES=[
    ["bed","Back to hotel","Rest · shower · change","4:30p",null],
    ["food","Dinner — San Ho Won","","7:00p",[-122.4102473,37.759599]]
   ]},
- {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(180deg,#241820 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Levi%27s_Stadium_2014.jpg/1280px-Levi%27s_Stadium_2014.jpg",loc:[-121.969,37.403],day:"Fri, Jun 19",flag:"⚽",teaser:"Bike ride · then match day",match:true,
+ {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(180deg,#241820 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-121.969,37.403,14,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-121.969,37.403],weatherDays:[{d:"Fri Jun 19",hi:29,lo:18,c:"Hot · Match Night",ic:"sun"},{d:"Sat Jun 20",hi:27,lo:17,c:"Sunny",ic:"sun"}],day:"Fri, Jun 19",flag:"⚽",teaser:"Bike ride · then match day",match:true,
   items:[
    ["food","Breakfast near hotel","","8:00a"],
    ["place","Bike rental pickup","Bay City / Blazing Saddles · Wharf","9:00a"],
@@ -516,11 +524,11 @@ const CITIES=[
    ["bed","Rest · eat · head to stadium","","3:00p"],
    ["match","TÜRKIYE MATCH — Levi's Stadium","Santa Clara","9:00p"]
   ]},
- {n:"03",name:"Monterey / Carmel",dates:"Jun 20–21",wx:"18°/24°",bg:"linear-gradient(180deg,#181f1d 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Lone_Cypress_Tree_at_Pebble_Beach%2C_California%2C_USA.jpg/1280px-Lone_Cypress_Tree_at_Pebble_Beach%2C_California%2C_USA.jpg",loc:[-121.918,36.583],day:"Sat, Jun 20",flag:"🌲",teaser:"Wranglers up · 17-Mile Drive",
+ {n:"03",name:"Monterey / Carmel",dates:"Jun 20–21",wx:"18°/24°",bg:"linear-gradient(180deg,#181f1d 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-121.918,36.583,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-121.918,36.583],weatherDays:[{d:"Sat Jun 20",hi:22,lo:14,c:"Coastal Cloud · Cool",ic:"cloud"},{d:"Sun Jun 21",hi:21,lo:13,c:"Foggy AM · Clear PM",ic:"cloudsun"}],day:"Sat, Jun 20",flag:"🌲",teaser:"Wranglers up · 17-Mile Drive",
   items:[["drive","Pick up 2× Jeep Wrangler","Santa Clara · 9:30 AM","9:30a"],["place","17-Mile Drive","Pebble Beach",""],["bed","Portola Hotel & Spa","Monterey · check-in 3 PM",""]]},
- {n:"04",name:"Big Sur → SB",dates:"Jun 21–22",wx:"19°/23°",bg:"linear-gradient(180deg,#231d1a 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bixby_Creek_Bridge%2C_The_Big_Sur_California_-_PAN_DSC_5097.jpg/1280px-Bixby_Creek_Bridge%2C_The_Big_Sur_California_-_PAN_DSC_5097.jpg",loc:[-121.901,36.371],day:"Sun, Jun 21",flag:"🌊",teaser:"The PCH run · top down",
+ {n:"04",name:"Big Sur → SB",dates:"Jun 21–22",wx:"19°/23°",bg:"linear-gradient(180deg,#231d1a 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-121.901,36.371,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-121.901,36.371],weatherDays:[{d:"Sun Jun 21",hi:22,lo:15,c:"Sunny on the PCH",ic:"sun"},{d:"Mon Jun 22",hi:23,lo:16,c:"Sunny · Warm",ic:"sun"}],day:"Sun, Jun 21",flag:"🌊",teaser:"The PCH run · top down",
   items:[["drive","Big Sur drive","Bixby · McWay",""],["drive","Drop Wranglers","Mon Jun 22 · 9:30 AM","9:30a"],["drive","Pick up SUV","Jun 22 · 6:30 PM","6:30p"],["bed","Santa Barbara overnight","",""]]},
- {n:"05",name:"Santa Monica / LA",dates:"Jun 22–23",wx:"21°/26°",bg:"linear-gradient(180deg,#221a23 0%,#28141a 55%,#1f0f12 100%)",photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Santa_Monica_Pier_at_Dusk.jpg/1280px-Santa_Monica_Pier_at_Dusk.jpg",loc:[-118.497,34.008],day:"Tue, Jun 23",flag:"🌴",teaser:"Pier · beach · LAX out",flightOut:true,
+ {n:"05",name:"Santa Monica / LA",dates:"Jun 22–23",wx:"21°/26°",bg:"linear-gradient(180deg,#221a23 0%,#28141a 55%,#2d070e 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-118.497,34.008,13,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-118.497,34.008],weatherDays:[{d:"Mon Jun 22",hi:24,lo:19,c:"Sunny",ic:"sun"},{d:"Tue Jun 23",hi:25,lo:20,c:"Beach Day · LAX Out",ic:"sun"}],day:"Tue, Jun 23",flag:"🌴",teaser:"Pier · beach · LAX out",flightOut:true,
   items:[["place","Santa Monica Pier","Ferris wheel + beach",""],["drive","Drop SUV","Jun 23 · 6:15 PM","6:15p"],["flight","Everyone flies home","LAX out",""]]}
 ];
 /* ---- PLACES dictionary ----
@@ -706,10 +714,10 @@ function renderOverview(){
  const fl=(ME.flights||[]).length;
  const hotels=Object.keys(LODGING).length;
  const types=[
-  {id:'overFlights',ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>',name:'Flights',sub:`${fl} leg${fl!==1?'s':''} · ${ME.name}'s journey`,count:fl,bg:'#2a1418'},
-  {id:'overStays',  ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>',name:'Stays',  sub:`${hotels} booked · ${4-hotels} to go`,count:hotels,bg:'#2a1418'},
-  {id:'overCars',   ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>',name:'Cars',   sub:'2 Wranglers · 1 SUV',count:3,bg:'#2a1418'},
-  {id:'overRes',    ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',name:'Bookings',sub:'Dinners & reservations',count:1,bg:'#2a1418'},
+  {id:'overFlights',ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>',name:'Flights',sub:`${fl} leg${fl!==1?'s':''} · ${ME.name}'s journey`,count:fl,bg:'#3a0e16'},
+  {id:'overStays',  ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>',name:'Stays',  sub:`${hotels} booked · ${4-hotels} to go`,count:hotels,bg:'#3a0e16'},
+  {id:'overCars',   ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>',name:'Cars',   sub:'2 Wranglers · 1 SUV',count:3,bg:'#3a0e16'},
+  {id:'overRes',    ic:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',name:'Bookings',sub:'Dinners & reservations',count:1,bg:'#3a0e16'},
  ];
  document.getElementById('viewOver').innerHTML=`<div class="ovgrid">`+types.map(t=>`
    <div class="ovcard" onclick="openOverview('${t.id}')"><div class="ovg" style="background:${t.bg}"></div>
@@ -770,7 +778,7 @@ function openCity(i){curCity=i;const c=CITIES[i];
  const hasCoords=c.items.some(it=>it[4]);
  document.getElementById('cityBody').innerHTML=`${flag}
   <div class="qa"><button onclick="openS('lodging')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg></span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></span><small>Cars</small></button><button onclick="openS('places')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span><small>Places</small></button></div>
-  ${flightBanner}
+  ${c.weatherDays?`<div class="wxrow">${c.weatherDays.map(w=>`<div class="wxchip"><div class="wxd">${w.d}</div><div class="wxhi">${w.hi}°<span class="wxlo">/${w.lo}°</span></div><div class="wxc">${w.c}</div></div>`).join('')}</div>`:''}
   <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
   ${hasCoords?`<button class="maptoggle" id="mapToggle" type="button" onclick="toggleMap()"><span class="mti">🗺️</span><span class="mtl">View Stops on Map</span><span class="mtchev">›</span></button><div id="mapWrap" style="display:none;margin-top:10px"><div id="mapbox" class="mapbox"></div></div>`:''}
   <div id="itinList" style="margin-top:14px">
@@ -1009,7 +1017,7 @@ function openPlaceSheet(idx){
 function closePlaceSheet(){const el=document.getElementById('placesheet');if(el)el.classList.remove('on');}
 window.openPlaceSheet=openPlaceSheet;window.closePlaceSheet=closePlaceSheet;
 document.getElementById('cityBack').onclick=()=>{document.getElementById('city').classList.remove('on');resetBg();};
-function resetBg(){bg.style.background="#1a0c0e";}
+function resetBg(){bg.style.background="#25060e";}
 
 function openS(id){if(id==='flight')buildFlight();if(id==='lodging')buildLodging();if(id==='cars')buildCars();if(id==='res')buildReservations();document.getElementById(id).classList.add('on');}
 function closeS(id){document.getElementById(id).classList.remove('on');}
@@ -1128,38 +1136,16 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
  if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
-   // land on HOME, not the lock screen — lock is only reachable by tapping the shatter card
    const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
  }}
  else resetBg();
 });
 </script>
->${p.origin}</span>`;
-  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
-
-/* ---- tabs ---- */
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
- const id=t.dataset.tab;
- document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
- document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
- if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
-   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
--trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
- the shatter card
-   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
-Id('popenBtn');if(b&&paniniCollected>=6){b.textContent="ALBUM COMPLETE ✦";b.style.background="#ffffff14";b.style.color="#ffffff77";}
+eElement('div');s.style.cssText="aspect-ratio:3/4.2;border-radius:11px;position:relative";
+  s.innerHTML=i<paniniCollected?stickerHTML(p):`<div style="position:absolute;inset:0;border:2px dashed #ffffff22;background:#ffffff08;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#ffffff44"><div style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:22px">?</div><div style="font-size:9px;letter-spacing:.1em;font-weight:700">${p.pos}</div></div>`;
+  g.appendChild(s);});
+ const cnt=document.getElementById('palbumCount');if(cnt)cnt.textContent=`${paniniCollected} / 6 collected`;
+ const b=document.getElementById('popenBtn');if(b&&paniniCollected>=6){b.textContent="ALBUM COMPLETE ✨";b.style.background="#ffffff14";b.style.color="#ffffff77";}
 }
 
 /* ---- YOU ---- */
@@ -1175,30 +1161,6 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
  if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
    const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
--trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
-nits(p.name)}</span><span class="pn">${p.name}${p.id===ME.id?' (you)':''}</span><span class="pv">${p.origin}</span>`;
-  el.onclick=()=>{ME=p;syncRider();};l.appendChild(el);});}
-
-/* ---- tabs ---- */
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
- const id=t.dataset.tab;
- document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
- document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='tab-'+id));
- if(id==='trip'){const a=document.querySelector('#city.on');if(!a){resetBg();
-   const home=document.querySelector('#tab-trip .home');if(home)home.scrollIntoView({block:'start'});
- }}
- else resetBg();
-});
-</script>
--trip .home');if(home)home.scrollIntoView({block:'start'});
  }}
  else resetBg();
 });
