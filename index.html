@@ -30,6 +30,16 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .loader .ring{width:34px;height:34px;border-radius:50%;border:3px solid #ffffff1c;border-top-color:#e30a17;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* games coming-soon panel */
+.gamespanel{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:40px 22px;}
+.gamespanel.on{display:flex;}
+.gp-card{max-width:340px;text-align:center;background:linear-gradient(160deg,#3a0e16,#28141a 70%,#1f0f12);border:1px solid #e30a1788;border-radius:22px;padding:34px 26px 30px;box-shadow:0 18px 50px #000a,inset 0 1px 0 #ffffff14;}
+.gp-icon{width:72px;height:72px;border-radius:20px;background:#e30a1722;border:1px solid #e30a1755;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.gp-icon svg{width:38px;height:38px;}
+.gp-h{font-family:'Inter',sans-serif;font-weight:900;font-size:24px;letter-spacing:-.02em;margin-bottom:10px;}
+.gp-s{font-size:13px;color:#ffffffc0;line-height:1.5;margin-bottom:18px;}
+.gp-meta{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;font-weight:800;color:#e30a17;background:#e30a1722;padding:6px 12px;border-radius:999px;}
+
 /* native You panel */
 .youpanel{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;}
 .youpanel.on{display:flex;}
@@ -67,7 +77,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .bcat .bcm b{font-size:14.5px;display:block;font-weight:700;}
 .bcat .bcm small{font-size:11.5px;color:#ffffffa0;display:block;margin-top:2px;}
 .bcat .bcm .bcbar{display:block;margin-top:7px;height:4px;background:#ffffff10;border-radius:3px;overflow:hidden;}
-.bcat .bcm .bcbar i{display:block;height:100%;background:linear-gradient(90deg,#e30a17,#ff6b4a);border-radius:3px;transition:width .6s ease;}
+.bcat .bcm .bcbar i{display:block;height:100%;background:#e30a17;border-radius:3px;transition:width .6s ease;}
 .bcat .bcv{text-align:right;font-family:'Space Mono',monospace;font-weight:700;font-size:14.5px;padding-right:14px;}
 .bcat .bcv .bpend{display:block;font-size:9px;color:#ffd166;letter-spacing:.06em;font-weight:700;margin-top:2px;}
 /* Budget detail drill-in */
@@ -85,6 +95,16 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .bditem .nums .nl{font-size:10px;letter-spacing:.14em;color:#ffffff80;font-weight:700;}
 .bditem .nums .nv{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
 .bditem .nums .your .nv{color:#ffd166;font-size:16px;}
+/* By City rows */
+.bcity{display:flex;align-items:center;background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:13px 16px;margin-bottom:8px;gap:12px;}
+.bcity-l{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.bcity-d{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.12em;color:#ffffff90;font-weight:700;text-transform:uppercase;}
+.bcity-n{font-size:14.5px;font-weight:800;letter-spacing:-.005em;display:flex;align-items:center;gap:8px;}
+.bcity-b{display:inline-block;font-size:8.5px;background:#e30a17;color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:.1em;font-weight:800;}
+.bcity-s{font-size:11.5px;color:#ffffff90;margin-top:2px;}
+.bcity-bar{display:block;margin-top:7px;height:3px;background:#ffffff10;border-radius:2px;overflow:hidden;}
+.bcity-bar i{display:block;height:100%;background:#e30a17;border-radius:2px;}
+.bcity-v{font-family:'Space Mono',monospace;font-weight:700;font-size:14.5px;color:#fafafa;text-align:right;flex:none;}
 .bppl{display:flex;flex-direction:column;gap:8px;}
 .bprow{display:flex;align-items:center;gap:11px;background:#3a0e16;border:1px solid #ffffff12;border-radius:13px;padding:11px 13px;}
 .bprow .bpav{width:30px;height:30px;border-radius:50%;color:#0e0f1a;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;flex:none;}
@@ -107,6 +127,40 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .swp-l small{display:block;font-size:10.5px;color:#ffffff80;letter-spacing:.04em;margin-top:1px;text-transform:uppercase;}
 .swp-you{font-size:9px;background:#e30a17;color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:.08em;font-weight:700;vertical-align:middle;margin-left:6px;}
 .swp-amt{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
+/* Add-expense floating button + modal */
+.bplus{position:fixed;right:18px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:25;width:54px;height:54px;border-radius:50%;background:#e30a17;border:none;color:#fff;font-size:30px;font-weight:300;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 22px #e30a1766,0 4px 12px #000a;transition:transform .15s;}
+.bplus:active{transform:scale(.92);}
+.bplus.gone{display:none;}
+.bsheet{position:fixed;inset:0;z-index:50;background:#000a;backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;}
+.bsheet.on{display:flex;animation:bsheetin .25s ease;}
+@keyframes bsheetin{from{background:transparent;}to{background:#000a;}}
+.bsheet-card{width:100%;max-width:460px;background:#1f0f12;border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid #e30a1755;border-bottom:none;padding:22px 22px calc(28px + env(safe-area-inset-bottom));animation:bslide .3s cubic-bezier(.22,1,.36,1);}
+@keyframes bslide{from{transform:translateY(100%);}to{transform:none;}}
+.bsheet-h{font-family:'Inter',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.02em;margin-bottom:6px;}
+.bsheet-s{font-size:12.5px;color:#ffffffa0;margin-bottom:18px;}
+.bsheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.bsheet-cat{background:#3a0e16;border:1px solid #ffffff14;border-radius:14px;padding:16px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:8px;transition:.15s;}
+.bsheet-cat:hover{border-color:#e30a1788;transform:translateY(-1px);}
+.bsheet-cat svg{width:24px;height:24px;stroke:#e30a17;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.bsheet-cat b{font-size:14px;font-weight:700;}
+.bsheet-cat small{font-size:11px;color:#ffffff90;}
+.bsheet-input{display:block;width:100%;background:#3a0e16;border:1px solid #ffffff20;border-radius:12px;padding:13px 14px;color:#fff;font-family:inherit;font-size:14px;margin-bottom:10px;}
+.bsheet-input::placeholder{color:#ffffff60;}
+.bsheet-input:focus{outline:none;border-color:#e30a17;}
+.bsheet-actions{display:flex;gap:10px;margin-top:6px;}
+.bsheet-btn{flex:1;background:none;border:1px solid #ffffff22;color:#fff;font-family:inherit;font-weight:700;font-size:14px;padding:13px;border-radius:12px;cursor:pointer;}
+.bsheet-btn.prim{background:#e30a17;border-color:#e30a17;}
+.bsheet-btn:disabled{opacity:.4;cursor:not-allowed;}
+/* custom expense row inside breakdown */
+.bcustom{display:flex;align-items:center;background:#3a0e16;border:1px dashed #e30a1788;border-radius:14px;padding:13px 16px;margin-bottom:8px;gap:13px;}
+.bcustom .bci{width:36px;height:36px;border-radius:10px;background:#e30a1722;border:1px solid #e30a1755;display:flex;align-items:center;justify-content:center;flex:none;}
+.bcustom .bci svg{width:18px;height:18px;stroke:#e30a17;fill:none;stroke-width:1.7;}
+.bcustom .bcm{flex:1;min-width:0;}
+.bcustom .bcm b{display:block;font-size:14px;font-weight:700;}
+.bcustom .bcm small{display:block;font-size:11.5px;color:#ffffffa0;margin-top:2px;}
+.bcustom .bcv{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;}
+.bcustom .bx{margin-left:8px;background:none;border:none;color:#ffffff66;cursor:pointer;font-size:18px;padding:4px 8px;}
+.bcustom .bx:hover{color:#e30a17;}
 .bview{display:flex;gap:6px;background:#ffffff0c;border:1px solid #ffffff14;border-radius:999px;padding:4px;margin-bottom:14px;}
 .bvt{flex:1;background:none;border:none;color:#ffffff80;font-family:inherit;font-size:12px;font-weight:700;padding:9px 8px;border-radius:999px;cursor:pointer;transition:.2s;letter-spacing:.02em;}
 .bvt.on{background:#e30a17;color:#fff;}
@@ -134,7 +188,14 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
     <iframe class="fr on" id="fr-trip"></iframe>
     <iframe class="fr" id="fr-matchday" data-src="section-trip.html?screen=gameday"></iframe>
     <iframe class="fr" id="fr-wc" data-src="section-worldcup.html"></iframe>
-    <iframe class="fr" id="fr-games" data-src="section-games.html"></iframe>
+    <div class="gamespanel" id="fr-games-soon">
+      <div class="gp-card">
+       <div class="gp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#e30a17" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="3.5"/><path d="M7 11v4M5 13h4"/><circle cx="15.5" cy="11.5" r="1.2" fill="#e30a17"/><circle cx="17.5" cy="14.5" r="1.2" fill="#e30a17"/></svg></div>
+       <div class="gp-h">Games — coming soon</div>
+       <div class="gp-s">Panini stickers, Bingo, Score Predictions, Bracket Challenge — all dropping before Türkiye vs Paraguay kicks off.</div>
+       <div class="gp-meta">Drops before Jun 19</div>
+      </div>
+     </div>
     <div class="youpanel" id="fr-you">
       <div class="youpage">
         <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys">Riding the West Coast Run</div></div></div>
@@ -145,6 +206,14 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
         <div id="bHero" class="bhero"></div>
         <div class="sectitle" id="bSect1"></div>
         <div id="bBreak" class="bbreak"></div>
+       </div>
+       <button class="bplus gone" id="bplus" onclick="openAddSheet()" aria-label="Add expense">+</button>
+       <div class="bsheet" id="bsheet">
+        <div class="bsheet-card" id="bsheet-card">
+         <div class="bsheet-h">Add an expense</div>
+         <div class="bsheet-s" id="bsheet-sub">Pick a category</div>
+         <div id="bsheet-body"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -200,6 +269,25 @@ function personHotels(name){
  HOTELS_SHARED.forEach(h=>list.push({name:h.name,sub:"split /6 across the squad",total:h.total,share:h.total/6,note:"your share"}));
  return list;
 }
+function personByCity(name){
+ const list=[];
+ const perNight=SD_TOTAL/SD_NIGHTS;
+ if(name==="Kaan"){
+  list.push({name:"San Diego",dates:"Jun 12 - 15",amt:(perNight*SD_KAAN_NIGHTS)/4,note:"3 nights · early crew"});
+ } else if(SD_FULL.includes(name)){
+  const sd=(perNight*SD_KAAN_NIGHTS)/4+(perNight*(SD_NIGHTS-SD_KAAN_NIGHTS))/3;
+  list.push({name:"San Diego",dates:"Jun 12 - 17",amt:sd,note:"5 nights · pre-trip"});
+ }
+ list.push({name:"San Francisco",dates:"Jun 17 - 19",amt:HOTELS_SHARED[0].total/6,note:"Sure Stay · split /6"});
+ const sc=HOTELS_SHARED[1].total/6;
+ const ticket=TICKETS[name]||0;
+ list.push({name:"Santa Clara",dates:"Jun 19 - 20",amt:sc+ticket,note:"Residence Inn + match ticket",badge:"MATCH"});
+ list.push({name:"Carmel-by-the-Sea",dates:"Jun 20 - 21",amt:HOTELS_SHARED[2].total/6,note:"Portola · split /6"});
+ const sb=HOTELS_SHARED[3].total/6;
+ const transport=TRANSPORT.reduce((s,t)=>s+t.total,0)/6;
+ list.push({name:"Santa Barbara",dates:"Jun 21 - 22",amt:sb+transport,note:"Airbnb + Wranglers"});
+ return list;
+}
 function personProjected(name){
  const breakdown=[];let total=0;
  const hotels=personHotels(name);
@@ -245,8 +333,58 @@ async function loadSplitwise(){
  if(BVIEW==='split')renderSplit();
 }
 
+
+/* ===== Custom expenses (per-person, persisted in localStorage) ===== */
+const ADD_CATS=[
+ {id:'flight',name:'Flight',sub:'Add your airfare',svg:'<svg viewBox="0 0 24 24"><path d="M3 12l5 1.5 4-7 2 1-2 7 5 1.5L20 21l-9-3-7 3 1-5 4-2-6-2z"/></svg>'},
+ {id:'hotel',name:'Hotel',sub:'Add a stay',svg:'<svg viewBox="0 0 24 24"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg>'},
+ {id:'car',name:'Car / Transport',sub:'Rental, gas, ride',svg:'<svg viewBox="0 0 24 24"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>'},
+ {id:'res',name:'Reservation',sub:'Dinner, ticket, tour',svg:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'},
+];
+function customKey(){return 'wcr_custom_'+ME.name;}
+function loadCustom(){try{return JSON.parse(localStorage.getItem(customKey())||'[]');}catch(e){return [];}}
+function saveCustom(list){try{localStorage.setItem(customKey(),JSON.stringify(list));}catch(e){}}
+function openAddSheet(){
+ const sub=document.getElementById('bsheet-sub');
+ const body=document.getElementById('bsheet-body');
+ sub.textContent='Pick a category';
+ body.innerHTML=`<div class="bsheet-grid">${ADD_CATS.map(c=>`
+   <div class="bsheet-cat" onclick="pickAddCategory('${c.id}','${c.name.replace(/'/g,"&apos;")}')">${c.svg}<b>${c.name}</b><small>${c.sub}</small></div>`).join('')}</div>
+   <div class="bsheet-actions"><button class="bsheet-btn" onclick="closeAddSheet()">Cancel</button></div>`;
+ document.getElementById('bsheet').classList.add('on');
+}
+function pickAddCategory(id,name){
+ const sub=document.getElementById('bsheet-sub');
+ const body=document.getElementById('bsheet-body');
+ sub.textContent=name+' details';
+ body.innerHTML=`<input class="bsheet-input" id="badd-name" placeholder="What is it? e.g. ${id==='flight'?'San Diego → SFO':id==='hotel'?'Airbnb upgrade':id==='car'?'Uber from airport':'Dinner at San Ho Won'}" autofocus>
+   <input class="bsheet-input" id="badd-amt" type="number" inputmode="decimal" step="0.01" placeholder="Your share ($)">
+   <div class="bsheet-actions">
+     <button class="bsheet-btn" onclick="openAddSheet()">‹ Back</button>
+     <button class="bsheet-btn prim" id="badd-save" onclick="saveAddExpense('${id}','${name.replace(/'/g,"&apos;")}')">Add</button>
+   </div>`;
+ setTimeout(()=>{const i=document.getElementById('badd-name');if(i)i.focus();},120);
+}
+function saveAddExpense(catId,catName){
+ const n=document.getElementById('badd-name').value.trim();
+ const a=parseFloat(document.getElementById('badd-amt').value);
+ if(!n||!isFinite(a)||a<=0)return;
+ const list=loadCustom();
+ list.push({id:Date.now(),catId,catName,name:n,amt:a});
+ saveCustom(list);
+ closeAddSheet();
+ if(BVIEW==='budget')renderBudget();
+}
+function deleteCustom(id){
+ const list=loadCustom().filter(x=>x.id!==id);
+ saveCustom(list);
+ if(BVIEW==='budget')renderBudget();
+}
+function closeAddSheet(){document.getElementById('bsheet').classList.remove('on');}
+window.openAddSheet=openAddSheet;window.pickAddCategory=pickAddCategory;window.saveAddExpense=saveAddExpense;window.closeAddSheet=closeAddSheet;window.deleteCustom=deleteCustom;
+
 /* ===== BUDGET VIEW (by category, with wow hero + drill-ins) ===== */
-const CAT_COLORS={hotels:"#e30a17",transport:"#ff6b4a",ticket:"#ffd166",flight:"#7c8cff"};
+const CAT_COLORS={hotels:"#e30a17",transport:"#fafafa",ticket:"#7a1620",flight:"#a8a8a8"};
 let _budgetAnim=null;
 function animateCount(el,from,to,ms){
  if(_budgetAnim)cancelAnimationFrame(_budgetAnim);
@@ -263,8 +401,13 @@ function animateCount(el,from,to,ms){
  _budgetAnim=requestAnimationFrame(step);
 }
 function renderBudget(){
+ // show + button only in budget mode
+ const bp=document.getElementById('bplus');if(bp)bp.classList.remove('gone');
  document.getElementById('bSect1').textContent='YOUR BREAKDOWN';
  const mine=personProjected(ME.name);
+ const custom=loadCustom();
+ const customTotal=custom.reduce((s,x)=>s+x.amt,0);
+ mine.total+=customTotal;
  const hero=document.getElementById('bHero');
  const pendingItems=mine.breakdown.filter(b=>b.status==='pending').length;
  const bookedItems=mine.breakdown.filter(b=>b.status==='booked'&&b.amt>0).length;
@@ -283,9 +426,37 @@ function renderBudget(){
    const click=b.drill?`onclick="openBudgetDetail('${b.id}')"`:'';
    return `<div class="bcat ${tap}" ${click}>
     <div class="bci">${CAT_ICON[b.id]||CAT_ICON.hotels}</div>
-    <div class="bcm"><b>${b.cat}</b><small>${b.note}</small><span class="bcbar"><i style="width:${pct}%;background:linear-gradient(90deg,${CAT_COLORS[b.id]||'#e30a17'},#ff6b4a)"></i></span></div>
+    <div class="bcm"><b>${b.cat}</b><small>${b.note}</small><span class="bcbar"><i style="width:${pct}%;background:${CAT_COLORS[b.id]||'#e30a17'}"></i></span></div>
     <div class="bcv">${b.amt?money(b.amt):'-'}${b.status==='pending'?'<span class="bpend">ADD PRICE</span>':''}</div>
    </div>`;}).join("");
+ // BY CITY section
+ const cities=personByCity(ME.name);
+ const cityTotal=cities.reduce((s,x)=>s+x.amt,0);
+ const cityHTML=cities.map(x=>{
+  const pct=cityTotal?(x.amt/cityTotal*100):0;
+  return `<div class="bcity"><div class="bcity-l">
+    <span class="bcity-d">${x.dates}</span>
+    <span class="bcity-n">${x.name}${x.badge?` <span class="bcity-b">${x.badge}</span>`:''}</span>
+    <span class="bcity-s">${x.note}</span>
+    <span class="bcity-bar"><i style="width:${pct.toFixed(1)}%"></i></span>
+   </div>
+   <div class="bcity-v">${money(x.amt)}</div></div>`;
+ }).join("");
+ document.getElementById('bBreak').insertAdjacentHTML('beforeend',
+  `<div class="sectitle" style="margin:22px 2px 10px">BY CITY</div>${cityHTML}`);
+ if(custom.length){
+  const customHTML=custom.map(x=>{
+   const ic=(ADD_CATS.find(c=>c.id===x.catId)||{}).svg||CAT_ICON.hotels;
+   return `<div class="bcustom">
+    <div class="bci">${ic}</div>
+    <div class="bcm"><b>${x.name}</b><small>${x.catName} · added by you</small></div>
+    <div class="bcv">${money(x.amt)}</div>
+    <button class="bx" onclick="deleteCustom(${x.id})" aria-label="remove">×</button>
+   </div>`;
+  }).join('');
+  document.getElementById('bBreak').insertAdjacentHTML('beforeend',
+   `<div class="sectitle" style="margin:22px 2px 10px">YOUR ADDITIONS</div>${customHTML}`);
+ }
 }
 function openBudgetDetail(id){
  if(id==='hotels')return renderHotelsDetail();
@@ -293,6 +464,7 @@ function openBudgetDetail(id){
 }
 function backToBudget(){renderBudget();}
 function renderHotelsDetail(){
+ const bp=document.getElementById('bplus');if(bp)bp.classList.add('gone');
  document.getElementById('bSect1').textContent='';
  const hero=document.getElementById('bHero');
  const hotels=personHotels(ME.name);
@@ -312,6 +484,7 @@ function renderHotelsDetail(){
    </div>`).join("");
 }
 function renderTransportDetail(){
+ const bp=document.getElementById('bplus');if(bp)bp.classList.add('gone');
  document.getElementById('bSect1').textContent='';
  const hero=document.getElementById('bHero');
  const list=TRANSPORT.map(t=>({name:t.name,sub:"split /6 across the squad",total:t.total,share:t.total/6}));
@@ -335,6 +508,7 @@ window.backToBudget=backToBudget;
 
 /* ===== SPLITWISE VIEW (hero = your balance, breakdown = simplified transactions) ===== */
 function renderSplit(){
+ const bp=document.getElementById('bplus');if(bp)bp.classList.add('gone');
  const hero=document.getElementById('bHero');
  const br=document.getElementById('bBreak');
  if(!SW_GROUP){
@@ -428,15 +602,18 @@ function reloadTrip(){
  if(fm.src && fm.src!=='about:blank') setFrameURL(fm,'section-trip.html?rider='+ME.id+'&screen=gameday');
 }
 const loaderEl=document.getElementById('loader');
-const IFRAME_KEYS=['trip','matchday','wc','games'];
+const IFRAME_KEYS=['trip','matchday','wc'];
 IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
 function showTab(id){
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
  const isFrame=IFRAME_KEYS.includes(id);
- IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.classList.toggle('on',k===id);
+ IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);if(!f)return;f.classList.toggle('on',k===id);
    if(k===id&&(!f.src||f.src==='about:blank')&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
  document.getElementById('fr-you').classList.toggle('on',id==='you');
- if(!isFrame)loaderEl.classList.remove('on');
+ document.getElementById('fr-games-soon').classList.toggle('on',id==='games');
+ if(!isFrame||id==='games')loaderEl.classList.remove('on');
+ // hide the + button outside the budget view
+ const bp=document.getElementById('bplus');if(bp&&id!=='you')bp.classList.add('gone');
  if(id==='you')setBView(BVIEW);
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
