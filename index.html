@@ -31,9 +31,9 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .pwelcome.gone{opacity:0;transform:translateY(-10px);pointer-events:none;}
 
 /* Icon — starts huge centered, then docks to top-left corner */
-.pflag{width:200px;height:200px;border-radius:42px;overflow:hidden;position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);box-shadow:0 24px 56px #e30a17aa,0 0 0 1px #ffffff14;animation:pflagIn 1.4s cubic-bezier(.22,1,.36,1) both, pflagDock 1.3s 2.4s cubic-bezier(.65,0,.35,1) forwards;}
+.pflag{width:200px;height:200px;border-radius:42px;overflow:hidden;position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);box-shadow:0 28px 60px #e30a17aa;animation:pflagIn 1.4s cubic-bezier(.22,1,.36,1) both, pflagDock 1.3s 2.4s cubic-bezier(.65,0,.35,1) forwards;}
 .pflag img{width:100%;height:100%;object-fit:cover;display:block;}
-.pflag::after{content:'';position:absolute;inset:-6px;border-radius:48px;border:2px solid #e30a17;opacity:0;pointer-events:none;animation:pflagRing 2.4s ease-out 1.4s 1;}
+.pflag::after{display:none;}
 @keyframes pflagIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-10deg);filter:blur(14px);}55%{opacity:1;transform:translate(-50%,-50%) scale(1.06) rotate(3deg);filter:blur(0);}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0);filter:blur(0);}}
 @keyframes pflagDock{
  0%{left:50%;top:38%;width:200px;height:200px;border-radius:42px;transform:translate(-50%,-50%);}
