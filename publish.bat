@@ -1,9 +1,9 @@
 @echo off
-title West Coast Run -- Publish
+title World Cup Trip -- Publish
 cd /d "%~dp0"
 echo.
 echo ================================
-echo   WEST COAST RUN -- PUBLISH
+echo   WORLD CUP TRIP -- PUBLISH
 echo ================================
 echo.
 echo Folder: %CD%

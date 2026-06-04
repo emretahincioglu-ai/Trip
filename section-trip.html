@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>West Coast Run</title>
+<title>World Cup Trip</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
 <style>
@@ -341,7 +341,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 <div class="frame">
   <div class="picker" id="picker">
     <div class="sub">NY · SF · PCH → LA</div>
-    <h1>WEST COAST RUN</h1>
+    <h1>WORLD CUP TRIP</h1>
     <div class="dates">JUN 17 – 24, 2026</div>
     <div class="who">WHO'S RIDING?</div>
     <div class="people" id="people"></div>
@@ -401,7 +401,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
   <div class="panel" id="tab-you">
     <div class="scrollarea">
       <div class="youpage">
-        <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys" id="youSub">Riding the West Coast Run</div></div></div>
+        <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys" id="youSub">Riding the World Cup Trip</div></div></div>
         <div class="sectitle">SWITCH RIDER</div>
         <div class="peoplelist" id="youList"></div>
       </div>
@@ -1167,7 +1167,7 @@ GAMES.forEach(g=>{const el=document.createElement('div');el.className='gcard'+(g
 function stickerHTML(p){return `<div style="position:absolute;inset:0;border-radius:11px;overflow:hidden;padding:6px 5px;background:linear-gradient(160deg,${p.c},#150f25 80%);border:2px solid #ffce6e;box-shadow:inset 0 0 16px #ffffff14;display:flex;flex-direction:column">${p.rare?'<div style="position:absolute;top:4px;right:6px;font-size:10px">⭐</div>':''}<div style="font-size:8px;font-weight:800;opacity:.9">${p.pos} · #${p.num}</div><div style="width:30px;height:30px;border-radius:50%;background:#e8b58c;border:2px solid #ffffff55;margin:5px auto 3px"></div><div style="text-align:center;font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:11px">${p.name}</div><div style="display:flex;justify-content:space-between;margin-top:auto;font-family:'Space Mono',monospace;font-size:7px;opacity:.85"><span>WCR'26</span><span>${p.flag}</span></div></div>`;}
 function buildPanini(){document.getElementById('paniniScroll').innerHTML=`
  <div class="back" onclick="closeS('panini')">‹ Games</div>
- <div style="text-align:center;padding:8px 16px 4px"><div style="font-size:11px;letter-spacing:.24em;color:#ffd166;font-weight:800">PANINI · WEST COAST RUN</div><div style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px">THE SQUAD ALBUM</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#ffffffaa" id="palbumCount">${paniniCollected} / 6 collected</div></div>
+ <div style="text-align:center;padding:8px 16px 4px"><div style="font-size:11px;letter-spacing:.24em;color:#ffd166;font-weight:800">PANINI · WORLD CUP TRIP</div><div style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;letter-spacing:-.01em;font-size:28px">THE SQUAD ALBUM</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:#ffffffaa" id="palbumCount">${paniniCollected} / 6 collected</div></div>
  <div style="padding:14px 16px 30px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px" id="pgrid"></div>
  <button id="popenBtn" style="width:100%;margin-top:16px;background:linear-gradient(120deg,#ff6b4a,#ff4d8d);color:#0e0f1a;border:none;border-radius:14px;padding:14px;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer">OPEN TODAY'S PACK ✦</button>
  <div style="font-size:11px;color:#ffffff88;text-align:center;margin-top:10px">A new pack every day until kickoff</div></div>`;

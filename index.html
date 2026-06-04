@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>West Coast Run</title>
+<title>World Cup Trip</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=DM+Sans:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -177,7 +177,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 <div class="frame">
   <div class="picker" id="picker">
     <div class="sub">NY · SF · PCH → LA</div>
-    <h1>WEST COAST RUN</h1>
+    <h1>WORLD CUP TRIP</h1>
     <div class="dates">JUN 17 – 24, 2026</div>
     <div class="who">WHO'S RIDING?</div>
     <div class="people" id="people"></div>
@@ -198,7 +198,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
      </div>
     <div class="youpanel" id="fr-you">
       <div class="youpage">
-        <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys">Riding the West Coast Run</div></div></div>
+        <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys">Riding the World Cup Trip</div></div></div>
         <div class="bview">
           <button class="bvt on" id="bvBudget" onclick="setBView('budget')">Budget</button>
           <button class="bvt" id="bvSplit" onclick="setBView('split')">Splitwise</button>
@@ -384,7 +384,7 @@ function closeAddSheet(){document.getElementById('bsheet').classList.remove('on'
 window.openAddSheet=openAddSheet;window.pickAddCategory=pickAddCategory;window.saveAddExpense=saveAddExpense;window.closeAddSheet=closeAddSheet;window.deleteCustom=deleteCustom;
 
 /* ===== BUDGET VIEW (by category, with wow hero + drill-ins) ===== */
-const CAT_COLORS={hotels:"#e30a17",transport:"#fafafa",ticket:"#7a1620",flight:"#a8a8a8"};
+const CAT_COLORS={hotels:"#e30a17",transport:"#ffd166",ticket:"#f5e6c8",flight:"#ff9f6b"};
 let _budgetAnim=null;
 function animateCount(el,from,to,ms){
  if(_budgetAnim)cancelAnimationFrame(_budgetAnim);
