@@ -18,11 +18,11 @@ body{font-family:'DM Sans',sans-serif;background:#f5efef;color:#fff;overflow:hid
 .frame{position:relative;height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;background:#25060e;}
 
 /* PICKER — cinematic */
-.picker{position:absolute;inset:0;z-index:30;background:#0d0306;overflow:hidden;transition:opacity .5s,transform .5s;}
+.picker{position:absolute;inset:0;z-index:30;background:#1f0810;overflow:hidden;transition:opacity .5s,transform .5s;}
 .picker.gone{opacity:0;transform:scale(1.06);pointer-events:none;}
 .picker.gone *, .picker.gone .plist, .picker.gone .pwelcome, .picker.gone .pclose, .picker.gone .pbtn, .picker.gone .pcta{pointer-events:none !important;}
 .picker.dead{display:none !important;}
-.picker::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:140%;height:140%;background:radial-gradient(circle,#e30a1755 0%,#3a0e16 30%,#0d0306 70%);opacity:.6;animation:pglow 6s ease-in-out infinite alternate;}
+.picker::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:140%;height:140%;background:radial-gradient(circle,#e30a1755 0%,#3a0e16 30%,#1f0810 75%);opacity:.6;animation:pglow 6s ease-in-out infinite alternate;}
 @keyframes pglow{from{opacity:.5;transform:translateX(-50%) scale(1);}to{opacity:.75;transform:translateX(-50%) scale(1.08);}}
 .pstage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px calc(40px + env(safe-area-inset-bottom));}
 
@@ -220,8 +220,7 @@ body{font-family:'DM Sans',sans-serif;background:#f5efef;color:#fff;overflow:hid
 .bvt.on{background:#e30a17;color:#fff;}
 .bcat .bci.flame{background:#e30a1722;}
 
-.tabs{flex:none;display:flex;background:#f5efef;border-top:2px solid #e30a17;padding:9px 4px calc(max(env(safe-area-inset-bottom,0px),26px) + 7px);box-shadow:0 -4px 18px #000a;position:relative;z-index:10;transition:transform .35s cubic-bezier(.22,1,.36,1);}
-.tabs.matchday-hide{transform:translateY(100%);}
+.tabs{flex:none;display:flex;background:#f5efef;border-top:2px solid #e30a17;padding:8px 4px calc(env(safe-area-inset-bottom,0px) + 6px);box-shadow:0 -4px 18px #000a;position:relative;z-index:10;}
 .tab{flex:1;background:none;border:none;color:#3a1418;padding:7px 2px 4px;font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s;}
 .tab.on{color:#e30a17;}
 .tab .ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
@@ -679,16 +678,6 @@ function hideRiderList(){
 window.showRiderList=showRiderList;window.hideRiderList=hideRiderList;
 /* Refresh budget when a flight price gets entered inside the iframe */
 window.addEventListener('storage',e=>{if(e.key&&e.key.indexOf('wcr_fpg_')===0&&BVIEW==='budget')renderBudget();});
-/* Listen for the Match Day iframe telling us it's on the wallpaper (hide tabs)
-   or scrolled past it (show tabs). Only honor while Match Day tab is active. */
-window.addEventListener('message',e=>{
- if(!e||!e.data||e.data.cmd!=='matchDayTabs')return;
- const tabsEl=document.querySelector('.tabs');
- if(!tabsEl)return;
- const onMatchDay=document.querySelector('.tab.on')&&document.querySelector('.tab.on').dataset.tab==='matchday';
- if(!onMatchDay){tabsEl.classList.remove('matchday-hide');return;}
- tabsEl.classList.toggle('matchday-hide',!!e.data.hidden);
-});
 window.addEventListener('message',e=>{if(e&&e.data&&e.data.cmd==='flightPriceUpdated'&&BVIEW==='budget')renderBudget();});
 function pick(id){
  ME=PEOPLE[id];
@@ -729,8 +718,6 @@ const loaderEl=document.getElementById('loader');
 const IFRAME_KEYS=['trip','matchday','wc'];
 IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
 function showTab(id){
- const tabsEl=document.querySelector('.tabs');
- if(tabsEl&&id!=='matchday')tabsEl.classList.remove('matchday-hide');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
  const isFrame=IFRAME_KEYS.includes(id);
  IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);if(!f)return;f.classList.toggle('on',k===id);
