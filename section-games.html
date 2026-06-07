@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Panini — team themes (bold)</title>
+<title>FIFA World Cup 2026 — Sticker Book</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=DM+Sans:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -24,32 +24,25 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pageView.in{animation:pin .45s cubic-bezier(.4,.7,.3,1);}
 @keyframes pin{0%{transform:translateX(30px) scale(.96);opacity:0}100%{transform:none;opacity:1}}
 
-/* ---- THEMED TEAM PAGE ---- */
+/* ---- THEMED TEAM PAGE (album) ---- */
 .tp{position:absolute;inset:0;overflow:hidden;}
-/* flowing color-block art (built from layered blobs) */
 .tp .art{position:absolute;inset:0;overflow:hidden;}
 .tp .blob{position:absolute;border-radius:50%;filter:blur(2px);}
 .tp .b1{width:140%;height:60%;left:-20%;top:-22%;background:var(--c1);border-radius:0 0 60% 40%/0 0 70% 80%;filter:none;}
 .tp .b2{width:120%;height:46%;left:-30%;bottom:-10%;background:var(--c2);border-radius:50% 60% 0 0/80% 90% 0 0;filter:none;}
 .tp .b3{width:70%;height:40%;right:-18%;top:30%;background:var(--c3);opacity:.92;border-radius:50%;filter:none;}
 .tp .stripe{position:absolute;left:0;right:0;height:6px;background:#ffffff55;top:46%;transform:rotate(-8deg) scale(1.3);}
-/* big integrated 26 */
 .tp .num26{position:absolute;right:-6%;bottom:-10%;font-family:'Archivo Black',sans-serif;font-size:240px;line-height:.7;color:#ffffff;opacity:.1;letter-spacing:-.04em;z-index:1;}
-/* pattern texture */
 .tp .pat{position:absolute;inset:0;z-index:1;opacity:.10;mix-blend-mode:overlay;
  background-image:radial-gradient(circle at 50% 50%,#fff 0 2px,transparent 2px);background-size:22px 22px;}
 .tp .pat2{position:absolute;inset:0;z-index:1;opacity:.07;
  background-image:repeating-linear-gradient(60deg,#fff 0 1px,transparent 1px 16px);}
-
-/* header block */
 .tp .hd{position:absolute;top:20px;left:20px;right:20px;z-index:3;}
 .tp .kick{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:#ffffffcc;}
 .tp .weare{font-family:'Archivo Black',sans-serif;font-size:30px;line-height:.86;letter-spacing:-.02em;margin-top:4px;text-shadow:0 3px 14px #0006;}
 .tp .weare .l2{display:block;font-size:42px;-webkit-text-stroke:1.5px #fff;color:transparent;}
 .tp .crestbig{position:absolute;top:14px;right:18px;z-index:3;width:62px;height:62px;border-radius:50%;background:#ffffffea;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 8px 20px #0006;}
 .tp .fed{position:absolute;top:96px;left:20px;z-index:3;font-size:10px;font-weight:700;color:#ffffffdd;max-width:55%;line-height:1.2;}
-
-/* slots */
 .tp .slots{position:absolute;left:18px;right:18px;bottom:18px;z-index:3;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .slot{aspect-ratio:3/3.85;border-radius:9px;position:relative;cursor:pointer;}
 .slot .empty{position:absolute;inset:0;border-radius:9px;background:#ffffffe8;box-shadow:0 4px 12px #0004;padding:8%;display:flex;flex-direction:column;overflow:hidden;}
@@ -62,15 +55,12 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .slot .filled .fn{position:relative;z-index:1;font-family:'Anton',sans-serif;font-size:9px;text-align:center;margin-top:auto;padding:3px;background:#0004;}
 @keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:none;opacity:1}}
 .slot.legend .filled::after{content:'';position:absolute;inset:0;z-index:3;border-radius:9px;background:linear-gradient(125deg,transparent 32%,#fff8 48%,#ffe9a8 50%,#fff8 52%,transparent 68%);mix-blend-mode:overlay;box-shadow:inset 0 0 0 2.5px #ffd75e;}
-
-/* group ribbon */
 .tp .group{position:absolute;right:18px;bottom:calc(18px + 0px);z-index:4;}
 
 .nav{display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 14px calc(12px + env(safe-area-inset-bottom));}
 .nav .arrow{width:42px;height:42px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:2px solid #ffffff22;}
 .nav .arrow.off{opacity:.3;pointer-events:none;}
 .nav .label{background:#000;border-radius:999px;padding:10px 22px;font-family:'Anton',sans-serif;letter-spacing:.04em;font-size:14px;min-width:150px;text-align:center;}
-.themetoggle{position:fixed;top:12px;right:14px;z-index:40;background:#ffffff18;border:1px solid #ffffff22;color:#fff;border-radius:999px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;}
 
 /* OPEN PACK button */
 .openbar{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:15;display:flex;justify-content:center;pointer-events:none;}
@@ -90,57 +80,118 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .sparkle{position:absolute;font-size:18px;z-index:1;pointer-events:none;animation:twinkle 2.2s ease-in-out infinite;}
 @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
 
-/* the foil pack — BIG */
-.pack{width:250px;height:360px;border-radius:20px;position:relative;cursor:pointer;overflow:hidden;z-index:2;
- background:
-  linear-gradient(135deg,#ff6b4a 0%,#ff4d8d 38%,#9b2fb0 64%,#4a2c9c 100%);
- box-shadow:0 30px 80px #000c,inset 0 0 60px #ffffff2a,inset 0 0 0 3px #ffffff3a;
- display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .25s;}
+/* skin toggle (try normal vs deluxe) */
+.skinToggle{display:flex;gap:4px;background:#ffffff14;border:1px solid #ffffff22;border-radius:999px;padding:4px;margin-bottom:18px;z-index:3;position:relative;}
+.skinToggle .skbtn{background:none;border:none;color:#ffffff88;font-family:'Anton',sans-serif;letter-spacing:.08em;font-size:12px;padding:7px 16px;border-radius:999px;cursor:pointer;transition:.2s;}
+.skinToggle .skbtn.on{background:#fff;color:#10202a;}
+
+/* ===================== THE FOIL PACK ===================== */
+.pack{width:250px;height:360px;border-radius:22px;position:relative;cursor:pointer;overflow:hidden;z-index:2;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .25s;
+ box-shadow:0 30px 80px #000c,inset 0 0 60px #ffffff22,inset 0 0 0 3px #ffffff3a;}
 .pack:hover{transform:scale(1.04) rotate(-1.5deg);}
-/* foil shimmer */
-.pack::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffffff77 48%,#ffffffcc 50%,#ffffff77 52%,transparent 70%);background-size:280% 280%;animation:packholo 2.6s linear infinite;}
+
+/* NORMAL — bright WC geometric mosaic */
+.pack.normal{
+ background-color:#e30a17;
+ background-image:
+  radial-gradient(circle at 20% 17%, #ffd000 0 17px, transparent 18px),
+  radial-gradient(circle at 79% 22%, #4ad6c4 0 14px, transparent 15px),
+  radial-gradient(circle at 55% 47%, #ff4d8d 0 22px, transparent 23px),
+  radial-gradient(circle at 23% 64%, #1a3a8c 0 17px, transparent 18px),
+  radial-gradient(circle at 83% 70%, #0a7d3b 0 16px, transparent 17px),
+  radial-gradient(circle at 48% 86%, #9b2fb0 0 17px, transparent 18px),
+  radial-gradient(circle at 90% 92%, #ffd000 0 12px, transparent 13px),
+  radial-gradient(circle at 9% 92%, #4ad6c4 0 12px, transparent 13px),
+  repeating-linear-gradient(45deg, #ffffff18 0 11px, transparent 11px 22px),
+  repeating-linear-gradient(-45deg, #00000022 0 11px, transparent 11px 22px),
+  linear-gradient(135deg,#e30a17,#9b2fb0 58%,#1a3a8c);
+}
+/* DELUXE — black + dark pattern + gold */
+.pack.deluxe{
+ background-color:#0a0a10;
+ background-image:
+  repeating-linear-gradient(45deg, #ffffff0a 0 9px, transparent 9px 20px),
+  repeating-linear-gradient(-45deg, #ffffff07 0 9px, transparent 9px 20px),
+  radial-gradient(circle at 50% 28%, #1b1626 0%, #0a0a10 72%);
+ box-shadow:0 30px 80px #000e,inset 0 0 46px #d4af3733,inset 0 0 0 3px #d4af37;
+}
+/* foil holo shimmer (shared) */
+.pack::before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(115deg,transparent 30%,#ffffff77 48%,#ffffffcc 50%,#ffffff77 52%,transparent 70%);background-size:280% 280%;animation:packholo 2.6s linear infinite;pointer-events:none;}
+.pack.deluxe::before{background:linear-gradient(115deg,transparent 34%,#f7e3a1aa 48%,#fff2c8 50%,#f7e3a1aa 52%,transparent 66%);}
 @keyframes packholo{0%{background-position:140% 0}100%{background-position:-140% 0}}
-/* foil scale texture */
-.pack::after{content:'';position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
+/* foil scale texture (shared) */
+.pack::after{content:'';position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;pointer-events:none;
  background-image:radial-gradient(circle at 50% 50%,#fff 0 2px,transparent 2px);background-size:18px 18px;}
-.pack .pfoil{position:absolute;top:0;left:0;right:0;height:46px;background:linear-gradient(180deg,#ffffff55,transparent);border-bottom:3px dashed #ffffff99;z-index:3;}
-.pack .ptrophy{position:relative;z-index:2;font-size:46px;filter:drop-shadow(0 4px 10px #0007);margin-bottom:6px;}
-.pack .plogo{position:relative;z-index:2;font-family:'Anton',sans-serif;font-size:34px;text-align:center;line-height:.82;text-shadow:0 3px 16px #0008;letter-spacing:.01em;}
-.pack .psub{position:relative;z-index:2;font-size:10px;letter-spacing:.28em;margin-top:10px;opacity:.95;background:#0003;padding:4px 12px;border-radius:999px;}
-.pack .pwc{position:absolute;bottom:14px;left:0;right:0;text-align:center;z-index:2;font-size:8px;letter-spacing:.2em;opacity:.8;}
+/* crimped/serrated foil top edge */
+.pack .pfoil{position:absolute;top:0;left:0;right:0;height:46px;background:linear-gradient(180deg,#ffffff55,transparent);border-bottom:3px dashed #ffffff99;z-index:4;}
+.pack.deluxe .pfoil{background:linear-gradient(180deg,#f7e3a155,transparent);border-bottom:3px dashed #d4af37cc;}
+/* center logo */
+.pack .placard-logo{position:relative;z-index:3;width:104px;height:auto;filter:drop-shadow(0 6px 18px #0009);margin-bottom:14px;}
+.pack.deluxe .placard-logo{filter:drop-shadow(0 0 10px #d4af3777) drop-shadow(0 6px 14px #0009);}
+.pack .plabel{position:relative;z-index:3;font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#fff;background:#00000033;border:1px solid #ffffff44;padding:5px 14px;border-radius:999px;margin-top:7px;text-shadow:0 2px 8px #0008;}
+.pack .plabel.plabel-sub{font-size:10px;letter-spacing:.3em;opacity:.95;}
+.pack.deluxe .plabel{color:#f7e3a1;background:#d4af3714;border-color:#d4af3777;}
 .pack.tearing{animation:tear .55s forwards;}
 @keyframes tear{0%{transform:none}20%{transform:translate(-7px,3px) rotate(-4deg)}45%{transform:translate(7px,-3px) rotate(4deg)}70%{transform:translate(-4px,2px) rotate(-2deg)}100%{transform:translateY(-20px) scale(.88);opacity:0}}
 .packlabel{margin-top:24px;font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.1em;color:#fff;text-shadow:0 2px 12px #0008;}
 .packcount{margin-top:8px;font-family:'Space Mono',monospace;font-size:12px;color:#ffd0e0;}
 
-/* card reveal in pack */
+/* ===================== CARD REVEAL ===================== */
 .preveal{display:none;flex-direction:column;align-items:center;}
 .preveal.on{display:flex;}
 .preveal .pcards{position:relative;width:240px;height:336px;}
-.pcardmini{position:absolute;inset:0;border-radius:14px;padding:0;overflow:hidden;box-shadow:0 18px 44px #000a;background:var(--c1);
+
+/* ----- PLAYER STICKER CARD ----- */
+.pcardmini{position:absolute;inset:0;border-radius:16px;overflow:hidden;box-shadow:0 18px 44px #000a;background:var(--c1);
  transform:translateY(40px) scale(.9);opacity:0;transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .4s;}
-.pcardmini::before{content:'';position:absolute;inset:6px;border-radius:9px;border:2px solid #ffffffcc;z-index:6;pointer-events:none;}
+/* thin light inner border frame */
+.pcardmini::before{content:'';position:absolute;inset:7px;border-radius:11px;border:1.5px solid #ffffffcc;z-index:6;pointer-events:none;}
 .pcardmini.show{transform:none;opacity:1;}
 .pcardmini.gone{transform:translateX(-120%) rotate(-12deg);opacity:0;}
-.pcardmini .art2{position:absolute;inset:0;z-index:0;overflow:hidden;}
-.pcardmini .art2 .ab1{position:absolute;width:160%;height:55%;left:-30%;top:-15%;background:var(--c2);border-radius:0 0 60% 40%/0 0 80% 90%;}
-.pcardmini .art2 .ab2{position:absolute;width:150%;height:50%;right:-30%;bottom:-12%;background:var(--c1);filter:brightness(.7);border-radius:55% 45% 0 0/90% 80% 0 0;}
-.pcardmini .art2 .stripe2{position:absolute;left:-10%;right:-10%;height:8px;top:54%;background:#ffffff44;transform:rotate(-7deg);}
-.pcardmini .art2 .dots{position:absolute;inset:0;opacity:.12;background-image:radial-gradient(circle at 50% 50%,#fff 0 2px,transparent 2px);background-size:20px 20px;mix-blend-mode:overlay;}
-.pcardmini .bignum2{position:absolute;right:-6%;bottom:6%;z-index:1;font-family:'Archivo Black',sans-serif;font-size:150px;line-height:.7;color:#ffffff26;letter-spacing:-.04em;}
-.pcardmini .crestb{position:absolute;top:12px;left:12px;z-index:5;width:38px;height:38px;border-radius:50%;background:#ffffffee;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px #0006;overflow:hidden;}
-.pcardmini .crestb img{width:100%;height:100%;object-fit:cover;}
-.pcardmini .hd2{position:absolute;left:0;right:0;top:4%;height:62%;z-index:2;background-size:contain;background-repeat:no-repeat;background-position:center top;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);mask-image:linear-gradient(180deg,#000 80%,transparent);filter:drop-shadow(0 6px 14px #0007);}
-.pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:50%;left:25%;height:48%;border-radius:46% 46% 40% 40%;top:10%;-webkit-mask-image:none;mask-image:none;border:2px solid #fff7;}
-.pcardmini .plate2{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:10px 12px 14px;background:linear-gradient(180deg,transparent,#00000077 30%,#000000bb);}
-.pcardmini .nm{text-align:center;font-family:'Anton',sans-serif;font-size:19px;color:#fff;text-shadow:0 2px 8px #000a;line-height:1;}
-.pcardmini .meta{text-align:center;font-family:'Space Mono',monospace;font-size:9px;opacity:.92;margin-top:5px;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;}
-.pcardmini .meta .jersey{background:#ffffff22;border-radius:5px;padding:1px 6px;font-weight:700;}
-.pcardmini .sheen{position:absolute;inset:0;border-radius:14px;z-index:3;background:linear-gradient(115deg,transparent 42%,#ffffff66 50%,transparent 58%);background-size:300% 300%;animation:sheen 3.6s linear infinite;mix-blend-mode:overlay;pointer-events:none;}
+/* textured geometric (diamond/grid) team-colored background */
+.pcardmini .cbg{position:absolute;inset:0;z-index:0;background-color:var(--c1);
+ background-image:
+  repeating-linear-gradient(45deg, var(--c2) 0 2px, transparent 2px 15px),
+  repeating-linear-gradient(-45deg, #ffffff16 0 2px, transparent 2px 15px),
+  radial-gradient(circle at 70% 18%, #ffffff14 0 28px, transparent 29px),
+  linear-gradient(160deg, var(--c1), var(--c2));}
+/* large stylized 26 behind player, left-of-center */
+.pcardmini .big26{position:absolute;left:-5%;top:16%;z-index:1;font-family:'Archivo Black',sans-serif;font-size:152px;line-height:.7;letter-spacing:-.05em;color:#ffffff30;text-shadow:0 4px 18px #0004;}
+/* player photo cutout, bottom aligned */
+.pcardmini .hd2{position:absolute;left:0;right:0;bottom:17%;height:76%;z-index:2;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 8px 16px #0009);}
+.pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:52%;left:24%;right:auto;height:50%;bottom:20%;border-radius:46% 46% 40% 40%;border:2px solid #fff7;filter:none;}
+/* top-right WC26 mark + fallback */
+.pcardmini .cmark{position:absolute;top:10px;right:11px;z-index:5;width:30px;height:46px;display:flex;align-items:flex-start;justify-content:center;}
+.pcardmini .cmark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 6px #0009);}
+.pcardmini .cmark .mfallback{font-family:'Archivo Black',sans-serif;font-size:20px;color:#fff;background:#00000044;border:1px solid #ffffff66;border-radius:7px;padding:2px 6px;line-height:1;letter-spacing:-.04em;}
+/* pink "not in album" star (top-right) */
+.pcardmini .ownstar{position:absolute;top:8px;right:46px;z-index:7;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#ff6b9d,#ff2d6f);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;box-shadow:0 3px 10px #ff2d6f99;animation:starpop .45s cubic-bezier(.3,1.6,.5,1);}
+@keyframes starpop{0%{transform:scale(0) rotate(-40deg)}100%{transform:none}}
+/* right-middle flag + country code */
+.pcardmini .flagchip{position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pcardmini .flagchip .fl{width:32px;height:23px;border-radius:5px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;background:#ffffff22;box-shadow:0 2px 7px #0007;border:1px solid #ffffff44;}
+.pcardmini .flagchip .cc{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:.03em;color:#fff;text-shadow:0 2px 6px #000a;}
+/* bottom plate */
+.pcardmini .plate2{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:12px 13px 13px;background:linear-gradient(180deg,transparent,#000000a8 26%,#000000e6);}
+.pcardmini .nm{font-family:'Anton',sans-serif;font-size:19px;color:#fff;line-height:1;text-shadow:0 2px 8px #000b;}
+.pcardmini .stat{font-family:'Space Mono',monospace;font-size:8.5px;color:#ffffffcf;margin-top:5px;letter-spacing:.02em;}
+.pcardmini .club{font-size:9px;color:#ffffffb8;margin-top:3px;font-weight:700;letter-spacing:.01em;}
+/* neutral tag bottom-right */
+.pcardmini .wcrtag{position:absolute;bottom:10px;right:12px;z-index:5;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.12em;color:#ffffffaa;}
+/* holographic sheen */
+.pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background:linear-gradient(115deg,transparent 42%,#ffffff55 50%,transparent 58%);background-size:300% 300%;animation:sheen 3.6s linear infinite;mix-blend-mode:overlay;pointer-events:none;}
 @keyframes sheen{0%{background-position:130% 0}100%{background-position:-130% 0}}
-.pcardmini.legend::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:5;background:linear-gradient(125deg,transparent 32%,#fff8 48%,#ffe9a8 50%,#fff8 52%,transparent 68%);mix-blend-mode:overlay;box-shadow:inset 0 0 0 3px #ffd75e;pointer-events:none;}
-.pcardmini .newtag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:5;background:#ffd000;color:#10202a;font-size:9px;font-weight:800;padding:2px 9px;border-radius:999px;}
-.pcardmini .duptag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:5;background:#7c8cff;color:#10202a;font-size:9px;font-weight:800;padding:2px 9px;border-radius:999px;}
+/* ELITE RAINBOW rarity — bg pattern continuously cycles hue + stronger holo */
+.pcardmini.rainbow .cbg{animation:huecycle 6s linear infinite;}
+@keyframes huecycle{0%{filter:hue-rotate(0deg) saturate(1.25)}100%{filter:hue-rotate(360deg) saturate(1.25)}}
+.pcardmini.rainbow .sheen{background:linear-gradient(115deg,transparent 36%,#ffffff88 50%,transparent 64%);animation-duration:2.4s;}
+.pcardmini.rainbow::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:5;background:linear-gradient(125deg,transparent 30%,#ffffff66 47%,#ffe9a8 50%,#ffffff66 53%,transparent 70%);background-size:300% 300%;animation:sheen 3s linear infinite reverse;mix-blend-mode:overlay;box-shadow:inset 0 0 0 2.5px #ffffff66;pointer-events:none;}
+
+/* fan-out: all 5 spread in a tilted row */
+.pcards.fanned .pcardmini{transition:transform .6s cubic-bezier(.3,1.15,.4,1),opacity .45s;
+ transform:translateX(var(--fx,0)) translateY(var(--fy,0)) rotate(var(--fr,0)) scale(.46);opacity:1;}
+
 .ptap{margin-top:20px;font-size:12px;letter-spacing:.14em;color:#ffffffcc;animation:bob 1.6s infinite;}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 .pdone{margin-top:18px;background:#ffd000;color:#10202a;border:none;border-radius:999px;padding:12px 26px;font-weight:800;font-family:inherit;cursor:pointer;display:none;}
@@ -164,7 +215,16 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
     <div id="packStage">
       <div class="burst"></div>
       <span class="sparkle" style="top:24%;left:18%">✦</span><span class="sparkle" style="top:30%;right:16%;animation-delay:.6s">✦</span><span class="sparkle" style="bottom:30%;left:22%;animation-delay:1.1s">⭐</span><span class="sparkle" style="bottom:24%;right:20%;animation-delay:1.5s">✦</span>
-      <div class="pack" id="pack"><div class="pfoil"></div><div class="ptrophy">🏆</div><div class="plogo">WEST<br>COAST<br>RUN</div><div class="psub">STICKER PACK</div><div class="pwc">FIFA WORLD CUP 2026 · 5 STICKERS</div></div>
+      <div class="skinToggle" id="skinToggle">
+        <button class="skbtn on" data-skin="normal">NORMAL</button>
+        <button class="skbtn" data-skin="deluxe">DELUXE</button>
+      </div>
+      <div class="pack normal" id="pack">
+        <div class="pfoil"></div>
+        <img class="placard-logo" src="assets/wc26-mark.svg" alt="FIFA World Cup 2026" onerror="this.style.display='none'">
+        <div class="plabel plabel-main" id="plabelMain">STICKER PACK</div>
+        <div class="plabel plabel-sub">5 STICKERS</div>
+      </div>
       <div class="packlabel">RIP IT OPEN ✦</div>
       <div class="packcount">5 stickers inside</div>
     </div>
@@ -202,11 +262,9 @@ const has=(t,i)=>(owned[t.code]&&owned[t.code][i]||0)>0;
 async function loadRealTeams(){
  if(!window.WCR || WCR.SM_PROXY.startsWith("REPLACE")) return; // not configured, keep demo
  try{
-  // 1) get the season's teams (ids + names + crests)
   const teamsResp = await WCR.smFetch(`teams/seasons/${WCR.WC_SEASON_ID}`);
   if(!teamsResp || !teamsResp.data) return;
   const apiTeams = teamsResp.data;
-  // order: Türkiye + Paraguay first (our group), then the rest alphabetically
   apiTeams.sort((a,b)=>{
     const pri = n => n==='Türkiye'?0 : n==='Paraguay'?1 : 2;
     const an=a.name, bn=b.name;
@@ -216,37 +274,50 @@ async function loadRealTeams(){
   for(const at of apiTeams){
     const name=at.name;
     const col=WCR.colorsFor(name);
-    // crest from API if present, else flag emoji
     built.push({
       code:at.short_code||name.slice(0,3).toUpperCase(),
       id:at.id, name:name.toUpperCase(), flag:col.fl, crest:at.image_path||null,
       fed:name, group:"", c1:col.c1, c2:darken(col.c1,0.78), c3:col.c2,
       accent:col.c1, accent2:col.c2,
-      players:["Crest"], photos:[null], ids:[null], legends:[], loaded:false
+      players:["Crest"], photos:[null], ids:[null], dob:[null], ht:[null], wt:[null], club:[null], legends:[], loaded:false
     });
   }
   if(built.length){ TEAMS=built; owned={}; TEAMS.forEach(t=>owned[t.code]={});
-    // seed a few owned on the first team so the book shows faces immediately
     if(TEAMS[0]) owned[TEAMS[0].code]={1:1,2:1,4:1,7:1};
     buildPages(); pi=0; render(); }
-  // 2) lazily load the first few squads (Türkiye, Paraguay, then more) so faces appear fast
   for(let i=0;i<Math.min(TEAMS.length,8);i++){ await loadSquad(i); }
  }catch(e){ console.error("[panini] team load failed",e); }
 }
 function darken(hex,f){const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;r=Math.round(r*f);g=Math.round(g*f);b=Math.round(b*f);return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);}
+
+/* --- stat parsers (SportMonks player object) --- */
+function parseHeight(h){if(h==null)return null;const m=(''+h).match(/[\d.]+/);if(!m)return null;let v=parseFloat(m[0]);if(!isFinite(v))return null;if(v>3)v=v/100;return v.toFixed(2);} // -> meters string
+function parseWeight(w){if(w==null)return null;const m=(''+w).match(/[\d.]+/);if(!m)return null;const v=parseFloat(m[0]);return isFinite(v)?Math.round(v):null;} // -> kg number
+function fmtDOB(d){if(!d)return null;const m=(''+d).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const mo=months[parseInt(m[2],10)-1];if(!mo)return null;return `${parseInt(m[3],10)} ${mo} '${m[1].slice(2)}`;} /* parse parts directly — avoids Date() UTC off-by-one */
+function clubOf(p){ // best-effort domestic club; hidden gracefully when API doesn't provide it
+ if(!p)return null;
+ if(p.club&&p.club.name)return p.club.name;
+ if(p.current_team&&p.current_team.name)return p.current_team.name;
+ return null;
+}
+
 async function loadSquad(idx){
  const t=TEAMS[idx]; if(!t||t.loaded||!t.id) return;
  const resp=await WCR.smFetch(`teams/${t.id}?include=players.player`);
  if(!resp||!resp.data||!resp.data.players) return;
- // dedupe + sort by position then jersey
  const seen=new Set(); const ps=[];
  resp.data.players.forEach(row=>{const p=row.player; if(!p||seen.has(p.id))return; seen.add(p.id);
-   ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||null, captain:row.captain});});
+   ps.push({name:p.display_name||p.name, photo:p.image_path||null, pos:row.position_id, jersey:row.jersey_number||null, captain:row.captain,
+     dob:p.date_of_birth||null, ht:parseHeight(p.height), wt:parseWeight(p.weight), club:clubOf(p)});});
  ps.sort((a,b)=>(a.pos-b.pos)||((a.jersey||999)-(b.jersey||999)));
  const top=ps.slice(0,12);
  t.players=top.map(p=>p.name);
  t.photos=top.map(p=>p.photo);
  t.ids=top.map(p=>p.jersey);
+ t.dob=top.map(p=>p.dob);
+ t.ht=top.map(p=>p.ht);
+ t.wt=top.map(p=>p.wt);
+ t.club=top.map(p=>p.club);
  t.legends=[]; top.forEach((p,i)=>{if(p.captain)t.legends.push(i);});
  t.loaded=true;
  owned[t.code]=owned[t.code]||{};
@@ -266,7 +337,6 @@ function render(){const pg=PAGES[pi];const t=TEAMS[pg.i];pv.style.setProperty('-
  const grp=pg.k===1?`<div class="group">${chip(t.group,'#000a')}</div>`:'';
  pv.innerHTML=`<div class="tp"><div class="art"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="stripe"></div></div><div class="pat"></div><div class="pat2"></div><div class="num26">26</div>${head}${grp}<div class="slots">${slots}</div></div>`;
  document.getElementById('label').textContent=pg.k===0?t.name:t.name+" · SQUAD";
- // progress
  let g=0,tot=0;TEAMS.forEach(tt=>{tt.players.forEach((p,i)=>{tot++;if(has(tt,i))g++;});});
  document.getElementById('ov').textContent=`${g} / ${tot}`;document.getElementById('ovfill').style.width=Math.round(g/tot*100)+'%';
  document.getElementById('prev').classList.toggle('off',pi===0);
@@ -279,13 +349,26 @@ document.getElementById('next').onclick=()=>pi<PAGES.length-1&&flip(1);
 
 /* ---------- PACK OPENING ---------- */
 let packReady=3;            // demo: 3 packs (1/day in real app)
-let packCards=[];           // {team, idx, isNew}
+let packType='normal';      // 'normal' | 'deluxe'
+let packCards=[];           // {t, i, isNew}
 let revealStep=0;
+let fanned=false;
 const scrim=document.getElementById('scrim'),pack=document.getElementById('pack'),packStage=document.getElementById('packStage'),preveal=document.getElementById('preveal');
 
+/* WC26 mark fallback for player cards */
+function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
+
+function applySkin(){
+ pack.classList.toggle('normal',packType==='normal');
+ pack.classList.toggle('deluxe',packType==='deluxe');
+ document.getElementById('plabelMain').textContent=packType==='deluxe'?'DELUXE PACK':'STICKER PACK';
+ document.querySelectorAll('#skinToggle .skbtn').forEach(b=>b.classList.toggle('on',b.dataset.skin===packType));
+}
+document.querySelectorAll('#skinToggle .skbtn').forEach(b=>b.onclick=(e)=>{e.stopPropagation();packType=b.dataset.skin;applySkin();});
+
 function genPack(){const pool=[];
- TEAMS.forEach(t=>{if(!t.loaded&&t.players.length<=1)return; // skip teams whose squad hasn't loaded
-   t.players.forEach((p,i)=>{if(i===0)return; // skip the Crest slot
+ TEAMS.forEach(t=>{if(!t.loaded&&t.players.length<=1)return;
+   t.players.forEach((p,i)=>{if(i===0)return;
      pool.push({t,i});});});
  if(!pool.length){TEAMS.forEach(t=>t.players.forEach((p,i)=>{if(i>0)pool.push({t,i});}));}
  const cards=[];
@@ -293,38 +376,71 @@ function genPack(){const pool=[];
   cards.push({t:pick.t,i:pick.i});}
  return cards;}
 
-function openPack(){if(packReady<=0)return;packCards=genPack();revealStep=0;
- scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');}
+function openPack(){if(packReady<=0)return;packCards=genPack();revealStep=0;fanned=false;
+ scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');
+ document.getElementById('pcards').classList.remove('fanned');
+ applySkin();}
 document.getElementById('openBtn').onclick=openPack;
 
 pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.display='none';buildRevealStack();preveal.classList.add('on');showCard(0);},500);};
 
-function miniHTML(c,tag){const t=c.t;const p=t.players[c.i];const isL=t.legends.includes(c.i);
- const photo=t.photos&&t.photos[c.i];
- const jersey=(t.ids&&t.ids[c.i])||null;
+function miniHTML(c){const t=c.t,i=c.i;
+ const name=t.players[i];
+ const isRare=t.legends.includes(i);
+ const photo=t.photos&&t.photos[i];
+ const code=t.code||'';
+ const flag=t.flag||'⚪';
+ const dob=t.dob&&t.dob[i];
+ const ht=t.ht&&t.ht[i];
+ const wt=t.wt&&t.wt[i];
+ const club=t.club&&t.club[i];
  const photoHTML = photo ? `<div class="hd2" style="background-image:url('${photo}')"></div>` : `<div class="hd2 placeholder"></div>`;
- const country = (t.name||t.code||'').replace(/\b\w/g,m=>m).split(' ').map(w=>w[0]+w.slice(1).toLowerCase()).join(' ');
- const jerseyHTML = jersey ? `<span class="jersey">#${jersey}</span>` : '';
- return `<div class="pcardmini ${isL?'legend':''}" style="--c1:${t.accent||t.c1};--c2:${t.accent2||t.c3||t.c2}">
-   <div class="art2"><div class="ab1"></div><div class="ab2"></div><div class="stripe2"></div><div class="dots"></div></div>
-   ${jersey?`<div class="bignum2">${jersey}</div>`:''}
+ const statBits=[];const fdob=fmtDOB(dob);if(fdob)statBits.push(fdob);if(ht)statBits.push(ht+' m');if(wt)statBits.push(wt+' kg');
+ const statHTML=statBits.length?`<div class="stat">${statBits.join(' · ')}</div>`:'';
+ const clubHTML=club?`<div class="club">${club}${code?` (${code})`:''}</div>`:'';
+ const ownStar=c.isNew?`<div class="ownstar">★</div>`:'';
+ return `<div class="pcardmini ${isRare?'rainbow':''}" style="--c1:${t.c1};--c2:${t.c2||t.c3||t.c1}">
+   <div class="cbg"></div>
+   <div class="big26">26</div>
    ${photoHTML}
-   <div class="sheen"></div>${tag}
-   <div class="plate2"><div class="nm">${p}</div><div class="meta">${t.flag} ${country} ${jerseyHTML}</div></div>
+   <div class="sheen"></div>
+   <div class="cmark"><img src="assets/wc26-mark.svg" alt="26" onerror="markFail(this)"></div>
+   ${ownStar}
+   <div class="flagchip"><span class="fl">${flag}</span><span class="cc">${code}</span></div>
+   <div class="plate2"><div class="nm">${name}</div>${statHTML}${clubHTML}</div>
+   <div class="wcrtag">WCR '26</div>
  </div>`;}
-function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";
+
+function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";host.classList.remove('fanned');
  packCards.forEach((c,n)=>{const already=(owned[c.t.code]&&owned[c.t.code][c.i]||0)>0;c.isNew=!already;
-  const tag=c.isNew?'<div class="newtag">NEW!</div>':'<div class="duptag">DOUBLE</div>';
-  const wrap=document.createElement('div');wrap.innerHTML=miniHTML(c,tag);
+  const wrap=document.createElement('div');wrap.innerHTML=miniHTML(c);
   const el=wrap.firstElementChild;el.style.zIndex=packCards.length-n;host.appendChild(el);});
 }
 function showCard(n){const cards=document.querySelectorAll('#pcards .pcardmini');
- cards.forEach((c,idx)=>{c.classList.toggle('show',idx===n);if(idx<n)c.classList.add('gone');});
+ cards.forEach((c,idx)=>{c.classList.toggle('show',idx===n);c.classList.toggle('gone',idx<n);});
  const last=n>=packCards.length-1;
- document.getElementById('ptap').style.display=last?'none':'block';
- document.getElementById('pdone').classList.toggle('on',last);
+ const ptap=document.getElementById('ptap');
+ ptap.style.display='block';
+ ptap.textContent=last?'TAP TO FAN OUT ✦':'TAP FOR NEXT ›';
+ document.getElementById('pdone').classList.remove('on');
 }
-preveal.onclick=(e)=>{if(e.target.id==='pdone')return;if(revealStep<packCards.length-1){revealStep++;showCard(revealStep);}};
+function fanOut(){fanned=true;
+ const host=document.getElementById('pcards');
+ const cards=[...host.querySelectorAll('.pcardmini')];
+ const mid=(cards.length-1)/2;
+ cards.forEach((c,idx)=>{const off=idx-mid;
+  c.classList.remove('gone');c.classList.add('show');
+  c.style.setProperty('--fx',(off*76).toFixed(1)+'px');
+  c.style.setProperty('--fr',(off*6).toFixed(1)+'deg');
+  c.style.setProperty('--fy',(Math.abs(off)*10).toFixed(1)+'px');
+  c.style.zIndex=10+idx;});
+ host.classList.add('fanned');
+ document.getElementById('ptap').style.display='none';
+ document.getElementById('pdone').classList.add('on');
+}
+preveal.onclick=(e)=>{if(e.target.closest('#pdone'))return;
+ if(revealStep<packCards.length-1){revealStep++;showCard(revealStep);}
+ else if(!fanned){fanOut();}};
 document.getElementById('pdone').onclick=()=>{
  packCards.forEach(c=>{owned[c.t.code]=owned[c.t.code]||{};owned[c.t.code][c.i]=(owned[c.t.code][c.i]||0)+1;});
  packReady--;scrim.classList.remove('on');
@@ -334,5 +450,6 @@ document.getElementById('pdone').onclick=()=>{
 };
 
 /* ---- start loading real 48 teams + photos from the API ---- */
+applySkin();
 loadRealTeams();
 </script>
