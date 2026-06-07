@@ -256,14 +256,7 @@ body{font-family:'DM Sans',sans-serif;background:#f5efef;color:#fff;overflow:hid
     <iframe class="fr on" id="fr-trip"></iframe>
     <iframe class="fr" id="fr-matchday" data-src="section-trip.html?screen=gameday"></iframe>
     <iframe class="fr" id="fr-wc" data-src="section-worldcup.html"></iframe>
-    <div class="gamespanel" id="fr-games-soon">
-      <div class="gp-card">
-       <div class="gp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#e30a17" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="3.5"/><path d="M7 11v4M5 13h4"/><circle cx="15.5" cy="11.5" r="1.2" fill="#e30a17"/><circle cx="17.5" cy="14.5" r="1.2" fill="#e30a17"/></svg></div>
-       <div class="gp-h">Games — coming soon</div>
-       <div class="gp-s">Coming soon.</div>
-       
-      </div>
-     </div>
+    <iframe class="fr" id="fr-games" data-src="section-games.html?rider=0"></iframe>
     <div class="youpanel" id="fr-you">
       <div class="youpage">
         <div class="youhero"><span class="ya" id="youAv">EM</span><div><div class="yn" id="youName">Emre</div><div class="ys">Riding the World Cup Trip</div></div></div>
@@ -713,9 +706,11 @@ function reloadTrip(){
  setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider='+ME.id);
  const fm=document.getElementById('fr-matchday');
  if(fm.src && fm.src!=='about:blank') setFrameURL(fm,'section-trip.html?rider='+ME.id+'&screen=gameday');
+ const fg=document.getElementById('fr-games');
+ if(fg){fg.dataset.src='section-games.html?rider='+ME.id; if(fg.src && fg.src!=='about:blank') setFrameURL(fg,'section-games.html?rider='+ME.id);}
 }
 const loaderEl=document.getElementById('loader');
-const IFRAME_KEYS=['trip','matchday','wc'];
+const IFRAME_KEYS=['trip','matchday','wc','games'];
 IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);f.addEventListener('load',()=>{if(f.classList.contains('on'))loaderEl.classList.remove('on');});});
 function showTab(id){
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
@@ -723,8 +718,7 @@ function showTab(id){
  IFRAME_KEYS.forEach(k=>{const f=document.getElementById('fr-'+k);if(!f)return;f.classList.toggle('on',k===id);
    if(k===id&&(!f.src||f.src==='about:blank')&&f.dataset.src){loaderEl.classList.add('on');f.src=f.dataset.src;}});
  document.getElementById('fr-you').classList.toggle('on',id==='you');
- document.getElementById('fr-games-soon').classList.toggle('on',id==='games');
- if(!isFrame||id==='games')loaderEl.classList.remove('on');
+ if(!isFrame)loaderEl.classList.remove('on');
  // hide the + button outside the budget view
  const bp=document.getElementById('bplus');if(bp&&id!=='you')bp.classList.add('gone');
  if(id==='you')setBView(BVIEW);

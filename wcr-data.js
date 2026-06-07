@@ -99,6 +99,13 @@ const TEAM_COLORS = {
   "DR Congo":      {c1:"#007fff", c2:"#f7d618", fl:"🇨🇩"},
   // OFC
   "New Zealand":   {c1:"#000000", c2:"#ffffff", fl:"🇳🇿"},
+  // ---- API-spelling aliases (the live API uses these exact names) ----
+  "United States":       {c1:"#1a3a8c", c2:"#e0202c", fl:"🇺🇸"},
+  "Czech Republic":      {c1:"#11457e", c2:"#d7141a", fl:"🇨🇿"},
+  "Cape Verde Islands":  {c1:"#003893", c2:"#cf2027", fl:"🇨🇻"},
+  "Congo DR":            {c1:"#007fff", c2:"#f7d618", fl:"🇨🇩"},
+  "Côte d'Ivoire":       {c1:"#ff8200", c2:"#009e60", fl:"🇨🇮"},
+  "Iraq":                {c1:"#007a3d", c2:"#ce1126", fl:"🇮🇶"},
 };
 
 /* fallback for any team not in the map (keeps the book from breaking) */
@@ -106,8 +113,8 @@ const DEFAULT_COLORS = {c1:"#5a5a6e", c2:"#2c2c3a", fl:"⚪"};
 function colorsFor(name){
   if(!name) return DEFAULT_COLORS;
   if(TEAM_COLORS[name]) return TEAM_COLORS[name];
-  // loose match (strip accents/case)
-  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  // loose match (strip accents, case, and all non-letters so apostrophe/spacing variants match)
+  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
   const key = Object.keys(TEAM_COLORS).find(k=>norm(k)===norm(name));
   return key ? TEAM_COLORS[key] : DEFAULT_COLORS;
 }
