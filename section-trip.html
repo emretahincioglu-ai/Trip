@@ -317,6 +317,19 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .it.clickable{cursor:pointer;border-radius:8px;transition:background .2s;padding-left:4px;padding-right:4px;margin:0 -4px;}
 .it.clickable:hover{background:#ffffff08;}
 .it.on{background:linear-gradient(90deg,#e30a1726,#e30a1708);box-shadow:inset 3px 0 0 #ff3b30;}
+/* optional / alternate itinerary rows */
+.it.opt{opacity:.72;}
+.it.opt .g{outline:1.5px dashed #ffffff40;outline-offset:-1.5px;background:transparent !important;}
+.optbadge{display:inline-block;margin-left:7px;font-family:'Space Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.06em;color:#ffd24a;background:#ffd24a1f;border:1px solid #ffd24a44;border-radius:999px;padding:2px 6px;vertical-align:middle;line-height:1;}
+/* fog decision toggle (SF) */
+.fogtog{margin:10px 0 4px;background:#ffffff08;border:1px solid #ffffff14;border-radius:14px;padding:11px 12px;}
+.fogq{font-size:12px;color:#ffffffb8;margin-bottom:9px;line-height:1.4;}
+.fogq a{color:#9fd0ff;text-decoration:underline;}
+.fogseg{display:flex;gap:8px;}
+.fogseg button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:#0000001f;border:1px solid #ffffff18;border-radius:11px;padding:9px 6px;color:#ffffffb0;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;}
+.fogseg button small{font-weight:500;font-size:10px;color:#ffffff75;letter-spacing:.01em;}
+.fogseg button.on{background:linear-gradient(180deg,#e30a1733,#e30a1714);border-color:#e30a1788;color:#fff;box-shadow:inset 0 0 0 1px #e30a1744;}
+.fogseg button.on small{color:#ffd9dc;}
 
 /* PLACE SHEET */
 .placesheet{position:fixed;inset:0;z-index:25;background:#1f0f12;transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;}
@@ -580,16 +593,33 @@ const CITIES=[
   mapCenter:[-122.43,37.79],mapZoom:11.4,
   items:[
    ["flight","Everyone arrives SF","From SD · Chicago · AZ","",null],
-   ["place","Battery Spencer","Golden Gate postcard shot","9:00a",[-122.4816692,37.827761]],
-   ["place","Palace of Fine Arts","Rotunda + lagoon","10:00a",[-122.4484231,37.8029308]],
-   ["food","Breakfast near the Wharf","","10:45a",[-122.4125282,37.8085771]],
-   ["place","Ghirardelli + Wharf + Pier 39","Sea lions · waterfront","11:30a",[-122.4125282,37.8085771]],
-   ["place","Lombard Street","The zigzag road","1:00p",[-122.4195579,37.8020179]],
-   ["food","Chinatown","Good Mong Kok dumplings · Fortune Cookie Factory","1:30p",[-122.408356,37.795455]],
-   ["place","Painted Ladies","Alamo Square","2:30p",[-122.4327556,37.7762528]],
-   ["place","The Mission","Clarion Alley murals · Valencia St","3:15p",[-122.4195098,37.7630606]],
+   ["food","Early to Rise","Scratch brunch · beat the line (party of 6)","8:00a",[-122.4392,37.7785]],
+   ["place","Battery Spencer","Golden Gate postcard shot","9:15a",[-122.4816692,37.827761]],
+   ["place","Palace of Fine Arts","Rotunda + lagoon","10:15a",[-122.4484231,37.8029308]],
+   ["place","Ghirardelli + Wharf + Pier 39","Sea lions · waterfront","11:00a",[-122.4125282,37.8085771]],
+   ["place","Lombard Street","The zigzag road","12:00p",[-122.4195579,37.8020179]],
+   ["food","Golden Boy Pizza (optional)","North Beach slices · stop if hungry (adds ~20 min) · skip and the day stays on time","12:15p",[-122.408944,37.798889]],
+   ["food","Chinatown","Good Mong Kok dumplings · Fortune Cookie Factory","12:45p",[-122.408356,37.795455]],
+   ["place","Painted Ladies","Alamo Square · quick photo stop","1:45p",[-122.4327556,37.7762528]],
+   ["food","The Mill","Coffee + famous toast · pick-me-up by Painted Ladies","2:00p",[-122.4378,37.7765]],
+   ["place","The Mission","Clarion Alley murals · Valencia St","2:45p",[-122.4195098,37.7630606]],
    ["bed","Back to hotel","Rest · shower · change","4:30p",null],
-   ["food","Dinner — San Ho Won","","7:00p",[-122.4102473,37.759599]]
+   ["food","Dinner — Balboa Cafe","","8:00p",[-122.4364,37.7976]]
+  ],
+  itemsFog:[
+   ["flight","Everyone arrives SF","From SD · Chicago · AZ","",null],
+   ["food","Early to Rise","Scratch brunch · beat the line (party of 6)","8:00a",[-122.4392,37.7785]],
+   ["place","Palace of Fine Arts","Rotunda + lagoon · fine in fog","9:15a",[-122.4484231,37.8029308]],
+   ["place","Ghirardelli + Wharf + Pier 39","Sea lions · waterfront","10:00a",[-122.4125282,37.8085771]],
+   ["place","Battery Spencer","Golden Gate shot · fog usually lifts late AM","11:00a",[-122.4816692,37.827761]],
+   ["place","Lombard Street","The zigzag road","12:00p",[-122.4195579,37.8020179]],
+   ["food","Golden Boy Pizza (optional)","North Beach slices · stop if hungry (adds ~20 min) · skip and the day stays on time","12:15p",[-122.408944,37.798889]],
+   ["food","Chinatown","Good Mong Kok dumplings · Fortune Cookie Factory","12:45p",[-122.408356,37.795455]],
+   ["place","Painted Ladies","Alamo Square · quick photo stop","1:45p",[-122.4327556,37.7762528]],
+   ["food","The Mill","Coffee + famous toast · pick-me-up by Painted Ladies","2:00p",[-122.4378,37.7765]],
+   ["place","The Mission","Clarion Alley murals · Valencia St","2:45p",[-122.4195098,37.7630606]],
+   ["bed","Back to hotel","Rest · shower · change","4:30p",null],
+   ["food","Dinner — Balboa Cafe","","8:00p",[-122.4364,37.7976]]
   ]},
  {n:"02",name:"Santa Clara",dates:"Jun 19–20",wx:"20°/29°",bg:"linear-gradient(180deg,#241820 0%,#28141a 55%,#1f0f12 100%)",photo:"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/-121.969,37.403,14,0,50/700x500@2x?access_token=pk.eyJ1IjoidGFoaW5jaSIsImEiOiJjbXB4aXdpdXIwMDVhMnNwczMxbnlucGpiIn0.mQdIY9-mQwxqAp9deIqKtA",loc:[-121.969,37.403],weatherDays:[{d:"Fri Jun 19",hi:29,lo:18,c:"Hot · Match Night",ic:"sun"},{d:"Sat Jun 20",hi:27,lo:17,c:"Sunny",ic:"sun"}],day:"Fri, Jun 19",flag:"⚽",teaser:"Bike ride · then match day",match:true,
   items:[
@@ -597,9 +627,10 @@ const CITIES=[
    ["place","Bike rental pickup","Bay City / Blazing Saddles · Wharf","9:00a"],
    ["drive","Ride: Wharf → GG Bridge → Sausalito","8 miles · ~2 hrs","9:30a"],
    ["place","Arrive Sausalito","Explore waterfront","11:30a"],
-   ["food","Lunch in Sausalito","","12:00p"],
+   ["food","Lunch in Sausalito","Or save it for Golden Boy in SF","12:00p"],
    ["train","Ferry back to SF","Bikes on board","1:00p"],
    ["place","Drop bikes + grab bags","From hotel","1:30p"],
+   ["food","Golden Boy Pizza (alt)","North Beach · grab slices before drive · if you skipped Sausalito","1:40p"],
    ["drive","Drive to Santa Clara","~1 hour","2:00p"],
    ["bed","Check in: Residence Inn Sunnyvale","Penthouse · 750 Lakeway Dr","3:00p"],
    ["bed","Rest · eat · head to stadium","","3:00p"],
@@ -646,6 +677,14 @@ const PLACES={
   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Lombard_Street_2016.jpg/1280px-Lombard_Street_2016.jpg",
   blurb:"The eight-hairpin block of Lombard between Hyde and Leavenworth. Walk down it — the view from the bottom looking back is the shot.",
   address:"Lombard St btw Hyde & Leavenworth, San Francisco, CA",duration:"~20 min",price:"Free"},
+ "Early to Rise":{type:"Scratch Brunch · Alamo Square",icon:"🍳",
+  photo:"https://images.unsplash.com/photo-1525351484163-7529414344d8?w=1200&q=80&auto=format",
+  blurb:"Cozy corner spot with communal seating and Southern-inspired plates — house bagels, lox, grits, pancakes, French toast. Opens 8am and draws a line, so come early with a party of 6.",
+  address:"1801 McAllister St, San Francisco, CA 94117",website:"https://www.earlytorisesf.com",price:"$$",duration:"~60 min"},
+ "The Mill":{type:"Coffee + Toast · NoPa",icon:"🍞",
+  photo:"https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80&auto=format",
+  blurb:"Four Barrel coffee meets Josey Baker bread — famous thick-cut toast on house-milled loaves. Two blocks from Painted Ladies; perfect afternoon coffee + toast pick-me-up.",
+  address:"736 Divisadero St, San Francisco, CA 94117",website:"https://www.themillsf.com",price:"$$",duration:"~20 min"},
  "Chinatown":{type:"Neighborhood · Dim Sum",icon:"🥟",
   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Dragon_Gate%2C_Chinatown%2C_San_Francisco.jpg/1280px-Dragon_Gate%2C_Chinatown%2C_San_Francisco.jpg",
   blurb:"Largest Chinatown outside Asia. Good Mong Kok = legendary takeout dim sum ($1.50 buns, cash only, no seating). Fortune Cookie Factory is five blocks over.",
@@ -658,10 +697,10 @@ const PLACES={
   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Clarion_Alley_Mural_Project_2013.jpg/1280px-Clarion_Alley_Mural_Project_2013.jpg",
   blurb:"Mission District murals — Clarion Alley and Balmy Alley. Then walk Valencia for taquerias, shops, and the best burritos in the city.",
   address:"Clarion Alley, San Francisco, CA 94110",duration:"~45 min"},
- "Dinner — San Ho Won":{type:"Korean BBQ · ★ Michelin",icon:"🥩",
-  photo:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80&auto=format",
-  blurb:"Chef Corey Lee's wood-fire Korean. One Michelin star, Resy-only, books two weeks out. Friday is the night — reservation locked.",
-  address:"2170 Bryant St, San Francisco, CA 94110",website:"https://www.sanhowon.com",reservation:"https://resy.com/cities/san-francisco-ca/venues/san-ho-won",price:"$$$$",duration:"~2 hrs"}
+ "Dinner — Balboa Cafe":{type:"American Bistro · Cow Hollow",icon:"🍷",
+  photo:"https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=80&auto=format",
+  blurb:"A San Francisco institution since 1913 — classic American bistro in Cow Hollow. Famous burger, lively bar scene. 8 PM table for 6.",
+  address:"3199 Fillmore St, San Francisco, CA 94123",website:"https://www.balboacafe.com",price:"$$$",duration:"~2 hrs"}
 };
 const LODGING={
  2:{name:"Residence Inn Sunnyvale Silicon Valley I",addr:"750 Lakeway Dr, Sunnyvale, CA 94085",dates:"Jun 19–20",ci:"Jun 19 · 3:00 PM",co:"Jun 20 · 11:00 AM",conf:"72073179604705",total:370.76,rooms:"1× Penthouse, 2 Bedrooms"},
@@ -684,6 +723,8 @@ const SQUAD=[
 
 const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-06-19T20:00:00-07:00"),REVEAL=new Date("2026-06-15T23:59:00-07:00");
 let ME=PEOPLE[0], curCity=0, paniniCollected=1;
+let fogMode=false; try{fogMode=localStorage.getItem('wcr_fog')==='1';}catch(e){}
+function setFog(on){fogMode=!!on;try{localStorage.setItem('wcr_fog',on?'1':'0');}catch(e){}openCity(curCity,true);}
 /* CRITICAL: bind ME to ?rider= URL param so the iframe shows the picked person, not Emre.
    Must run BEFORE any rendering (carousel, overview, topbar). */
 (function bindRiderFromURL(){
@@ -910,7 +951,8 @@ window.WX_ICONS={
  cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="#cfd8e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path fill="#cfd8e312" d="M19 18H7a4 4 0 0 1 0-8 5 5 0 0 1 9.5 2A4 4 0 0 1 19 18z"/></svg>',
  rain:'<svg viewBox="0 0 24 24" fill="none" stroke="#9fd0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path fill="#9fd0ff15" d="M19 14H7a4 4 0 0 1 0-8 5 5 0 0 1 9.5 2A4 4 0 0 1 19 14z"/><path d="M9 18l-1 2M14 18l-1 2M19 18l-1 2"/></svg>',
 };
-function openCity(i){curCity=i;const c=CITIES[i];
+function openCity(i,skipPush){curCity=i;const c=CITIES[i];
+ if(c.itemsFog){if(!c.itemsClear)c.itemsClear=c.items;c.items=fogMode?c.itemsFog:c.itemsClear;}
  document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
  const cityDates=(c.datesByRider&&c.datesByRider[ME.id])||c.dates;
  document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${cityDates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
@@ -925,9 +967,10 @@ function openCity(i){curCity=i;const c=CITIES[i];
   <div class="qa"><button onclick="openS('lodging')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M3 17v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5M3 17h18M3 17v3M21 17v3M7 12h4"/></svg></span><small>Lodging</small></button><button onclick="openS('res')"><span class="qc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><small>Reservations</small></button><button onclick="openS('cars')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M5 17h14M5 17v3M19 17v3M5 17l1.5-5h11L19 17M7 14h10M7 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM20 17a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></span><small>Cars</small></button><button onclick="openS('places')"><span class="qc"><svg viewBox="0 0 24 24"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span><small>Places</small></button></div>
   ${c.weatherDays?`<div class="wxrow">${c.weatherDays.map(w=>`<div class="wxchip wx-${w.ic||'sun'}"><div class="wxd">${w.d}</div><div class="wxicon">${(window.WX_ICONS||{})[w.ic]||(window.WX_ICONS||{}).sun||''}</div><div class="wxbig">${w.hi}°<span class="wxlo">/ ${w.lo}°</span></div><div class="wxc">${w.c}</div></div>`).join('')}</div>`:''}
   <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
+  ${c.itemsFog?`<div class="fogtog"><div class="fogq">🌉 Check the Golden Gate <a href="https://www.golden-gate-bridge.org/bridge-tour-webcams" target="_blank" rel="noopener">live cam</a> the morning of — then pick:</div><div class="fogseg"><button type="button" class="${!fogMode?'on':''}" onclick="setFog(false)">☀️ Clear<small>Bridge first · 9:15a</small></button><button type="button" class="${fogMode?'on':''}" onclick="setFog(true)">🌫️ Foggy<small>Bridge later · 11a</small></button></div></div>`:''}
   ${hasCoords?`<button class="maptoggle" id="mapToggle" type="button" onclick="toggleMap()"><span class="mti">🗺️</span><span class="mtl">View Stops on Map</span><span class="mtchev">›</span></button><div id="mapWrap" style="display:none;margin-top:10px"><div id="mapbox" class="mapbox"></div></div>`:''}
   <div id="itinList" style="margin-top:14px">
-  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ff3b30;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${it[1]}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
+  ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const optM=it[1].match(/\((optional|alt)\)/i);const isOpt=!!optM;const optLabel=isOpt?optM[1].toUpperCase():'';const cleanName=isOpt?it[1].replace(/\s*\((optional|alt)\)/i,''):it[1];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ff3b30;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${isOpt?'opt':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${cleanName}${isOpt?`<span class="optbadge">${optLabel}</span>`:''}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
   <div class="viewall">View all days ›</div>
   </div>
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
@@ -935,7 +978,7 @@ function openCity(i){curCity=i;const c=CITIES[i];
    ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
  document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
  document.getElementById('city').classList.add('on');
- try{history.pushState({sub:'city'},'',location.href);}catch(e){}
+ if(!skipPush){try{history.pushState({sub:'city'},'',location.href);}catch(e){}}
  // reset map state for the new city (map is opt-in via toggle)
  mapInstance=null;mapOpened=false;activeIdx=-1;cancelOrbit&&cancelOrbit();
 }
@@ -1386,7 +1429,7 @@ function buildCars(){const cars=[
 
 function buildReservations(){
  const RES=[
-  {name:"San Ho Won",type:"Dinner · San Francisco",when:"Wed Jun 17 · 7:00 PM",party:"6",conf:null},
+  {name:"Balboa Cafe",type:"Dinner · San Francisco",when:"Thu Jun 18 · 8:00 PM",party:"6",conf:null},
  ];
  let body=`<div class="back" onclick="closeS('res')">‹ Back</div>
   <div class="fhero" style="padding-bottom:6px"><div class="hf">📅</div><div class="hn" style="font-size:38px">Bookings</div><div class="hd">All reservations · whole trip</div></div>
