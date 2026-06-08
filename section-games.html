@@ -233,8 +233,10 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 /* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
 .pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
 /* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
-/* DIAMOND: icy-blue shiny wave (same treatment as gold, recolored blue) over the team-color card */
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#2a6fb03d 0%,#7fd0ff66 26%,#3f9fe02e 44%,#e2f4ff73 52%,#3f9fe02e 60%,#7fd0ff66 74%,#2a6fb03d 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
+/* DIAMOND: black onyx card (darken bg only, photo stays readable) + blue shiny wave */
+.pcardmini.fin-diamond .cbg,.pcardmini.fin-diamond .lowerzone{filter:brightness(.3) saturate(.5);}
+.pcardmini.fin-diamond .nbanner{filter:brightness(.55) saturate(.62);}
+.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#2a6fb04d 0%,#7fd0ff80 26%,#3f9fe03d 44%,#e2f4ff8c 52%,#3f9fe03d 60%,#7fd0ff80 74%,#2a6fb04d 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 /* pack loading animation (covers the openPack fetch gap) */
 .packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
