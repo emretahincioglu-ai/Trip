@@ -75,13 +75,79 @@ function attackScore(p) { return posRank(p.pos) * 1000 + jerseyWeight(p.jersey);
 function seedNorm(s) {
   return ("" + s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 }
-// CURATED override - pin specific stars per team (matched case/accent-insensitively).
-// Names are forced to the FRONT of the ranking in the given order; the rest of the squad
-// then fills by attacking priority. Final tiering of the top 11: top 2 = Diamond,
-// next 3 = Gold, next 6 = Common. So curated[0..1] -> Diamond, curated[2..4] -> Gold, etc.
+function deacc(s) { return ("" + s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
+// CURATED key (left) -> normalized SportMonks squad name
+const TEAM_ALIAS = {
+  turkey: "turkiye", southkorea: "korearepublic", usa: "unitedstates",
+  ivorycoast: "cotedivoire", czechia: "czechrepublic", bosnia: "bosniaandherzegovina",
+  capeverde: "capeverdeislands", drcongo: "congodr",
+};
+function teamKey(name) { const k = seedNorm(name); return TEAM_ALIAS[k] || k; }
+// fuzzy, accent-insensitive player matcher: exact -> substring -> token-prefix -> surname
+function curatedFind(ps, nm) {
+  const q = seedNorm(nm);
+  let p = ps.find((x) => seedNorm(x.name) === q); if (p) return p;
+  p = ps.find((x) => { const s = seedNorm(x.name); return s.includes(q) || q.includes(s); }); if (p) return p;
+  const toks = deacc(nm).split(/[^a-z]+/).filter((t) => t.length >= 3);
+  if (toks.length) {
+    p = ps.find((x) => { const st = deacc(x.name).split(/[^a-z]+/).filter(Boolean);
+      return toks.every((t) => st.some((s) => s.startsWith(t) || t.startsWith(s))); }); if (p) return p;
+    const main = toks.slice().sort((a, b) => b.length - a.length)[0];
+    p = ps.find((x) => seedNorm(x.name).includes(seedNorm(main))); if (p) return p;
+  }
+  return null;
+}
+// CURATED rarity override (from db/curated_rarities.json): diamond names -> Diamond,
+// gold names -> Gold, everyone else in the squad -> Common. One rarity per player.
 const CURATED = {
-  // "Turkiye": ["Arda Guler", "Kenan Yildiz", "Hakan Calhanoglu", "Kerem Akturkoglu", "Ferdi Kadioglu"],
-  // "Brazil":  ["Vinicius Junior", "Raphinha", "Rodrygo", "Estevao", "Bruno Guimaraes"],
+  "Algeria": {diamond:["Mahrez","Amoura"], gold:["Aït-Nouri","Gouiri","Bensebaini"]},
+  "Argentina": {diamond:["Messi","Julián Álvarez"], gold:["Lautaro","Enzo","Mac Allister"]},
+  "Australia": {diamond:["Mathew Ryan","Souttar"], gold:["Irvine","Bos","Irankunda"]},
+  "Austria": {diamond:["Alaba","Sabitzer"], gold:["Laimer","Baumgartner","Arnautović"]},
+  "Belgium": {diamond:["De Bruyne","Doku"], gold:["Courtois","Lukaku","Onana"]},
+  "Bosnia": {diamond:["Džeko","Dedić"], gold:["Kolašinac","Demirović","Bajraktarević"]},
+  "Brazil": {diamond:["Neymar","Vinícius Jr"], gold:["Raphinha","Bruno Guimarães","Alisson"]},
+  "Canada": {diamond:["Davies","Jonathan David"], gold:["Larin","Johnston","Eustáquio"]},
+  "Cape Verde": {diamond:["Ryan Mendes","Logan Costa"], gold:["Garry Rodrigues","Jamiro Monteiro","Jovane Cabral"]},
+  "Colombia": {diamond:["Luis Díaz","Luis Suárez"], gold:["James","Jhon Arias","Daniel Muñoz"]},
+  "Croatia": {diamond:["Modrić","Gvardiol"], gold:["Kovačić","Perišić","Kramarić"]},
+  "Curaçao": {diamond:["Tahith Chong","Bazoer"], gold:["L. Bacuna","Juninho Bacuna","Hansen"]},
+  "Czechia": {diamond:["Schick","Souček"], gold:["Hložek","Krejčí","Šulc"]},
+  "DR Congo": {diamond:["Wissa","Mbemba"], gold:["Wan-Bissaka","Bakambu","Mayele"]},
+  "Ecuador": {diamond:["Moisés Caicedo","Hincapié"], gold:["Pacho","Estupiñán","Enner Valencia"]},
+  "Egypt": {diamond:["Salah","Marmoush"], gold:["Trézéguet","Ashour","Abdelmonem"]},
+  "England": {diamond:["Bellingham","Kane"], gold:["Saka","Rice","Rashford"]},
+  "France": {diamond:["Mbappé","Dembélé"], gold:["Tchouaméni","Saliba","Olise"]},
+  "Germany": {diamond:["Musiala","Havertz"], gold:["Wirtz","Kimmich","Rüdiger"]},
+  "Ghana": {diamond:["Partey","Semenyo"], gold:["Iñaki Williams","Kamaldeen","Ayew"]},
+  "Haiti": {diamond:["Bellegarde","Wilson Isidor"], gold:["Pierrot","Nazon","Etienne Jr."]},
+  "Iran": {diamond:["Taremi","Jahanbakhsh"], gold:["Ghoddos","Torabi","Beiranvand"]},
+  "Iraq": {diamond:["Ali Al-Hamadi","Zidane Iqbal"], gold:["Aymen Hussein","Mohanad Ali","Al-Ammari"]},
+  "Ivory Coast": {diamond:["Amad Diallo","Singo"], gold:["Kessié","Adingra","Ndicka"]},
+  "Japan": {diamond:["Kubo","Kamada"], gold:["Endo","Dōan","Tomiyasu"]},
+  "Jordan": {diamond:["Al-Taamari","Ali Olwan"], gold:["Al-Mardi","Yazan Al-Arab","Al-Rawabdeh"]},
+  "Mexico": {diamond:["Ochoa","Santiago Giménez"], gold:["Raúl Jiménez","Edson Álvarez","Mora"]},
+  "Morocco": {diamond:["Hakimi","Brahim Díaz"], gold:["Mazraoui","Aguerd","El Khannouss"]},
+  "Netherlands": {diamond:["Van Dijk","Frenkie de Jong"], gold:["Gakpo","Gravenberch","Reijnders"]},
+  "New Zealand": {diamond:["Chris Wood","Stamenić"], gold:["Cacace","Ben Old","Bindon"]},
+  "Norway": {diamond:["Haaland","Ødegaard"], gold:["Sørloth","Nusa","Bobb"]},
+  "Panama": {diamond:["Murillo","Carrasquilla"], gold:["Godoy","Ismael Díaz","Fajardo"]},
+  "Paraguay": {diamond:["Almirón","Enciso"], gold:["Diego Gómez","Gustavo Gómez","Sanabria"]},
+  "Portugal": {diamond:["Ronaldo","Bruno Fernandes"], gold:["Bernardo Silva","Vitinha","Leão"]},
+  "Qatar": {diamond:["Afif","Almoez Ali"], gold:["Al-Haydos","Khoukhi","Boudiaf"]},
+  "Saudi Arabia": {diamond:["Al-Dawsari","Al-Buraikan"], gold:["Al-Shehri","Saud Abdulhamid","Kanno"]},
+  "Scotland": {diamond:["Robertson","McTominay"], gold:["McGinn","Tierney","Ferguson"]},
+  "Senegal": {diamond:["Mané","Nicolas Jackson"], gold:["Ismaïla Sarr","Pape Matar Sarr","Iliman Ndiaye"]},
+  "South Africa": {diamond:["Lyle Foster","Mokoena"], gold:["Ronwen Williams","Zwane","Mofokeng"]},
+  "South Korea": {diamond:["Son","Kim Min-jae"], gold:["Lee Kang-in","Hwang Hee-chan","Hwang In-beom"]},
+  "Spain": {diamond:["Yamal","Pedri"], gold:["Rodri","Nico Williams","Gavi"]},
+  "Sweden": {diamond:["Isak","Gyökeres"], gold:["Elanga","Bergvall","Lindelöf"]},
+  "Switzerland": {diamond:["Xhaka","Akanji"], gold:["Ndoye","Kobel","Embolo"]},
+  "Tunisia": {diamond:["Skhiri","Hannibal Mejbri"], gold:["Ben Slimane","Talbi","Tounekti"]},
+  "Turkey": {diamond:["Arda Güler","Kenan Yıldız"], gold:["Çalhanoğlu","Aktürkoğlu","Demiral"]},
+  "Uruguay": {diamond:["Valverde","Muslera"], gold:["Darwin Núñez","Ugarte","Araújo"]},
+  "USA": {diamond:["Pulisic","McKennie"], gold:["Tyler Adams","Balogun","Gio Reyna"]},
+  "Uzbekistan": {diamond:["Khusanov","Shomurodov"], gold:["Fayzullaev","Masharipov","Shukurov"]},
 };
 
 // --- Supabase REST (service role) ---
@@ -269,25 +335,28 @@ serve(async (req) => {
         if (!ps.length) { teamsProcessed++; continue; }
 
         const byAttack = ps.slice().sort((a, b) => attackScore(a) - attackScore(b));
-        const curKey = Object.keys(CURATED).find((k) => seedNorm(k) === seedNorm(at.name));
-        const curNames = curKey ? CURATED[curKey] : [];
-        const findByName = (nm) => ps.find((p) => seedNorm(p.name) === seedNorm(nm)) || ps.find((p) => seedNorm(p.name).includes(seedNorm(nm)));
+        const cKey = Object.keys(CURATED).find((k) => teamKey(k) === teamKey(at.name));
+        const entry = cKey ? CURATED[cKey] : null;
 
-        // final ranking = curated names first (in order), then the rest by attacking priority
+        // explicit override: diamond names -> Diamond, gold names -> Gold (only if in squad)
         const usedIds = new Set();
-        const ranked = [];
-        for (const nm of curNames) { const p = findByName(nm); if (p && !usedIds.has(p.id)) { ranked.push(p); usedIds.add(p.id); } }
-        for (const p of byAttack) { if (!usedIds.has(p.id)) { ranked.push(p); usedIds.add(p.id); } }
-        const top11 = ranked.slice(0, 11);
+        const diamondPs = [], goldPs = [], unmatched = [];
+        if (entry) {
+          for (const nm of (entry.diamond || [])) { const p = curatedFind(ps, nm); if (p && !usedIds.has(p.id)) { diamondPs.push(p); usedIds.add(p.id); } else if (!p) unmatched.push(nm); }
+          for (const nm of (entry.gold || [])) { const p = curatedFind(ps, nm); if (p && !usedIds.has(p.id)) { goldPs.push(p); usedIds.add(p.id); } else if (!p) unmatched.push(nm); }
+        }
+        // everyone else -> Common; fill to 11 total from the rest by attacking priority
+        const TARGET = 11;
+        const commons = [];
+        for (const p of byAttack) { if (diamondPs.length + goldPs.length + commons.length >= TARGET) break; if (!usedIds.has(p.id)) { commons.push(p); usedIds.add(p.id); } }
 
-        // ONE rarity per player: top 2 = diamond, next 3 = gold, next 6 = common
-        const tierOf = (idx) => (idx < 2 ? "diamond" : (idx < 5 ? "gold" : "common"));
         const mkBase = (pl) => ({ set_id: setId, player_id: pl.id, player_name: pl.name, team: at.name, image_url: pl.img });
         const add = (pl, rarity) => { const k = `${pl.id}:${rarity}`; if (seen.has(k)) { skipped++; return; } seen.add(k); rows.push({ ...mkBase(pl), rarity }); };
-        const tierNames = { diamond: [], gold: [], common: [] };
-        top11.forEach((pl, idx) => { const t = tierOf(idx); add(pl, t); tierNames[t].push(pl.name); });
+        diamondPs.forEach((p) => add(p, "diamond"));   // one rarity per player
+        goldPs.forEach((p) => add(p, "gold"));
+        commons.forEach((p) => add(p, "common"));
 
-        picks.push({ team: at.name, diamond: tierNames.diamond, gold: tierNames.gold, common: tierNames.common, curated: !!curKey });
+        picks.push({ team: at.name, dCount: diamondPs.length, gCount: goldPs.length, unmatched, matchedTeam: !!entry });
         teamsProcessed++;
       }
 
@@ -299,8 +368,9 @@ serve(async (req) => {
       }
 
       const done = to >= totalTeams;
+      const unmatchedTeams = Object.keys(CURATED).filter((k) => !teams.some((t) => teamKey(t.name) === teamKey(k)));
       return jres({
-        ok: true, setsCreated, cleared, setId, totalTeams,
+        ok: true, setsCreated, cleared, setId, totalTeams, unmatchedTeams,
         processedRange: { from, to }, teamsProcessed, inserted, insertedTotal: rows.length, skippedExisting: skipped, picks, done,
         next: done ? null : { from: to, to: Math.min(totalTeams, to + SEED_BATCH) },
         hint: done ? "All teams processed - card catalog seeded." : `Call again: ?api=seedcards&from=${to}&to=${Math.min(totalTeams, to + SEED_BATCH)}`,

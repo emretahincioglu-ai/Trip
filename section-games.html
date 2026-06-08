@@ -230,10 +230,12 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
 /* ===== RARITY FINISHES (common = flat · gold · diamond) ===== */
-.pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(115deg,transparent 36%,#f7e3a155 45%,#fff6db 50%,#f7e3a155 55%,transparent 64%);animation:sheen 2.8s linear infinite;}
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:screen;background:linear-gradient(115deg,transparent 34%,#bfe6ff66 45%,#ffffff 50%,#bfe6ff66 55%,transparent 66%);animation:sheen 2.4s linear infinite;}
-.pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:3px solid #e9c44f;box-shadow:inset 0 0 13px #e9c44f55;}
-.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:3px solid #e4f3ff;box-shadow:inset 0 0 16px #bfe6ff66;}
+/* GOLD: static full-card gold foil (brushed metal + fine sparkle + warm tint), no streak */
+.pcardmini.fin-gold .sheen{opacity:1;animation:none;mix-blend-mode:normal;background-image:repeating-linear-gradient(118deg, rgba(255,241,200,.16) 0 1px, transparent 1px 4px),radial-gradient(circle, rgba(255,248,222,.55) 0 .6px, transparent 1.5px),linear-gradient(135deg, rgba(214,170,60,.30), rgba(255,226,150,.12) 50%, rgba(176,134,38,.32));background-size:6px 6px,9px 9px,auto;}
+/* DIAMOND: static silver/white holo foil (cross-hatch + sparkle + cool tint), no streak/rainbow */
+.pcardmini.fin-diamond .sheen{opacity:1;animation:none;mix-blend-mode:normal;background-image:repeating-linear-gradient(118deg, rgba(255,255,255,.18) 0 1px, transparent 1px 4px),repeating-linear-gradient(62deg, rgba(206,232,255,.12) 0 1px, transparent 1px 5px),radial-gradient(circle, rgba(255,255,255,.6) 0 .6px, transparent 1.5px),linear-gradient(135deg, rgba(212,236,255,.28), rgba(255,255,255,.16) 50%, rgba(184,212,242,.28));background-size:6px 6px,8px 8px,9px 9px,auto;}
+.pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
+.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #eaf6ff;box-shadow:inset 0 0 0 1.5px #ffffff,inset 0 0 20px #bfe6ff80;}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
 .pcardmini .fintag-g{background:#e9c44f;color:#3a2a00;}
 .pcardmini .fintag-d{background:#e4f3ff;color:#0a2740;}
