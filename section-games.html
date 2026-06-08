@@ -226,14 +226,13 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .lowerzone{position:absolute;left:0;right:0;top:55%;bottom:0;z-index:2;overflow:hidden;background-color:var(--ca);background-image:repeating-linear-gradient(45deg, transparent 0 14px, #ffffff2b 14px 16px, transparent 16px 30px),repeating-linear-gradient(-45deg, transparent 0 14px, #00000022 14px 16px, transparent 16px 30px),linear-gradient(180deg, transparent 0 42%, #000000b8 100%);}
 .pcardmini .lowerzone::before{content:'';position:absolute;left:-25%;right:-25%;top:34%;height:20%;background:var(--c1);opacity:.92;transform:rotate(-8deg);box-shadow:0 3px 12px #00000055;}
 .pcardmini .lowerzone::after{content:'26';position:absolute;right:-3%;bottom:-16%;font-family:'Archivo Black',sans-serif;font-size:118px;line-height:.7;color:#ffffff26;letter-spacing:-.05em;}
-.pcardmini .statline{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:9px 13px 12px;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.03em;color:#fff;text-shadow:0 1px 4px #000c;line-height:1.3;}
-/* light stat-chip panel under the name (album + duplicate cards only) */
-.pcardmini .statchips{display:none;}
-.albumcard .statchips{display:flex;align-items:center;justify-content:space-between;gap:8px;position:absolute;left:0;right:0;bottom:0;z-index:4;padding:9px 10px 11px;background:linear-gradient(180deg,#ffffffe0 0%,#e9edf3f7 70%);border-top:3px solid var(--c1);box-shadow:0 -4px 12px #0003;}
-.albumcard .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
-.albumcard .chip{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.02em;color:#141821;background:#dfe5ec;border-radius:6px;padding:3px 8px;line-height:1.05;white-space:nowrap;}
-.albumcard .chip-club{flex:1 1 100%;background:var(--c1);color:#fff;overflow:hidden;text-overflow:ellipsis;}
-.albumcard .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:40px;line-height:.78;color:var(--c1);text-shadow:0 2px 5px #0002;align-self:center;}
+.pcardmini .statline{display:none;}
+/* embedded, translucent, inset stat-chip panel — shown on ALL cards (album, pack reveal, enlarge) */
+.pcardmini .statchips{display:flex;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.26);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.22);}
+.pcardmini .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
+.pcardmini .chip{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:.02em;color:#fff;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 7px;line-height:1.05;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.55);}
+.pcardmini .chip-club{flex:1 1 100%;background:rgba(0,0,0,0.26);overflow:hidden;text-overflow:ellipsis;}
+.pcardmini .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:36px;line-height:.78;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.6);align-self:center;opacity:.9;}
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
 /* ===== RARITY FINISHES (common = flat · gold · diamond) ===== */
@@ -743,7 +742,7 @@ function rarityOf(t,i){
 function assignRarities(t){t.rarity=t.players.map((p,i)=>rarityOf(t,i));}
 
 /* ===================== BACKEND CATALOG / INVENTORY / WALLET ===================== */
-let OWNED={}; let WALLET={coins:0,freePacks:0};
+let OWNED={}; let WALLET={coins:0,freePacks:0}; const PSTATS={};
 const RARORD={diamond:0,gold:1,common:2};
 function sbGet(qs){return fetch(WCR.SM_PROXY+qs,{headers:{Authorization:'Bearer '+(WCR.SM_ANON||'')}}).then(r=>r.json());}
 function sbPostPack(type){return fetch(WCR.SM_PROXY+'?api=openPack&rider_id='+encodeURIComponent(RIDER),{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+(WCR.SM_ANON||'')},body:JSON.stringify({type})}).then(r=>r.json());}
@@ -752,7 +751,7 @@ function setOwnedFromInv(inv){OWNED={};((inv&&inv.items)||[]).forEach(it=>{if(it
 function updateWallet(){let el=document.getElementById('walletLine');if(!el){const head=document.querySelector('#hub .hubhead');if(!head)return;el=document.createElement('div');el.id='walletLine';el.style.cssText="margin-top:8px;font-family:'Space Mono',monospace;font-size:12px;color:#ffd447;letter-spacing:.04em;";head.appendChild(el);}el.textContent='🪙 '+(WALLET.coins||0)+'   ·   🎟️ '+(WALLET.freePacks||0)+' free pack'+((WALLET.freePacks===1)?'':'s');}
 async function refreshInventory(){try{setOwnedFromInv(await sbGet('?api=getInventory&rider_id='+encodeURIComponent(RIDER)));}catch(e){}}
 async function refreshWallet(){try{const w=await sbGet('?api=getWallet&rider_id='+encodeURIComponent(RIDER));if(w&&w.ok){WALLET.coins=w.coins||0;WALLET.freePacks=w.freePacks||0;updateWallet();}}catch(e){}}
-function pseudoTeam(c){const col=WCR.colorsFor(c.team);return {code:'',id:null,name:(''+(c.team||'')).toUpperCase(),fed:c.team,flag:col.fl,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,players:[c.player_name],photos:[c.image_url],ids:[c.player_id],rarity:[c.rarity],pos:[''],dob:[],ht:[],wt:[],club:[],legends:[]};}
+function pseudoTeam(c){const col=WCR.colorsFor(c.team);const s=PSTATS[c.player_id]||{};return {code:'',id:null,name:(''+(c.team||'')).toUpperCase(),fed:c.team,flag:col.fl,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,players:[c.player_name],photos:[c.image_url],ids:[c.player_id],rarity:[c.rarity],pos:[s.pos||''],dob:[s.dob||null],ht:[s.ht||null],wt:[s.wt||null],club:[s.club||null],jersey:[s.jersey||null],legends:[]};}
 async function loadFromBackend(){
  if(!window.WCR||!WCR.SM_PROXY){fallbackDemo();return;}
  try{
@@ -773,19 +772,22 @@ async function loadFromBackend(){
   registerCodes();buildPages();updateWallet();renderHubStats();
   loadGroups();
   if(albumOn())renderAlbum();
+  prefetchAllStats();
   console.log('[book] backend loaded',TEAMS.length,'teams',cat.cards.length,'cards owned',Object.keys(OWNED).length,'coins',WALLET.coins);
  }catch(e){console.error('[book] backend load failed',e);if(!TEAMS.length)fallbackDemo();}
 }
 function tnorm(s){return (''+s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z]/gi,'').toLowerCase();}
 /* lazily pull DOB/height/weight/club/position from SportMonks for one team, map onto its catalog cards by player id */
-async function enrichTeamStats(t){
- if(!t||t.statsLoaded||t.statsLoading||!t.id||!t.ids||!t.ids.length)return;
- t.statsLoading=true;
- try{
+function enrichTeamStats(t){
+ if(!t||!t.id||!t.ids||!t.ids.length||t.statsLoaded)return Promise.resolve();
+ if(t._sp)return t._sp;
+ t._sp=(async()=>{
   const resp=await WCR.smFetch(`teams/${t.id}?include=players.player`);
   const rows=(resp&&resp.data&&resp.data.players)||[];
+  if(!rows.length)throw new Error('empty squad');
   const m={};
   rows.forEach(row=>{const p=row.player;if(!p)return;m[p.id]={dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),pos:(window.WCR&&WCR.posBucket)?WCR.posBucket(row.position_id):'',jersey:row.jersey_number||null};});
+  Object.assign(PSTATS,m);
   t.dob=t.ids.map(id=>(m[id]&&m[id].dob)||null);
   t.ht=t.ids.map(id=>(m[id]&&m[id].ht)||null);
   t.wt=t.ids.map(id=>(m[id]&&m[id].wt)||null);
@@ -793,10 +795,19 @@ async function enrichTeamStats(t){
   t.pos=t.ids.map(id=>(m[id]&&m[id].pos)||'');
   t.jersey=t.ids.map(id=>(m[id]&&m[id].jersey)||null);
   t.statsLoaded=true;
- }catch(e){}
- t.statsLoading=false;
+ })();
+ t._sp.catch(()=>{t._sp=null;});  // failed → allow retry
+ return t._sp;
 }
-function maybeEnrich(ti){const t=TEAMS[ti];if(!t||t.statsLoaded||t.statsLoading||!t.id)return;enrichTeamStats(t).then(()=>{const pg=PAGES[pi];if(albumOn()&&pg&&pg.ti===ti)renderAlbum();});}
+function maybeEnrich(ti){const t=TEAMS[ti];if(!t||t.statsLoaded||!t.id)return;enrichTeamStats(t).then(()=>{const pg=PAGES[pi];if(albumOn()&&pg&&pg.ti===ti)renderAlbum();}).catch(()=>{});}
+/* prefetch every team's stats right after load (concurrency-limited) so cards are embedded with stats — no late pop-in */
+async function prefetchAllStats(){
+ const list=TEAMS.filter(t=>t.id&&!t.statsLoaded);
+ let idx=0;const N=4;
+ async function worker(){while(idx<list.length){const t=list[idx++];try{await enrichTeamStats(t);}catch(e){}}}
+ await Promise.all(Array.from({length:Math.min(N,list.length||1)},worker));
+ const pg=PAGES[pi];if(albumOn()&&pg&&(pg.type==='teamfront'||pg.type==='teamsquad'))renderAlbum();
+}
 
 /* ===================== PART 2: PACK GENERATION ===================== */
 /* rarity order: common < uncommon < rare < legend < squad (squad = ultra-rare) */
@@ -1300,10 +1311,13 @@ function startPackOpen(type){
  // show the pack INSTANTLY — no awaiting the server
  scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');document.getElementById('pcards').classList.remove('fanned');
  // fire openPack in PARALLEL; resolves to the revealed cards (or throws). Coins/wallet update on arrival.
- packPromise=sbPostPack(type).then(res=>{
+ packPromise=sbPostPack(type).then(async res=>{
    if(!res||res.error){const e=new Error((res&&res.error)||'Pack failed');e.detail=res;throw e;}
    WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
-   return (res.cards||[]).map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
+   const cards=res.cards||[];
+   const teams=[...new Set(cards.map(c=>c.team))].map(nm=>TEAMS.find(t=>t.fed===nm)).filter(Boolean);
+   await Promise.all(teams.map(t=>enrichTeamStats(t).catch(()=>{})));  // embed stats before reveal (loader covers it)
+   return cards.map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
  });
 }
 document.getElementById('sclose').onclick=()=>scrim.classList.remove('on');
