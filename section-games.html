@@ -233,8 +233,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 /* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
 .pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
 /* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
-/* DIAMOND: silver/icy shiny wave (same treatment as gold, recolored) over the team-color card */
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#8aa0b833 0%,#dfe8f15e 26%,#9fb2c626 44%,#f4f8fc66 52%,#9fb2c626 60%,#dfe8f15e 74%,#8aa0b833 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
+/* DIAMOND: icy-blue shiny wave (same treatment as gold, recolored blue) over the team-color card */
+.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#2a6fb03d 0%,#7fd0ff66 26%,#3f9fe02e 44%,#e2f4ff73 52%,#3f9fe02e 60%,#7fd0ff66 74%,#2a6fb03d 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 /* pack loading animation (covers the openPack fetch gap) */
 .packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -242,10 +242,10 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .packloader .pltext{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#ffd0e0;}
 @keyframes plspin{to{transform:rotate(360deg)}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
-.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #eaf6ff;box-shadow:inset 0 0 0 1.5px #ffffff,inset 0 0 20px #bfe6ff80;}
+.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #5db6ff;box-shadow:inset 0 0 0 1.5px #d6f0ff,inset 0 0 20px #2a9fffaa;}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
 .pcardmini .fintag-g{background:#e9c44f;color:#3a2a00;}
-.pcardmini .fintag-d{background:#e4f3ff;color:#0a2740;}
+.pcardmini .fintag-d{background:#5db6ff;color:#08233f;}
 .pcardmini .spk{position:absolute;z-index:6;width:16px;height:16px;pointer-events:none;opacity:0;background:radial-gradient(circle,#ffffff 0 9%,transparent 42%),linear-gradient(0deg,transparent 45%,#ffffff 49%,#ffffff 51%,transparent 55%),linear-gradient(90deg,transparent 45%,#ffffff 49%,#ffffff 51%,transparent 55%);filter:drop-shadow(0 0 5px #dff2ff);animation:twinkle 1.8s ease-in-out infinite;}
 .pcardmini .spk.s1{top:16%;left:13%;animation-delay:0s;}
 .pcardmini .spk.s2{top:27%;right:15%;width:12px;height:12px;animation-delay:.5s;}
