@@ -244,6 +244,13 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
 .pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #15181f;box-shadow:inset 0 0 0 1.5px #525b67,inset 0 0 18px #00000055;animation:diamondpulse 2.4s ease-in-out infinite;}
 @keyframes diamondpulse{0%,100%{box-shadow:inset 0 0 0 1.5px #4a5360,inset 0 0 16px #00000055,inset 0 0 6px #9fb0c733;}50%{box-shadow:inset 0 0 0 1.5px #9aa6b8,inset 0 0 16px #00000044,inset 0 0 26px #d4e6ffaa;}}
+/* DIAMOND FX: periodic shine sweep */
+.pcardmini.fin-diamond .dsweep{position:absolute;top:-15%;bottom:-15%;width:34%;left:-55%;z-index:6;pointer-events:none;background:linear-gradient(100deg,transparent,#ffffffb3,transparent);transform:skewX(-16deg);mix-blend-mode:overlay;opacity:0;animation:dsweepmove 5s ease-in-out infinite;}
+@keyframes dsweepmove{0%,72%{left:-55%;opacity:0;}80%{opacity:.95;}100%{left:120%;opacity:0;}}
+/* DIAMOND FX: edge light chase (bright point travels around the onyx border) */
+@property --dang{syntax:'<angle>';inherits:false;initial-value:0deg;}
+.pcardmini.fin-diamond .dchase{position:absolute;inset:0;border-radius:16px;z-index:6;pointer-events:none;padding:3px;background:conic-gradient(from var(--dang),transparent 0 78%,#cfe6ff 87%,#ffffff 92%,#cfe6ff 97%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;animation:dchaseSpin 3s linear infinite;}
+@keyframes dchaseSpin{to{--dang:360deg;}}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
 .pcardmini .fintag-g{background:#e9c44f;color:#3a2a00;}
 .pcardmini .fintag-d{background:#1a1e26;color:#eef2f7;}
@@ -791,7 +798,7 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
 function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="dchase"></div><div class="dsweep"></div><div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
