@@ -227,8 +227,9 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .lowerzone::before{content:'';position:absolute;left:-25%;right:-25%;top:34%;height:20%;background:var(--c1);opacity:.92;transform:rotate(-8deg);box-shadow:0 3px 12px #00000055;}
 .pcardmini .lowerzone::after{content:'26';position:absolute;right:-3%;bottom:-16%;font-family:'Archivo Black',sans-serif;font-size:118px;line-height:.7;color:#ffffff26;letter-spacing:-.05em;}
 .pcardmini .statline{display:none;}
-/* embedded, translucent, inset stat-chip panel — shown on ALL cards (album, pack reveal, enlarge) */
-.pcardmini .statchips{display:flex;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.26);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.22);}
+/* embedded, translucent, inset stat-chip panel — album + pack reveal only (enlarge view uses the detail list below the card instead, to avoid duplicate stats) */
+.pcardmini .statchips{display:none;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.26);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.22);}
+.albumcard .statchips,#pcards .statchips{display:flex;}
 .pcardmini .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
 .pcardmini .chip{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:.02em;color:#fff;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 7px;line-height:1.05;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.55);}
 .pcardmini .chip-club{flex:1 1 100%;background:rgba(0,0,0,0.26);overflow:hidden;text-overflow:ellipsis;}
