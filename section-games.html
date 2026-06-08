@@ -165,7 +165,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .scrim{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 40%,#2a1850ee,#080510f5);backdrop-filter:blur(4px);display:none;flex-direction:column;align-items:center;justify-content:center;}
 .scrim.on{display:flex;}
 .scrim .stage{position:relative;display:flex;flex-direction:column;align-items:center;}
-.scrim .sclose{position:absolute;top:16px;right:18px;z-index:9;width:38px;height:38px;border-radius:50%;background:#ffffff18;border:1px solid #ffffff22;color:#fff;font-size:20px;cursor:pointer;}
+.scrim .sclose{position:fixed;top:14px;right:14px;z-index:90;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#ffffff18;border:1px solid #ffffff22;color:#fff;font-size:20px;cursor:pointer;}
 .burst{position:absolute;top:38%;left:50%;width:380px;height:380px;transform:translate(-50%,-50%);z-index:0;pointer-events:none;background:conic-gradient(from 0deg,#ff6b4a,#ffd000,#ff4d8d,#7c8cff,#4ad6c4,#ff6b4a);border-radius:50%;filter:blur(36px);opacity:.5;animation:spin 14s linear infinite;}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 .sparkle{position:absolute;font-size:18px;z-index:1;pointer-events:none;animation:twinkle 2.2s ease-in-out infinite;}
@@ -233,8 +233,13 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 /* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
 .pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
 /* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:screen;background:linear-gradient(125deg,#a9d4ff3a 0%,#e6f3ff66 20%,#cfe0ff4d 36%,#ffffff70 50%,#d6c9ff4d 62%,#bfe6ff66 80%,#a9d4ff3a 100%);background-size:250% 250%;animation:holodrift 4.6s ease-in-out infinite;}
+.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#0c1830 0%,#1f7bff 16%,#2bd4ff 30%,#6a5cff 44%,#b14dff 52%,#2bd4ff 64%,#1f7bff 78%,#0c1830 100%);background-size:240% 240%;animation:holodrift 4.6s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+/* pack loading animation (covers the openPack fetch gap) */
+.packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.packloader .plring{width:54px;height:54px;border:5px solid #ffffff22;border-top-color:#ffd000;border-radius:50%;animation:plspin .8s linear infinite;}
+.packloader .pltext{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#ffd0e0;}
+@keyframes plspin{to{transform:rotate(360deg)}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
 .pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #eaf6ff;box-shadow:inset 0 0 0 1.5px #ffffff,inset 0 0 20px #bfe6ff80;}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
@@ -608,6 +613,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
       <div class="packlabel">RIP IT OPEN ✦</div>
       <div class="packcount">5 stickers inside</div>
     </div>
+    <div class="packloader" id="packLoader"><div class="plring"></div><div class="pltext">OPENING PACK…</div></div>
     <div class="preveal" id="preveal">
       <div class="pcards" id="pcards"></div>
       <div class="ptap" id="ptap">TAP FOR NEXT ›</div>
@@ -1258,11 +1264,14 @@ document.getElementById('sclose').onclick=()=>scrim.classList.remove('on');
 pack.onclick=()=>{
  if(pack.classList.contains('tearing'))return;
  pack.classList.add('tearing');
+ const loader=document.getElementById('packLoader');
  setTimeout(async ()=>{
    packStage.style.display='none';
+   if(loader)loader.style.display='flex';            // cover the openPack fetch gap
    let cards;
    try{ cards=await packPromise; }
-   catch(e){ scrim.classList.remove('on'); const d=e&&e.detail; alert((d&&d.error==='insufficient coins')?('Not enough coins — need '+d.cost+', you have '+d.coins):((e&&e.message)||'Pack failed — try again')); return; }
+   catch(e){ if(loader)loader.style.display='none'; scrim.classList.remove('on'); const d=e&&e.detail; alert((d&&d.error==='insufficient coins')?('Not enough coins — need '+d.cost+', you have '+d.coins):((e&&e.message)||'Pack failed — try again')); return; }
+   if(loader)loader.style.display='none';
    packCards=cards||[];
    if(!packCards.length){ scrim.classList.remove('on'); alert('No cards returned'); return; }
    buildRevealStack();preveal.classList.add('on');showCard(0);
