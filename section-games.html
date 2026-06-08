@@ -213,6 +213,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .tickerwm1{top:5%;transform:rotate(-9deg);}
 .pcardmini .tickerwm2{top:39%;transform:rotate(6deg);color:#ffffff22;}
 .pcardmini .postag{position:absolute;top:12px;left:12px;z-index:5;font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.1em;color:#10131a;background:#ffffffe6;padding:4px 9px;border-radius:6px;text-transform:uppercase;box-shadow:0 3px 8px #0007;}
+.albumcard .postag{font-size:8px;letter-spacing:.04em;padding:2px 5px;top:7px;left:7px;border-radius:4px;}
 .pcardmini .hd2{position:absolute;left:6%;right:6%;top:8%;height:47%;z-index:2;background-size:contain;background-repeat:no-repeat;background-position:center bottom;filter:drop-shadow(0 10px 16px #000a);}
 .pcardmini .hd2.placeholder{background:linear-gradient(180deg,#e8b58c,#c98f68);width:40%;left:30%;right:auto;top:12%;height:33%;border-radius:46% 46% 40% 40%;border:2px solid #fff7;filter:none;}
 .pcardmini .cmark{position:absolute;top:10px;right:11px;z-index:5;width:30px;height:46px;display:flex;align-items:flex-start;justify-content:center;}
@@ -229,10 +230,14 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .statline{display:none;}
 /* embedded, translucent, inset stat-chip panel — album + pack reveal only (enlarge view uses the detail list below the card instead, to avoid duplicate stats) */
 .pcardmini .statchips{display:none;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:linear-gradient(180deg,rgba(10,13,20,0.36) 0%,rgba(10,13,20,0.56) 100%);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.3);}
-.albumcard .statchips,#pcards .statchips{display:flex;}
-.pcardmini .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
+.albumcard .statchips,#pcards .statchips,#lbCard .statchips{display:flex;}
+.pcardmini .chipwrap{display:grid;grid-template-columns:auto auto;justify-content:start;align-content:center;gap:5px;flex:1 1 auto;min-width:0;}
+/* enlarge card: same look as album, scaled up proportionally */
+#lbCard .statchips{left:8px;right:8px;bottom:8px;border-radius:13px;padding:9px 11px 11px;gap:9px;}
+#lbCard .chip{font-size:17px;padding:4px 9px;}
+#lbCard .jnum{font-size:46px;}
 .pcardmini .chip{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:.02em;color:#fff;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 7px;line-height:1.05;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.55);}
-.pcardmini .chip-club{flex:1 1 100%;background:rgba(0,0,0,0.26);overflow:hidden;text-overflow:ellipsis;}
+.pcardmini .chip-club{grid-column:1/-1;background:rgba(0,0,0,0.26);overflow:hidden;text-overflow:ellipsis;}
 .pcardmini .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:36px;line-height:.78;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.65);-webkit-text-stroke:.6px rgba(0,0,0,0.3);align-self:center;}
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
@@ -1253,25 +1258,16 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 function openStickerLightbox(t,i){
  const rar=(t.rarity&&t.rarity[i])||'common';
  document.getElementById('lbCard').innerHTML=`<div class="pcardmini ${cardClass(t,i)}" style="${cardStyle(t)}">${cardBody(t,i)}</div>`;
- let rows;
- if(t.kind==='squad') rows=rowsHTML([['From',(t.city&&t.city[i])||null],['Role','World Cup road tripper'],['Set','The Squad · 6 stickers'],['Crew','West Coast Run']]);
- else if(t.kind==='matchday') rows=rowsHTML([['Detail',(t.sub&&t.sub[i])||null],['Fixture','Türkiye vs Paraguay'],['Venue',"Levi's Stadium, Santa Clara"],['Set','Matchday · 4 stickers']]);
- else rows=rowsHTML([
-   ['Position', POS_FULL[t.pos&&t.pos[i]]||null],
-   ['Date of birth', fmtDOBlong(t.dob&&t.dob[i])],
-   ['Height', (t.ht&&t.ht[i])?(t.ht[i]+' m'):null],
-   ['Weight', (t.wt&&t.wt[i])?(t.wt[i]+' kg'):null],
-   ['Club', (t.club&&t.club[i])||null],
-   ['Country', t.fed||t.name||null],
-   ['Set', 'Group Stage']
- ]);
- document.getElementById('lbPanel').innerHTML=`<div class="lb-name">${t.players[i]||''}</div>${rarPill(rar)}${rows}`;
+ const lp=document.getElementById('lbPanel');
+ if(t.kind==='squad'){lp.style.display='';lp.innerHTML=`<div class="lb-name">${t.players[i]||''}</div>${rarPill(rar)}${rowsHTML([['From',(t.city&&t.city[i])||null],['Role','World Cup road tripper'],['Set','The Squad · 6 stickers'],['Crew','West Coast Run']])}`;}
+ else if(t.kind==='matchday'){lp.style.display='';lp.innerHTML=`<div class="lb-name">${t.players[i]||''}</div>${rarPill(rar)}${rowsHTML([['Detail',(t.sub&&t.sub[i])||null],['Fixture','Türkiye vs Paraguay'],['Venue',"Levi's Stadium, Santa Clara"],['Set','Matchday · 4 stickers']])}`;}
+ else {lp.style.display='none';lp.innerHTML='';}  // player: on-card panel shows the stats — no duplicate list
  showLightbox();
 }
 function openRiderLightbox(idx){
  const r=RIDERS[idx]; if(!r)return; const col=RCOL[idx];
  document.getElementById('lbCard').innerHTML=`<div class="ridercard" style="background:linear-gradient(160deg,${col},${darken(col,0.5)})"><div class="rc-init">${inits(r.n)}</div><div class="rc-n">${r.n.toUpperCase()}</div><div class="rc-tag">WEST COAST RUN</div></div>`;
- const c='#c0a0ff';
+ const c='#c0a0ff'; document.getElementById('lbPanel').style.display='';
  document.getElementById('lbPanel').innerHTML=`<div class="lb-name">${r.n}</div><span class="lb-rar" style="background:${c}22;color:${c};border:1px solid ${c}66">THE CREW</span>${rowsHTML([['From',r.c],['Role','World Cup road tripper'],['Trip','SD → SF → LA']])}`;
  showLightbox();
 }
@@ -1279,7 +1275,7 @@ function openMatchdayLightbox(name){
  const key=s=>(''+s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z]/gi,'').toLowerCase();
  const t=TEAMS.find(x=>key(x.name)===key(name));
  if(!t){toast('Team data still loading…');return;}
- const collected=t.players.filter((p,i)=>has(t,i)).length;
+ const collected=t.players.filter((p,i)=>has(t,i)).length; document.getElementById('lbPanel').style.display='';
  document.getElementById('lbCard').innerHTML=`<div class="ridercard" style="background:linear-gradient(160deg,${t.c1},${darken(t.c1,0.5)})"><div style="font-size:60px;line-height:1">${t.flag}</div><div class="rc-n">${t.name}</div><div class="rc-tag">${GROUPS[t.id]?'GROUP '+GROUPS[t.id]:'WORLD CUP 2026'}</div></div>`;
  document.getElementById('lbPanel').innerHTML=`<div class="lb-name">${t.name}</div><span class="lb-rar" style="background:#ffd44722;color:#ffd447;border:1px solid #ffd44766">FEATURE MATCH</span>${rowsHTML([['Country',t.fed||t.name],['Group',GROUPS[t.id]?('Group '+GROUPS[t.id]):null],['Collected',collected+' / '+t.players.length],['Venue',"Levi's Stadium, Santa Clara"]])}`;
  showLightbox();
