@@ -233,10 +233,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 /* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
 .pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
 /* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
-/* DIAMOND: black onyx card (darken bg only, photo stays readable) + blue shiny wave */
-.pcardmini.fin-diamond .cbg,.pcardmini.fin-diamond .lowerzone{filter:brightness(.6) saturate(.62);}
-.pcardmini.fin-diamond .nbanner{filter:brightness(.74) saturate(.7);}
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#7a818c33 0%,#e6ecf36e 26%,#9aa2ac2e 44%,#ffffff8c 52%,#9aa2ac2e 60%,#e6ecf36e 74%,#7a818c33 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
+/* SILVER (2nd tier): light silver shiny wave over the team-color card */
+.pcardmini.fin-silver .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#aeb8c63a 0%,#eef3f870 26%,#c2cbd633 44%,#ffffff96 52%,#c2cbd633 60%,#eef3f870 74%,#aeb8c63a 100%);background-size:230% 230%;animation:holodrift 5.2s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 /* pack loading animation (covers the openPack fetch gap) */
 .packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -244,10 +242,10 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .packloader .pltext{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#ffd0e0;}
 @keyframes plspin{to{transform:rotate(360deg)}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
-.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #2f3845;box-shadow:inset 0 0 0 1.5px #c4ccd6,inset 0 0 18px #00000040;}
+.pcardmini.fin-silver::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #eef2f7;box-shadow:inset 0 0 0 1.5px #ffffff,inset 0 0 18px #d6dee8aa;}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
 .pcardmini .fintag-g{background:#e9c44f;color:#3a2a00;}
-.pcardmini .fintag-d{background:#e8edf3;color:#1a2230;}
+.pcardmini .fintag-s{background:#eef2f7;color:#2a3340;}
 .pcardmini .spk{position:absolute;z-index:6;width:16px;height:16px;pointer-events:none;opacity:0;background:radial-gradient(circle,#ffffff 0 9%,transparent 42%),linear-gradient(0deg,transparent 45%,#ffffff 49%,#ffffff 51%,transparent 55%),linear-gradient(90deg,transparent 45%,#ffffff 49%,#ffffff 51%,transparent 55%);filter:drop-shadow(0 0 5px #dff2ff);animation:twinkle 1.8s ease-in-out infinite;}
 .pcardmini .spk.s1{top:16%;left:13%;animation-delay:0s;}
 .pcardmini .spk.s2{top:27%;right:15%;width:12px;height:12px;animation-delay:.5s;}
@@ -791,8 +789,8 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 /* ===================== CARD MARKUP (shared album + reveal) ===================== */
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
-function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-gold';if(r==='gold'||r==='rare')return 'fin-silver';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="fintag fintag-g">GOLD</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-s">SILVER</div>';return '';}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
@@ -1187,8 +1185,8 @@ document.getElementById('tttInput').addEventListener('keydown',e=>{if(e.key==='E
 document.getElementById('tttSheet').addEventListener('click',e=>{if(e.target.id==='tttSheet')tttCloseSheet();});
 
 /* ===================== STICKER LIGHTBOX ===================== */
-const RARITY_LABEL={common:'Common',uncommon:'Uncommon',rare:'Rare',legend:'Legend',squad:'Squad',gold:'Gold',diamond:'Diamond'};
-const RARITY_COL={common:'#9aa3b2',uncommon:'#4ad6c4',rare:'#5ab0ff',legend:'#ffd447',squad:'#c0a0ff',gold:'#e9c44f',diamond:'#bfe6ff'};
+const RARITY_LABEL={common:'Common',uncommon:'Uncommon',rare:'Silver',legend:'Gold',squad:'Squad',gold:'Silver',diamond:'Gold'};
+const RARITY_COL={common:'#9aa3b2',uncommon:'#4ad6c4',rare:'#cfd8e2',legend:'#e9c44f',squad:'#c0a0ff',gold:'#cfd8e2',diamond:'#e9c44f'};
 const POS_FULL={Keepers:'Goalkeeper',Defenders:'Defender',Midfielders:'Midfielder',Forwards:'Forward'};
 function fmtDOBlong(d){if(!d)return null;const m=(''+d).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;const months=['January','February','March','April','May','June','July','August','September','October','November','December'];const mo=months[+m[2]-1];if(!mo)return null;return `${+m[3]} ${mo} ${m[1]}`;}
 function rowsHTML(rows){return rows.filter(r=>r&&r[1]!=null&&r[1]!=='').map(r=>`<div class="lb-row"><span class="lb-k">${r[0]}</span><span class="lb-v">${r[1]}</span></div>`).join('');}
