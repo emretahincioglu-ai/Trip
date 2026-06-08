@@ -618,7 +618,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 <script src="wcr-data.js"></script>
 <script>
 /* ===================== STATE + PERSISTENCE (per rider) ===================== */
-const RIDER=(new URLSearchParams(location.search).get('rider'))||'0';
+/* sanitize rider: strip any trailing comma / stray array-join so rider_id is ALWAYS a clean integer */
+const RIDER=(((new URLSearchParams(location.search).get('rider'))||'0').match(/\d+/)||['0'])[0];
 const LSKEY='wcr_collection_'+RIDER;
 let STATE={owned:{},packsOpened:0,packsSinceRare:0};
 (function(){try{const s=JSON.parse(localStorage.getItem(LSKEY));if(s&&s.owned){STATE=Object.assign({owned:{},packsOpened:0,packsSinceRare:0},s);}}catch(e){}})();

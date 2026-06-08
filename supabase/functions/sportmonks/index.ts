@@ -211,7 +211,9 @@ async function ecoCtx(url) {
   const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!SB_URL || !SB_KEY) return { error: "SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not available", status: 500 };
   const sb = sbClient(SB_URL, SB_KEY);
-  const riderId = url.searchParams.get("rider_id") ?? url.searchParams.get("rider");
+  // sanitize: rider_id must be a clean integer (strip trailing comma / stray array-join)
+  const rawRider = url.searchParams.get("rider_id") ?? url.searchParams.get("rider");
+  const riderId = rawRider == null ? null : ((String(rawRider).match(/\d+/) || [null])[0]);
   const u = await resolveProfile(sb, riderId);
   if (u.error) return { error: u.error, status: 400 };
   const cfg = await loadConfig(sb);
