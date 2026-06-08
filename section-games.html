@@ -228,12 +228,12 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .lowerzone::after{content:'26';position:absolute;right:-3%;bottom:-16%;font-family:'Archivo Black',sans-serif;font-size:118px;line-height:.7;color:#ffffff26;letter-spacing:-.05em;}
 .pcardmini .statline{display:none;}
 /* embedded, translucent, inset stat-chip panel — album + pack reveal only (enlarge view uses the detail list below the card instead, to avoid duplicate stats) */
-.pcardmini .statchips{display:none;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.26);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.22);}
+.pcardmini .statchips{display:none;align-items:center;justify-content:space-between;gap:7px;position:absolute;left:6px;right:6px;bottom:6px;z-index:4;padding:7px 8px 8px;border-radius:11px;background:linear-gradient(180deg,rgba(10,13,20,0.36) 0%,rgba(10,13,20,0.56) 100%);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 3px 12px rgba(0,0,0,0.3);}
 .albumcard .statchips,#pcards .statchips{display:flex;}
 .pcardmini .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
 .pcardmini .chip{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:.02em;color:#fff;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 7px;line-height:1.05;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.55);}
 .pcardmini .chip-club{flex:1 1 100%;background:rgba(0,0,0,0.26);overflow:hidden;text-overflow:ellipsis;}
-.pcardmini .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:36px;line-height:.78;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.6);align-self:center;opacity:.9;}
+.pcardmini .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:36px;line-height:.78;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.65);-webkit-text-stroke:.6px rgba(0,0,0,0.3);align-self:center;}
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
 /* ===== RARITY FINISHES (common = flat · gold · diamond) ===== */
