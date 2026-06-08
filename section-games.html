@@ -242,7 +242,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .packloader .pltext{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#ffd0e0;}
 @keyframes plspin{to{transform:rotate(360deg)}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
-.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #15181f;box-shadow:inset 0 0 0 1.5px #525b67,inset 0 0 18px #00000055;}
+.pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #15181f;box-shadow:inset 0 0 0 1.5px #525b67,inset 0 0 18px #00000055;animation:diamondpulse 2.4s ease-in-out infinite;}
+@keyframes diamondpulse{0%,100%{box-shadow:inset 0 0 0 1.5px #4a5360,inset 0 0 16px #00000055,inset 0 0 6px #9fb0c733;}50%{box-shadow:inset 0 0 0 1.5px #9aa6b8,inset 0 0 16px #00000044,inset 0 0 26px #d4e6ffaa;}}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
 .pcardmini .fintag-g{background:#e9c44f;color:#3a2a00;}
 .pcardmini .fintag-d{background:#1a1e26;color:#eef2f7;}
