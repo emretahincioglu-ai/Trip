@@ -126,7 +126,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .slot .filled{position:absolute;inset:0;border-radius:9px;overflow:hidden;background:var(--c1);box-shadow:0 4px 12px #0005;}
 .slot .filled.popin{animation:pop .4s cubic-bezier(.3,1.5,.5,1);}
 .slot .filled .albumcard{position:absolute;top:0;left:0;width:200px;height:256.7px;transform-origin:top left;transform:scale(var(--mscale,0.45));opacity:1;transition:none;border-radius:0;box-shadow:none;}
-.slot .filled .albumcard .statline{display:block;font-size:13px;line-height:1.25;padding:7px 12px 9px;letter-spacing:0;white-space:normal;}
+.slot .filled .albumcard .statline{display:none;}
 @keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:none;opacity:1}}
 .tp .group{position:absolute;right:18px;bottom:18px;z-index:4;}
 
@@ -143,7 +143,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .dupgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .dupcell{position:relative;aspect-ratio:3/3.85;border-radius:9px;overflow:hidden;box-shadow:0 4px 12px #0005;}
 .dupcell .albumcard{position:absolute;top:0;left:0;width:200px;height:256.7px;transform-origin:top left;transform:scale(var(--dscale,0.42));opacity:1;transition:none;border-radius:0;box-shadow:none;}
-.dupcell .albumcard .statline{display:block;font-size:13px;line-height:1.25;padding:7px 12px 9px;letter-spacing:0;white-space:normal;}
+.dupcell .albumcard .statline{display:none;}
 .dupx{position:absolute;top:6px;right:6px;z-index:9;background:#7c8cff;color:#10131a;font-family:'Anton',sans-serif;font-size:12px;padding:2px 8px;border-radius:999px;box-shadow:0 2px 6px #0007;}
 .dupnote{text-align:center;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9b8cff;margin:6px 0 16px;}
 
@@ -227,6 +227,13 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .lowerzone::before{content:'';position:absolute;left:-25%;right:-25%;top:34%;height:20%;background:var(--c1);opacity:.92;transform:rotate(-8deg);box-shadow:0 3px 12px #00000055;}
 .pcardmini .lowerzone::after{content:'26';position:absolute;right:-3%;bottom:-16%;font-family:'Archivo Black',sans-serif;font-size:118px;line-height:.7;color:#ffffff26;letter-spacing:-.05em;}
 .pcardmini .statline{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:9px 13px 12px;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.03em;color:#fff;text-shadow:0 1px 4px #000c;line-height:1.3;}
+/* light stat-chip panel under the name (album + duplicate cards only) */
+.pcardmini .statchips{display:none;}
+.albumcard .statchips{display:flex;align-items:center;justify-content:space-between;gap:8px;position:absolute;left:0;right:0;bottom:0;z-index:4;padding:9px 10px 11px;background:linear-gradient(180deg,#ffffffe0 0%,#e9edf3f7 70%);border-top:3px solid var(--c1);box-shadow:0 -4px 12px #0003;}
+.albumcard .chipwrap{display:flex;flex-wrap:wrap;gap:5px;flex:1 1 auto;min-width:0;}
+.albumcard .chip{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.02em;color:#141821;background:#dfe5ec;border-radius:6px;padding:3px 8px;line-height:1.05;white-space:nowrap;}
+.albumcard .chip-club{flex:1 1 100%;background:var(--c1);color:#fff;overflow:hidden;text-overflow:ellipsis;}
+.albumcard .jnum{flex:0 0 auto;font-family:'Archivo Black',sans-serif;font-size:40px;line-height:.78;color:var(--c1);text-shadow:0 2px 5px #0002;align-self:center;}
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
 /* ===== RARITY FINISHES (common = flat · gold · diamond) ===== */
@@ -659,6 +666,7 @@ function textOn(hex){try{const n=parseInt((''+hex).replace('#',''),16);const r=(
 function parseHeight(h){if(h==null)return null;const m=(''+h).match(/[\d.]+/);if(!m)return null;let v=parseFloat(m[0]);if(!isFinite(v))return null;if(v>3)v=v/100;return v.toFixed(2);}
 function parseWeight(w){if(w==null)return null;const m=(''+w).match(/[\d.]+/);if(!m)return null;const v=parseFloat(m[0]);return isFinite(v)?Math.round(v):null;}
 function fmtDOB(d){if(!d)return null;const m=(''+d).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const mo=months[parseInt(m[2],10)-1];if(!mo)return null;return `${parseInt(m[3],10)} ${mo} '${m[1].slice(2)}`;}
+function ageFromDOB(d){if(!d)return null;const m=(''+d).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;const now=new Date();let a=now.getFullYear()-(+m[1]);const md=(now.getMonth()+1)-(+m[2])||(now.getDate()-(+m[3]));if(md<0)a--;return (a>10&&a<55)?a:null;}
 function clubOf(p){if(!p)return null;if(p.club&&p.club.name)return p.club.name;if(p.current_team&&p.current_team.name)return p.current_team.name;return null;}
 
 /* PART 1: knockout-bracket placeholder rows the API mixes into the teams list */
@@ -777,12 +785,13 @@ async function enrichTeamStats(t){
   const resp=await WCR.smFetch(`teams/${t.id}?include=players.player`);
   const rows=(resp&&resp.data&&resp.data.players)||[];
   const m={};
-  rows.forEach(row=>{const p=row.player;if(!p)return;m[p.id]={dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),pos:(window.WCR&&WCR.posBucket)?WCR.posBucket(row.position_id):''};});
+  rows.forEach(row=>{const p=row.player;if(!p)return;m[p.id]={dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),pos:(window.WCR&&WCR.posBucket)?WCR.posBucket(row.position_id):'',jersey:row.jersey_number||null};});
   t.dob=t.ids.map(id=>(m[id]&&m[id].dob)||null);
   t.ht=t.ids.map(id=>(m[id]&&m[id].ht)||null);
   t.wt=t.ids.map(id=>(m[id]&&m[id].wt)||null);
   t.club=t.ids.map(id=>(m[id]&&m[id].club)||null);
   t.pos=t.ids.map(id=>(m[id]&&m[id].pos)||'');
+  t.jersey=t.ids.map(id=>(m[id]&&m[id].jersey)||null);
   t.statsLoaded=true;
  }catch(e){}
  t.statsLoading=false;
@@ -830,6 +839,11 @@ function cardInner(t,i){
  const statHTML=sb.length?`<div class="statline">${sb.join(' · ')}</div>`:'';
  const pos=(t.pos&&t.pos[i])||'';
  const posLabel=({Keepers:'GOALKEEPER',Defenders:'DEFENDER',Midfielders:'MIDFIELDER',Forwards:'FORWARD'})[pos]||'';
+ const posShort=({Keepers:'GK',Defenders:'DEF',Midfielders:'MID',Forwards:'FWD'})[pos]||'';
+ const age=ageFromDOB(dob); const jersey=(t.jersey&&t.jersey[i]);
+ const ch=[];if(posShort)ch.push(`<span class="chip">${posShort}</span>`);if(ht)ch.push(`<span class="chip">${ht} m</span>`);if(wt)ch.push(`<span class="chip">${wt} kg</span>`);if(age)ch.push(`<span class="chip">${age} yrs</span>`);
+ const clubChip=club?`<span class="chip chip-club">${club}</span>`:'';
+ const chipsHTML=(ch.length||clubChip)?`<div class="statchips"><div class="chipwrap">${ch.join('')}${clubChip}</div>${(jersey!=null&&jersey!=='')?`<div class="jnum">${jersey}</div>`:''}</div>`:'';
  const teamName=(t.name||'').toUpperCase(); const ticker=Array(10).fill('WORLD CUP 26').join('   ·   ');
  return `<div class="cbg"></div><div class="rays"></div><div class="starfield"></div><div class="confetti"></div><div class="swoosh swoosh1"></div>
    <div class="teamwm">${teamName}</div><div class="tickerwm tickerwm1">${ticker}</div><div class="tickerwm tickerwm2">${ticker}</div>
@@ -837,7 +851,7 @@ function cardInner(t,i){
    <div class="cmark"><img src="assets/wc26-mark.svg" alt="26" onerror="markFail(this)"></div>
    ${posLabel?`<div class="postag">${posLabel}</div>`:''}
    <div class="flagchip"><span class="fl">${flag}</span><span class="cc">${code}</span></div>
-   <div class="nbanner"><div class="nm">${name}</div></div>${statHTML}<div class="wcrtag">WCR '26</div>`;
+   <div class="nbanner"><div class="nm">${name}</div></div>${statHTML}${chipsHTML}<div class="wcrtag">WCR '26</div>`;
 }
 
 /* ===================== ALBUM PAGES ===================== */
