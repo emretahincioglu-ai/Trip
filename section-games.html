@@ -126,7 +126,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .slot .filled{position:absolute;inset:0;border-radius:9px;overflow:hidden;background:var(--c1);box-shadow:0 4px 12px #0005;}
 .slot .filled.popin{animation:pop .4s cubic-bezier(.3,1.5,.5,1);}
 .slot .filled .albumcard{position:absolute;top:0;left:0;width:200px;height:256.7px;transform-origin:top left;transform:scale(var(--mscale,0.45));opacity:1;transition:none;border-radius:0;box-shadow:none;}
-.slot .filled .albumcard .statline{display:none;}
+.slot .filled .albumcard .statline{display:block;font-size:13px;line-height:1.25;padding:7px 12px 9px;letter-spacing:0;white-space:normal;}
 @keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:none;opacity:1}}
 .tp .group{position:absolute;right:18px;bottom:18px;z-index:4;}
 
@@ -143,7 +143,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .dupgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .dupcell{position:relative;aspect-ratio:3/3.85;border-radius:9px;overflow:hidden;box-shadow:0 4px 12px #0005;}
 .dupcell .albumcard{position:absolute;top:0;left:0;width:200px;height:256.7px;transform-origin:top left;transform:scale(var(--dscale,0.42));opacity:1;transition:none;border-radius:0;box-shadow:none;}
-.dupcell .albumcard .statline{display:none;}
+.dupcell .albumcard .statline{display:block;font-size:13px;line-height:1.25;padding:7px 12px 9px;letter-spacing:0;white-space:normal;}
 .dupx{position:absolute;top:6px;right:6px;z-index:9;background:#7c8cff;color:#10131a;font-family:'Anton',sans-serif;font-size:12px;padding:2px 8px;border-radius:999px;box-shadow:0 2px 6px #0007;}
 .dupnote{text-align:center;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;color:#9b8cff;margin:6px 0 16px;}
 
@@ -749,16 +749,17 @@ async function loadFromBackend(){
  if(!window.WCR||!WCR.SM_PROXY){fallbackDemo();return;}
  try{
   try{await sbGet('?api=claimDaily&rider_id='+encodeURIComponent(RIDER));}catch(e){}
-  const [cat,inv,wal]=await Promise.all([sbGet('?api=catalog'),sbGet('?api=getInventory&rider_id='+encodeURIComponent(RIDER)),sbGet('?api=getWallet&rider_id='+encodeURIComponent(RIDER))]);
+  const [cat,inv,wal,seas]=await Promise.all([sbGet('?api=catalog'),sbGet('?api=getInventory&rider_id='+encodeURIComponent(RIDER)),sbGet('?api=getWallet&rider_id='+encodeURIComponent(RIDER)),WCR.smFetch('teams/seasons/'+WCR.WC_SEASON_ID).catch(()=>null)]);
   if(!cat||!cat.ok||!Array.isArray(cat.cards)||!cat.cards.length){console.warn('[book] catalog empty — fallback');fallbackDemo();return;}
   setOwnedFromInv(inv);
   if(wal&&wal.ok){WALLET.coins=wal.coins||0;WALLET.freePacks=wal.freePacks||0;}
+  const smId={};((seas&&seas.data)||[]).forEach(tt=>{if(tt&&tt.name&&!isPlaceholder(tt.name))smId[tnorm(tt.name)]=tt.id;});
   const grouped={};cat.cards.forEach(c=>{(grouped[c.team]||(grouped[c.team]=[])).push(c);});
   const names=Object.keys(grouped).sort((a,b)=>a.localeCompare(b));
   const usedCodes={};
   TEAMS=names.map(name=>{const col=WCR.colorsFor(name);let code=code3(name);while(usedCodes[code])code=code+'x';usedCodes[code]=1;
    const cards=grouped[name].slice().sort((a,b)=>((RARORD[a.rarity]!=null?RARORD[a.rarity]:9)-(RARORD[b.rarity]!=null?RARORD[b.rarity]:9))||(''+a.player_name).localeCompare(b.player_name));
-   return {code,id:null,name:name.toUpperCase(),fed:name,flag:col.fl,crest:null,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+   return {code,id:smId[tnorm(name)]||null,name:name.toUpperCase(),fed:name,flag:col.fl,crest:null,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
      players:cards.map(c=>c.player_name),photos:cards.map(c=>c.image_url),ids:cards.map(c=>c.player_id),rarity:cards.map(c=>c.rarity),
      pos:cards.map(()=>''),dob:[],ht:[],wt:[],club:[],legends:[],loaded:true};});
   registerCodes();buildPages();updateWallet();renderHubStats();
@@ -767,6 +768,26 @@ async function loadFromBackend(){
   console.log('[book] backend loaded',TEAMS.length,'teams',cat.cards.length,'cards owned',Object.keys(OWNED).length,'coins',WALLET.coins);
  }catch(e){console.error('[book] backend load failed',e);if(!TEAMS.length)fallbackDemo();}
 }
+function tnorm(s){return (''+s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z]/gi,'').toLowerCase();}
+/* lazily pull DOB/height/weight/club/position from SportMonks for one team, map onto its catalog cards by player id */
+async function enrichTeamStats(t){
+ if(!t||t.statsLoaded||t.statsLoading||!t.id||!t.ids||!t.ids.length)return;
+ t.statsLoading=true;
+ try{
+  const resp=await WCR.smFetch(`teams/${t.id}?include=players.player`);
+  const rows=(resp&&resp.data&&resp.data.players)||[];
+  const m={};
+  rows.forEach(row=>{const p=row.player;if(!p)return;m[p.id]={dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),pos:(window.WCR&&WCR.posBucket)?WCR.posBucket(row.position_id):''};});
+  t.dob=t.ids.map(id=>(m[id]&&m[id].dob)||null);
+  t.ht=t.ids.map(id=>(m[id]&&m[id].ht)||null);
+  t.wt=t.ids.map(id=>(m[id]&&m[id].wt)||null);
+  t.club=t.ids.map(id=>(m[id]&&m[id].club)||null);
+  t.pos=t.ids.map(id=>(m[id]&&m[id].pos)||'');
+  t.statsLoaded=true;
+ }catch(e){}
+ t.statsLoading=false;
+}
+function maybeEnrich(ti){const t=TEAMS[ti];if(!t||t.statsLoaded||t.statsLoading||!t.id)return;enrichTeamStats(t).then(()=>{const pg=PAGES[pi];if(albumOn()&&pg&&pg.ti===ti)renderAlbum();});}
 
 /* ===================== PART 2: PACK GENERATION ===================== */
 /* rarity order: common < uncommon < rare < legend < squad (squad = ultra-rare) */
@@ -897,8 +918,8 @@ function renderAlbum(){
  else if(pg.type==='matchday')pv.innerHTML=matchdayHTML();
  else if(pg.type==='groups'){pv.innerHTML=groupsHTML();
    pv.querySelectorAll('[data-jump]').forEach(el=>el.onclick=()=>jumpToTeam(+el.dataset.jump));}
- else if(pg.type==='teamfront')renderTeamPage(TEAMS[pg.ti],0);
- else if(pg.type==='teamsquad')renderTeamPage(TEAMS[pg.ti],1);
+ else if(pg.type==='teamfront'){renderTeamPage(TEAMS[pg.ti],0);maybeEnrich(pg.ti);}
+ else if(pg.type==='teamsquad'){renderTeamPage(TEAMS[pg.ti],1);maybeEnrich(pg.ti);}
  fitMini();
  updateAlbumHud();
  document.getElementById('prev').classList.toggle('off',pi===0);
