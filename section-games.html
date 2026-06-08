@@ -624,7 +624,7 @@ let STATE={owned:{},packsOpened:0,packsSinceRare:0};
 (function(){try{const s=JSON.parse(localStorage.getItem(LSKEY));if(s&&s.owned){STATE=Object.assign({owned:{},packsOpened:0,packsSinceRare:0},s);}}catch(e){}})();
 function saveState(){try{localStorage.setItem(LSKEY,JSON.stringify(STATE));}catch(e){}}
 function cnt(code,i){return (STATE.owned[code]&&STATE.owned[code][i])||0;}
-function has(t,i){return cnt(t.code,i)>0;}
+function has(t,i){if(t&&(t.kind==='squad'||t.kind==='matchday'))return cnt(t.code,i)>0;const pid=t&&t.ids&&t.ids[i];return pid!=null&&(OWNED[pid]||0)>0;}
 function addCard(code,i){STATE.owned[code]=STATE.owned[code]||{};STATE.owned[code][i]=(STATE.owned[code][i]||0)+1;}
 
 /* ===================== TEAMS ===================== */
@@ -715,6 +715,40 @@ function rarityOf(t,i){
 }
 function assignRarities(t){t.rarity=t.players.map((p,i)=>rarityOf(t,i));}
 
+/* ===================== BACKEND CATALOG / INVENTORY / WALLET ===================== */
+let OWNED={}; let WALLET={coins:0,freePacks:0};
+const RARORD={diamond:0,gold:1,common:2};
+function sbGet(qs){return fetch(WCR.SM_PROXY+qs,{headers:{Authorization:'Bearer '+(WCR.SM_ANON||'')}}).then(r=>r.json());}
+function sbPostPack(type){return fetch(WCR.SM_PROXY+'?api=openPack&rider_id='+encodeURIComponent(RIDER),{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+(WCR.SM_ANON||'')},body:JSON.stringify({type})}).then(r=>r.json());}
+function code3(name){const c=(''+(name||'')).toUpperCase().replace(/[^A-Z]/g,'').slice(0,3);return c||'TBD';}
+function setOwnedFromInv(inv){OWNED={};((inv&&inv.items)||[]).forEach(it=>{if(it.player_id!=null)OWNED[it.player_id]=it.count||1;});}
+function updateWallet(){let el=document.getElementById('walletLine');if(!el){const head=document.querySelector('#hub .hubhead');if(!head)return;el=document.createElement('div');el.id='walletLine';el.style.cssText="margin-top:8px;font-family:'Space Mono',monospace;font-size:12px;color:#ffd447;letter-spacing:.04em;";head.appendChild(el);}el.textContent='🪙 '+(WALLET.coins||0)+'   ·   🎟️ '+(WALLET.freePacks||0)+' free pack'+((WALLET.freePacks===1)?'':'s');}
+async function refreshInventory(){try{setOwnedFromInv(await sbGet('?api=getInventory&rider_id='+encodeURIComponent(RIDER)));}catch(e){}}
+async function refreshWallet(){try{const w=await sbGet('?api=getWallet&rider_id='+encodeURIComponent(RIDER));if(w&&w.ok){WALLET.coins=w.coins||0;WALLET.freePacks=w.freePacks||0;updateWallet();}}catch(e){}}
+function pseudoTeam(c){const col=WCR.colorsFor(c.team);return {code:'',id:null,name:(''+(c.team||'')).toUpperCase(),fed:c.team,flag:col.fl,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,players:[c.player_name],photos:[c.image_url],ids:[c.player_id],rarity:[c.rarity],pos:[''],dob:[],ht:[],wt:[],club:[],legends:[]};}
+async function loadFromBackend(){
+ if(!window.WCR||!WCR.SM_PROXY){fallbackDemo();return;}
+ try{
+  try{await sbGet('?api=claimDaily&rider_id='+encodeURIComponent(RIDER));}catch(e){}
+  const [cat,inv,wal]=await Promise.all([sbGet('?api=catalog'),sbGet('?api=getInventory&rider_id='+encodeURIComponent(RIDER)),sbGet('?api=getWallet&rider_id='+encodeURIComponent(RIDER))]);
+  if(!cat||!cat.ok||!Array.isArray(cat.cards)||!cat.cards.length){console.warn('[book] catalog empty — fallback');fallbackDemo();return;}
+  setOwnedFromInv(inv);
+  if(wal&&wal.ok){WALLET.coins=wal.coins||0;WALLET.freePacks=wal.freePacks||0;}
+  const grouped={};cat.cards.forEach(c=>{(grouped[c.team]||(grouped[c.team]=[])).push(c);});
+  const names=Object.keys(grouped).sort((a,b)=>a.localeCompare(b));
+  const usedCodes={};
+  TEAMS=names.map(name=>{const col=WCR.colorsFor(name);let code=code3(name);while(usedCodes[code])code=code+'x';usedCodes[code]=1;
+   const cards=grouped[name].slice().sort((a,b)=>((RARORD[a.rarity]!=null?RARORD[a.rarity]:9)-(RARORD[b.rarity]!=null?RARORD[b.rarity]:9))||(''+a.player_name).localeCompare(b.player_name));
+   return {code,id:null,name:name.toUpperCase(),fed:name,flag:col.fl,crest:null,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+     players:cards.map(c=>c.player_name),photos:cards.map(c=>c.image_url),ids:cards.map(c=>c.player_id),rarity:cards.map(c=>c.rarity),
+     pos:cards.map(()=>''),dob:[],ht:[],wt:[],club:[],legends:[],loaded:true};});
+  registerCodes();buildPages();updateWallet();renderHubStats();
+  loadGroups();
+  if(albumOn())renderAlbum();
+  console.log('[book] backend loaded',TEAMS.length,'teams',cat.cards.length,'cards owned',Object.keys(OWNED).length,'coins',WALLET.coins);
+ }catch(e){console.error('[book] backend load failed',e);if(!TEAMS.length)fallbackDemo();}
+}
+
 /* ===================== PART 2: PACK GENERATION ===================== */
 /* rarity order: common < uncommon < rare < legend < squad (squad = ultra-rare) */
 const ODDS={normal:{common:.677,uncommon:.23,rare:.08,legend:.01,squad:.003},deluxe:{common:.49,uncommon:.28,rare:.16,legend:.06,squad:.01}};
@@ -744,8 +778,8 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 /* ===================== CARD MARKUP (shared album + reveal) ===================== */
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
-function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';return r==='legend'?'fin-diamond':(r==='rare'?'fin-gold':'');}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='legend')return '<div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
@@ -1140,8 +1174,8 @@ document.getElementById('tttInput').addEventListener('keydown',e=>{if(e.key==='E
 document.getElementById('tttSheet').addEventListener('click',e=>{if(e.target.id==='tttSheet')tttCloseSheet();});
 
 /* ===================== STICKER LIGHTBOX ===================== */
-const RARITY_LABEL={common:'Common',uncommon:'Uncommon',rare:'Rare',legend:'Legend',squad:'Squad'};
-const RARITY_COL={common:'#9aa3b2',uncommon:'#4ad6c4',rare:'#5ab0ff',legend:'#ffd447',squad:'#c0a0ff'};
+const RARITY_LABEL={common:'Common',uncommon:'Uncommon',rare:'Rare',legend:'Legend',squad:'Squad',gold:'Gold',diamond:'Diamond'};
+const RARITY_COL={common:'#9aa3b2',uncommon:'#4ad6c4',rare:'#5ab0ff',legend:'#ffd447',squad:'#c0a0ff',gold:'#e9c44f',diamond:'#bfe6ff'};
 const POS_FULL={Keepers:'Goalkeeper',Defenders:'Defender',Midfielders:'Midfielder',Forwards:'Forward'};
 function fmtDOBlong(d){if(!d)return null;const m=(''+d).slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;const months=['January','February','March','April','May','June','July','August','September','October','November','December'];const mo=months[+m[2]-1];if(!mo)return null;return `${+m[3]} ${mo} ${m[1]}`;}
 function rowsHTML(rows){return rows.filter(r=>r&&r[1]!=null&&r[1]!=='').map(r=>`<div class="lb-row"><span class="lb-k">${r[0]}</span><span class="lb-v">${r[1]}</span></div>`).join('');}
@@ -1158,12 +1192,12 @@ function openStickerLightbox(t,i){
  else if(t.kind==='matchday') rows=rowsHTML([['Detail',(t.sub&&t.sub[i])||null],['Fixture','Türkiye vs Paraguay'],['Venue',"Levi's Stadium, Santa Clara"],['Set','Matchday · 4 stickers']]);
  else rows=rowsHTML([
    ['Position', POS_FULL[t.pos&&t.pos[i]]||null],
-   ['Number', (t.ids&&t.ids[i])?('#'+t.ids[i]):null],
    ['Date of birth', fmtDOBlong(t.dob&&t.dob[i])],
    ['Height', (t.ht&&t.ht[i])?(t.ht[i]+' m'):null],
    ['Weight', (t.wt&&t.wt[i])?(t.wt[i]+' kg'):null],
    ['Club', (t.club&&t.club[i])||null],
-   ['Country', t.fed||t.name||null]
+   ['Country', t.fed||t.name||null],
+   ['Set', 'Group Stage']
  ]);
  document.getElementById('lbPanel').innerHTML=`<div class="lb-name">${t.players[i]||''}</div>${rarPill(rar)}${rows}`;
  showLightbox();
@@ -1205,14 +1239,20 @@ function applySkin(){pack.classList.toggle('normal',packType==='normal');pack.cl
 function oddsRowHTML(type){const o=ODDS[type];return TIER_ORDER.map(t=>{const pct=o[t]*100;const s=pct<1?pct.toFixed(1):Math.round(pct);return `<span class="od"><i style="background:${RARITY_COL[t]}"></i>${RARITY_LABEL[t]} ${s}%</span>`;}).join('');}
 function renderOdds(){const n=document.getElementById('oddsNormal'),d=document.getElementById('oddsDeluxe');if(n)n.innerHTML=oddsRowHTML('normal');if(d)d.innerHTML=oddsRowHTML('deluxe');}
 document.querySelectorAll('#packs [data-type]').forEach(el=>el.onclick=()=>startPackOpen(el.dataset.type));
-function startPackOpen(type){packType=type;packCards=genPack(type);if(!packCards.length){alert('Squads still loading — try again in a moment.');return;}
- revealStep=0;fanned=false;applySkin();
+async function startPackOpen(type){
+ if(type!=='normal'&&type!=='deluxe')type='normal';packType=type;applySkin();
+ let res;try{res=await sbPostPack(type);}catch(e){alert('Pack failed — check connection and try again');return;}
+ if(!res||res.error){const m=(res&&res.error)||'Pack failed';alert(m==='insufficient coins'?('Not enough coins — need '+res.cost+', you have '+res.coins):m);return;}
+ WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
+ packCards=(res.cards||[]).map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
+ if(!packCards.length){alert('No cards returned');return;}
+ revealStep=0;fanned=false;
  scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');document.getElementById('pcards').classList.remove('fanned');}
 document.getElementById('sclose').onclick=()=>scrim.classList.remove('on');
 pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.display='none';buildRevealStack();preveal.classList.add('on');showCard(0);},500);};
 
-function miniHTML(c){const t=teamByCode(c.code);
- return `<div class="pcardmini ${cardClass(t,c.i)}" style="${cardStyle(t)}">${cardBody(t,c.i)}</div>`;}
+function miniHTML(c){const t=c.t||teamByCode(c.code);const i=(c.i!=null)?c.i:0;
+ return `<div class="pcardmini ${cardClass(t,i)}" style="${cardStyle(t)}">${cardBody(t,i)}</div>`;}
 function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";host.classList.remove('fanned');
  packCards.forEach((c,n)=>{const wrap=document.createElement('div');wrap.innerHTML=miniHTML(c);const el=wrap.firstElementChild;el.style.zIndex=packCards.length-n;host.appendChild(el);});}
 function ensureRevFx(){let f=document.getElementById('revflash');if(!f){f=document.createElement('div');f.id='revflash';f.className='revflash';document.body.appendChild(f);}let g=document.getElementById('revflourish');if(!g){g=document.createElement('div');g.id='revflourish';g.className='revflourish';document.body.appendChild(g);}return {f,g};}
@@ -1226,11 +1266,9 @@ function fanOut(){fanned=true;const host=document.getElementById('pcards');const
  cards.forEach((c,idx)=>{const off=idx-mid;c.classList.remove('gone');c.classList.add('show');c.style.setProperty('--fx',(off*76).toFixed(1)+'px');c.style.setProperty('--fr',(off*6).toFixed(1)+'deg');c.style.setProperty('--fy',(Math.abs(off)*10).toFixed(1)+'px');c.style.zIndex=10+idx;});
  host.classList.add('fanned');document.getElementById('ptap').style.display='none';document.getElementById('pdone').classList.add('on');}
 preveal.onclick=(e)=>{if(e.target.closest('#pdone'))return;if(revealStep<packCards.length-1){revealStep++;showCard(revealStep);}else if(!fanned){fanOut();}};
-document.getElementById('pdone').onclick=()=>{
- packCards.forEach(c=>addCard(c.code,c.i));
- STATE.packsOpened++; if(packHasRarePlus(packCards))STATE.packsSinceRare=0; else STATE.packsSinceRare++;
- saveState();
+document.getElementById('pdone').onclick=async ()=>{
  scrim.classList.remove('on');
+ await refreshInventory(); await refreshWallet();
  renderHubStats(); if(albumOn())renderAlbum();
 };
 
@@ -1258,5 +1296,5 @@ function fallbackDemo(){
 
 /* ===================== START ===================== */
 registerCodes(); buildPages(); renderHubStats(); renderOdds(); showScreen('gameshub');
-loadRealTeams();
+loadFromBackend();
 </script>

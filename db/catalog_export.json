@@ -1,0 +1,972 @@
+{
+  "generated_from": "cards table + db/curated_rarities.json",
+  "total_cards": 528,
+  "teams": 48,
+  "catalog": {
+    "Algeria": {
+      "diamond": [
+        "Mohamed Amoura",
+        "Riyad Mahrez"
+      ],
+      "gold": [
+        "Amine Gouiri",
+        "Ramy Bensebaini",
+        "Rayan Aït-Nouri"
+      ],
+      "common": [
+        "Adil Boulbina",
+        "Anis Hadj Moussa",
+        "Farès Chaïbi",
+        "Farès Ghedjemis",
+        "Nabil Bentaleb",
+        "Nadhir Benbouali"
+      ],
+      "unmatched": []
+    },
+    "Argentina": {
+      "diamond": [
+        "Julián Álvarez",
+        "Lionel Messi  "
+      ],
+      "gold": [
+        "Alexis Mac Allister",
+        "Enzo Fernández",
+        "Lautaro Martínez"
+      ],
+      "common": [
+        "Giovani Lo Celso",
+        "Giuliano Simeone",
+        "José Manuel López",
+        "Nico González",
+        "Rodrigo De Paul",
+        "Thiago Almada"
+      ],
+      "unmatched": []
+    },
+    "Australia": {
+      "diamond": [
+        "Harry Souttar",
+        "Mathew Ryan"
+      ],
+      "gold": [
+        "Jackson Irvine",
+        "Jordan Bos",
+        "Nestory Irankunda"
+      ],
+      "common": [
+        "Ajdin Hrustic",
+        "Awer Mabil",
+        "Mathew Leckie",
+        "Mohamed Touré",
+        "Nishan Velupillay",
+        "Tete Yengi"
+      ],
+      "unmatched": []
+    },
+    "Austria": {
+      "diamond": [
+        "David Alaba",
+        "Marcel Sabitzer"
+      ],
+      "gold": [
+        "Konrad Laimer",
+        "Marko Arnautovic"
+      ],
+      "common": [
+        "Alexander Prass",
+        "Carney Chukwuemeka",
+        "Florian Grillitsch",
+        "Michael Gregoritsch",
+        "Patrick Wimmer",
+        "Romano Schmid",
+        "Sasa Kalajdzic"
+      ],
+      "unmatched": [
+        {
+          "name": "Baumgartner",
+          "intended": "gold"
+        }
+      ]
+    },
+    "Belgium": {
+      "diamond": [
+        "Jérémy Doku",
+        "Kevin De Bruyne "
+      ],
+      "gold": [
+        "Amadou Onana",
+        "Romelu Lukaku",
+        "Thibaut Courtois"
+      ],
+      "common": [
+        "Charles De Ketelaere",
+        "Diego Moreira",
+        "Dodi Lukébakio",
+        "Leandro Trossard",
+        "Matías Fernández-Pardo",
+        "Youri Tielemans"
+      ],
+      "unmatched": []
+    },
+    "Bosnia and Herzegovina": {
+      "diamond": [
+        "Amar Dedić",
+        "Edin Džeko"
+      ],
+      "gold": [
+        "Ermedin Demirovic",
+        "Esmir Bajraktarevic",
+        "Sead Kolasinac"
+      ],
+      "common": [
+        "Armin Gigovic",
+        "Dzenis Burnic",
+        "Haris Tabakovic",
+        "Jovo Lukic",
+        "Kerim Alajbegovic",
+        "Samed Bazdar"
+      ],
+      "unmatched": []
+    },
+    "Brazil": {
+      "diamond": [
+        "Neymar ",
+        "Vinicius Junior"
+      ],
+      "gold": [
+        "Alisson",
+        "Bruno Guimarães",
+        "Raphinha"
+      ],
+      "common": [
+        "Endrick",
+        "Gabriel Martinelli",
+        "Igor Thiago",
+        "Luiz Henrique",
+        "Matheus Cunha",
+        "Rayan"
+      ],
+      "unmatched": []
+    },
+    "Canada": {
+      "diamond": [
+        "Alphonso Davies",
+        "Jonathan David"
+      ],
+      "gold": [
+        "Alistair Johnston",
+        "Cyle Larin",
+        "Stephen Eustaquio"
+      ],
+      "common": [
+        "Jacob Shaffelburg ",
+        "Jonathan Osorio ",
+        "Liam Millar",
+        "Promise David",
+        "Tajon Buchanan",
+        "Tani Oluwaseyi"
+      ],
+      "unmatched": []
+    },
+    "Cape Verde Islands": {
+      "diamond": [
+        "Logan Costa",
+        "Ryan Mendes"
+      ],
+      "gold": [
+        "Garry Rodrigues",
+        "Jamiro Monteiro",
+        "Jovane Cabral"
+      ],
+      "common": [
+        "Benchimol",
+        "Dailon Livramento",
+        "Hélio Varela",
+        "Nuno Da Costa",
+        "Telmo Arcanjo",
+        "Willy Semedo"
+      ],
+      "unmatched": []
+    },
+    "Colombia": {
+      "diamond": [
+        "Luis Díaz",
+        "Luis Suárez"
+      ],
+      "gold": [
+        "Daniel Muñoz",
+        "James Rodríguez",
+        "Jhon Arias"
+      ],
+      "common": [
+        "Andrés Gómez",
+        "Cucho Hernández",
+        "Jhon Córdoba",
+        "Jorge Carrascal",
+        "Juan Fernando Quintero",
+        "Jáminton Campaz"
+      ],
+      "unmatched": []
+    },
+    "Congo DR": {
+      "diamond": [
+        "Chancel Mbemba",
+        "Yoane Wissa"
+      ],
+      "gold": [
+        "Aaron Wan-Bissaka",
+        "Cédric Bakambu",
+        "Fiston Mayele"
+      ],
+      "common": [
+        "Brian Cipenga",
+        "Gaël Kakuta",
+        "Nathanaël Mbuku",
+        "Samuel Moutoussamy",
+        "Simon Banza",
+        "Théo Bongonda"
+      ],
+      "unmatched": []
+    },
+    "Côte d'Ivoire": {
+      "diamond": [
+        "Amad Diallo",
+        "Wilfried Singo"
+      ],
+      "gold": [
+        "Evan Ndicka",
+        "Franck Kessié",
+        "Simon Adingra"
+      ],
+      "common": [
+        "Ange-Yoan Bonny",
+        "Elye Wahi",
+        "Evann Guessand",
+        "Nicolas Pépé",
+        "Oumar Diakité",
+        "Yan Diomande"
+      ],
+      "unmatched": []
+    },
+    "Croatia": {
+      "diamond": [
+        "Josko Gvardiol ",
+        "Luka Modrić"
+      ],
+      "gold": [
+        "Andrej Kramaric",
+        "Ivan Perišić",
+        "Mateo Kovacic "
+      ],
+      "common": [
+        "Ante Budimir",
+        "Igor Matanovic",
+        "Marco Pašalić",
+        "Nikola Moro",
+        "Petar Musa",
+        "Petar Sučić"
+      ],
+      "unmatched": []
+    },
+    "Curacao": {
+      "diamond": [
+        "Riechedly Bazoer",
+        "Tahith Chong"
+      ],
+      "gold": [
+        "Juninho Bacuna",
+        "Sontje Hansen"
+      ],
+      "common": [
+        "Ar'jany Martha",
+        "Brandley Kuwas",
+        "Gervane Kastaneer",
+        "Jearl Margaritha",
+        "Jeremy Antonisse",
+        "Jürgen Locadia",
+        "Kenji Gorré"
+      ],
+      "unmatched": []
+    },
+    "Czech Republic": {
+      "diamond": [
+        "Patrik Schick",
+        "Tomáš Souček"
+      ],
+      "gold": [
+        "Adam Hlozek",
+        "Ladislav Krejci",
+        "Pavel Sulc"
+      ],
+      "common": [
+        "David Doudera",
+        "Jan Kuchta",
+        "Lukas Provod",
+        "Mojmír Chytil",
+        "Tomas Chory",
+        "Vladimír Darida"
+      ],
+      "unmatched": []
+    },
+    "Ecuador": {
+      "diamond": [
+        "Moisés Caicedo",
+        "Piero Hincapié"
+      ],
+      "gold": [
+        "Enner Valencia",
+        "Pervis Estupiñán",
+        "Willian Pacho"
+      ],
+      "common": [
+        "Alan Minda",
+        "Anthony Valencia",
+        "Gonzalo Plata",
+        "John Yeboah",
+        "Kevin Rodríguez",
+        "Nilson Angulo"
+      ],
+      "unmatched": []
+    },
+    "Egypt": {
+      "diamond": [
+        "Mohamed Salah",
+        "Omar Marmoush"
+      ],
+      "gold": [
+        "Emam Ashour",
+        "Mahmoud Trezeguet",
+        "Mohamed Abdelmonem "
+      ],
+      "common": [
+        "Haissem Hassan",
+        "Hamza Abdelkarim",
+        "Ibrahim Adel",
+        "Mohanad Lasheen",
+        "Mostafa Mohamed Zaki Abdelraouf",
+        "Zizo"
+      ],
+      "unmatched": []
+    },
+    "England": {
+      "diamond": [
+        "Harry Kane ",
+        "Jude Bellingham"
+      ],
+      "gold": [
+        "Bukayo Saka",
+        "Declan Rice",
+        "Marcus Rashford"
+      ],
+      "common": [
+        "Anthony Gordon",
+        "Eberechi Eze",
+        "Ivan Toney",
+        "Morgan Rogers",
+        "Noni Madueke",
+        "Ollie Watkins"
+      ],
+      "unmatched": []
+    },
+    "France": {
+      "diamond": [
+        "Kylian Mbappé",
+        "Ousmane Dembélé"
+      ],
+      "gold": [
+        "Aurélien Tchouaméni",
+        "Michael Olise",
+        "William Saliba"
+      ],
+      "common": [
+        "Adrien Rabiot",
+        "Bradley Barcola",
+        "Désiré Doué",
+        "Jean-Philippe Mateta",
+        "Maghnes Akliouche",
+        "Marcus Thuram"
+      ],
+      "unmatched": []
+    },
+    "Germany": {
+      "diamond": [
+        "Jamal Musiala",
+        "Kai Havertz"
+      ],
+      "gold": [
+        "Antonio Rüdiger",
+        "Florian Wirtz",
+        "Joshua Kimmich "
+      ],
+      "common": [
+        "Deniz Undav",
+        "Jamie Leweling",
+        "Leon Goretzka",
+        "Leroy Sané",
+        "Maximilian Beier",
+        "Nick Woltemade"
+      ],
+      "unmatched": []
+    },
+    "Ghana": {
+      "diamond": [
+        "Antoine Semenyo",
+        "Thomas Partey"
+      ],
+      "gold": [
+        "Iñaki Williams",
+        "Jordan Ayew",
+        "Kamaldeen Sulemana"
+      ],
+      "common": [
+        "Brandon Thomas-Asante",
+        "Christopher Bonsu Baah",
+        "Ernest Nuamah",
+        "Issahaku Fatawu",
+        "Kwasi Sibo",
+        "Prince Adu"
+      ],
+      "unmatched": []
+    },
+    "Haiti": {
+      "diamond": [
+        "Jean-Ricner Bellegarde",
+        "Wilson Isidor"
+      ],
+      "gold": [
+        "Derrick Etienne Jr.",
+        "Duckens Nazon",
+        "Frantzdy Pierrot"
+      ],
+      "common": [
+        "Danley Jean Jacques",
+        "Josué Casimir",
+        "Lenny Joseph",
+        "Louicius Deedson",
+        "Ruben Providence",
+        "Yassin Fortuné"
+      ],
+      "unmatched": []
+    },
+    "Iran": {
+      "diamond": [
+        "Alireza Jahanbakhsh",
+        "Mehdi Taremi"
+      ],
+      "gold": [
+        "Alireza Beiranvand",
+        "Mehdi Torabi",
+        "Saman Ghoddos"
+      ],
+      "common": [
+        "Ali Alipour",
+        "Amirhossein Hosseinzadeh",
+        "Dennis Eckert Ayensa",
+        "Mehdi Ghayedi",
+        "Mohammad Mohebi",
+        "Shahriar Moghanlou"
+      ],
+      "unmatched": []
+    },
+    "Iraq": {
+      "diamond": [
+        "Ali Al-Hamadi",
+        "Zidane Iqbal"
+      ],
+      "gold": [
+        "Amir Al-Ammari",
+        "Aymen Hussein",
+        "Mohanad Ali"
+      ],
+      "common": [
+        "Ahmed Qasem",
+        "Ali Jasim",
+        "Ali Yousif",
+        "Kevin Yakob",
+        "Marko Farji",
+        "Youssef Amyn "
+      ],
+      "unmatched": []
+    },
+    "Japan": {
+      "diamond": [
+        "Daichi Kamada",
+        "Takefusa Kubo"
+      ],
+      "gold": [
+        "Ritsu Doan",
+        "Takehiro Tomiyasu",
+        "Wataru Endo"
+      ],
+      "common": [
+        "Ayase Ueda",
+        "Daizen Maeda",
+        "Junya Ito",
+        "Keisuke Goto",
+        "Koki Ogawa",
+        "Yuito Suzuki"
+      ],
+      "unmatched": []
+    },
+    "Jordan": {
+      "diamond": [
+        "Ali Olwan",
+        "Mousa Tamari"
+      ],
+      "gold": [
+        "Mahmoud Al-Mardi",
+        "Noor Al-Rawabdeh",
+        "Yazan Alarab"
+      ],
+      "common": [
+        "Ali Azaizeh",
+        "Amer Jamous",
+        "Nizar Al-Rashdan",
+        "Odeh Fakhouri",
+        "Rajaei Ayed",
+        "Shararh"
+      ],
+      "unmatched": []
+    },
+    "Korea Republic": {
+      "diamond": [
+        "Heung-min Son",
+        "Min-jae Kim"
+      ],
+      "gold": [
+        "Hee-chan Hwang",
+        "In-beom Hwang ",
+        "Kang-in Lee"
+      ],
+      "common": [
+        "Gue-sung Cho",
+        "Hyeon-gyu Oh",
+        "Hyun-jun Yang",
+        "Jae-sung Lee",
+        "Ji-sung Eom",
+        "Jun-ho Bae"
+      ],
+      "unmatched": []
+    },
+    "Mexico": {
+      "diamond": [
+        "Guillermo Ochoa",
+        "Santiago Gimenez"
+      ],
+      "gold": [
+        "Edson Álvarez",
+        "Gilberto Mora",
+        "Raúl Jiménez"
+      ],
+      "common": [
+        "Alexis Vega",
+        "Armando González",
+        "César Huerta",
+        "Guillermo Martínez Ayala",
+        "Julián Quiñones",
+        "Roberto Alvarado"
+      ],
+      "unmatched": []
+    },
+    "Morocco": {
+      "diamond": [
+        "Achraf Hakimi",
+        "Brahim Díaz"
+      ],
+      "gold": [
+        "Bilal El Khannouss",
+        "Nayef Aguerd",
+        "Noussair Mazraoui"
+      ],
+      "common": [
+        "Abde Ezzalzouli",
+        "Ayoub El Kaabi",
+        "Ayoube Amaimouni-Echghouyab",
+        "Chemsdine Talbi",
+        "Gessime Yassine",
+        "Soufiane Rahimi"
+      ],
+      "unmatched": []
+    },
+    "Netherlands": {
+      "diamond": [
+        "Frenkie de Jong",
+        "Virgil van Dijk "
+      ],
+      "gold": [
+        "Cody Gakpo",
+        "Ryan Gravenberch",
+        "Tijjani Reijnders"
+      ],
+      "common": [
+        "Brian Brobbey",
+        "Crysencio Summerville",
+        "Donyell Malen",
+        "Memphis Depay ",
+        "Noa Lang",
+        "Wout Weghorst "
+      ],
+      "unmatched": []
+    },
+    "New Zealand": {
+      "diamond": [
+        "Chris Wood ",
+        "Marko Stamenić"
+      ],
+      "gold": [
+        "Ben Old",
+        "Liberato Cacace",
+        "Tyler Bindon"
+      ],
+      "common": [
+        "Ben Waine",
+        "Elijah Just",
+        "Jesse Randall",
+        "Kosta Barbarouses",
+        "Matthew Garbett",
+        "Sarpreet Singh"
+      ],
+      "unmatched": []
+    },
+    "Norway": {
+      "diamond": [
+        "Erling Haaland",
+        "Martin Ødegaard"
+      ],
+      "gold": [
+        "Alexander Sørloth",
+        "Antonio Nusa",
+        "Oscar Bobb "
+      ],
+      "common": [
+        "Andreas Schjelderup",
+        "Fredrik Aursnes",
+        "Jens Petter Hauge",
+        "Jørgen Strand Larsen",
+        "Sander Berge",
+        "Thelo Aasgaard"
+      ],
+      "unmatched": []
+    },
+    "Panama": {
+      "diamond": [
+        "Adalberto Carrasquilla",
+        "Amir Murillo"
+      ],
+      "gold": [
+        "Aníbal Godoy",
+        "Ismael Díaz",
+        "José Fajardo"
+      ],
+      "common": [
+        "Alberto Quintero",
+        "Cecilio Waterman",
+        "César Yanis",
+        "José Luis Rodríguez",
+        "Tomás Rodríguez",
+        "Yoel Bárcenas"
+      ],
+      "unmatched": []
+    },
+    "Paraguay": {
+      "diamond": [
+        "Julio Enciso",
+        "Miguel Almirón"
+      ],
+      "gold": [
+        "Antonio Sanabria",
+        "Diego Gómez",
+        "Gustavo Gómez "
+      ],
+      "common": [
+        "Gabriel Ávalos",
+        "Gustavo Caballero",
+        "Isidro Pitta",
+        "Mauricio",
+        "Ramón Sosa",
+        "Álex Arce "
+      ],
+      "unmatched": []
+    },
+    "Portugal": {
+      "diamond": [
+        "Bruno Fernandes",
+        "Cristiano Ronaldo"
+      ],
+      "gold": [
+        "Bernardo Silva",
+        "Rafael Leão",
+        "Vitinha"
+      ],
+      "common": [
+        "Francisco Conceição",
+        "Gonçalo Guedes",
+        "Gonçalo Ramos",
+        "João Félix",
+        "Pedro Neto ",
+        "Rúben Neves"
+      ],
+      "unmatched": []
+    },
+    "Qatar": {
+      "diamond": [
+        "Akram Afif",
+        "Almoez Ali"
+      ],
+      "gold": [
+        "Boualem Khoukhi",
+        "Hasan Al-Haydos ",
+        "Karim Boudiaf"
+      ],
+      "common": [
+        "Ahmed Al-Ganehi",
+        "Ahmed Alaaeldin",
+        "Edmílson Junior",
+        "Mohammed Muntari",
+        "Tahsin Mohammed Jamshid",
+        "Yusuf Abdurisag"
+      ],
+      "unmatched": []
+    },
+    "Saudi Arabia": {
+      "diamond": [
+        "Firas Al-Buraikan",
+        "Nasser Al-Dawsari"
+      ],
+      "gold": [
+        "Mohamed Kanno",
+        "Saleh Al-Shehri",
+        "Saud Abdulhamid"
+      ],
+      "common": [
+        "Abdullah Al-Hamdan",
+        "Alaa Hejji",
+        "Khalid Al-Ghannam",
+        "Musab Al-Juwayr",
+        "Salem Al-Dawsari",
+        "Sultan Mandash"
+      ],
+      "unmatched": []
+    },
+    "Scotland": {
+      "diamond": [
+        "Andrew Robertson",
+        "Scott McTominay"
+      ],
+      "gold": [
+        "John McGinn",
+        "Kieran Tierney",
+        "Lewis Ferguson"
+      ],
+      "common": [
+        "Ben Gannon-Doak",
+        "Ché Adams",
+        "George Hirst",
+        "Lawrence Shankland",
+        "Lyndon Dykes",
+        "Ross Stewart"
+      ],
+      "unmatched": []
+    },
+    "Senegal": {
+      "diamond": [
+        "Nicolas Jackson",
+        "Sadio Mané"
+      ],
+      "gold": [
+        "Iliman Ndiaye",
+        "Ismaïla Sarr",
+        "Pape Matar Sarr"
+      ],
+      "common": [
+        "Assane Diao ",
+        "Bamba Dieng",
+        "Cherif Ndiaye",
+        "Habib Diarra",
+        "Ibrahim Mbaye",
+        "Lamine Camara"
+      ],
+      "unmatched": []
+    },
+    "South Africa": {
+      "diamond": [
+        "Lyle Foster",
+        "Teboho Mokoena"
+      ],
+      "gold": [
+        "Relebohile Mofokeng",
+        "Ronwen Williams",
+        "Themba Zwane"
+      ],
+      "common": [
+        "Evidence Makgopa",
+        "Iqraam Rayners",
+        "Oswin Appollis",
+        "Thalente Mbatha",
+        "Thapelo Maseko",
+        "Tshepang Moremi"
+      ],
+      "unmatched": []
+    },
+    "Spain": {
+      "diamond": [
+        "Lamine Yamal",
+        "Pedri"
+      ],
+      "gold": [
+        "Gavi",
+        "Nico Williams",
+        "Rodri"
+      ],
+      "common": [
+        "Borja Iglesias",
+        "Ferran Torres",
+        "Mikel Oyarzabal",
+        "Víctor Muñoz",
+        "Yéremy Pino",
+        "Álex Baena"
+      ],
+      "unmatched": []
+    },
+    "Sweden": {
+      "diamond": [
+        "Alexander Isak",
+        "Viktor Gyökeres"
+      ],
+      "gold": [
+        "Anthony Elanga",
+        "Lucas Bergvall",
+        "Victor Lindelöf"
+      ],
+      "common": [
+        "Alexander Bernhardsson",
+        "Benjamin Nygren",
+        "Gustaf Nilsson",
+        "Mattias Svanberg",
+        "Taha Ali",
+        "Yasin Ayari"
+      ],
+      "unmatched": []
+    },
+    "Switzerland": {
+      "diamond": [
+        "Granit Xhaka",
+        "Manuel Akanji"
+      ],
+      "gold": [
+        "Breel Embolo",
+        "Dan Ndoye",
+        "Gregor Kobel"
+      ],
+      "common": [
+        "Cedric Itten",
+        "Johan Manzambi",
+        "Noah Okafor",
+        "Remo Freuler",
+        "Rubén Vargas",
+        "Zeki Amdouni"
+      ],
+      "unmatched": []
+    },
+    "Tunisia": {
+      "diamond": [
+        "Ellyes Skhiri",
+        "Hannibal"
+      ],
+      "gold": [
+        "Anis Slimane",
+        "Montassar Talbi",
+        "Sebastian Tounekti"
+      ],
+      "common": [
+        "Elias Achouri",
+        "Elias Saad",
+        "Firas Chaouat",
+        "Hazem Mastouri",
+        "Ismaël Gharbi",
+        "K. Ayari"
+      ],
+      "unmatched": []
+    },
+    "Türkiye": {
+      "diamond": [
+        "Arda Güler",
+        "Kenan Yıldız"
+      ],
+      "gold": [
+        "Barış Alper Yılmaz",
+        "Hakan Çalhanoğlu ",
+        "Kerem Aktürkoğlu",
+        "Merih Demiral"
+      ],
+      "common": [
+        "Deniz Gül",
+        "Kaan Ayhan",
+        "Oğuz Aydın",
+        "Yunus Akgün",
+        "İrfan Can Kahveci"
+      ],
+      "unmatched": []
+    },
+    "United States": {
+      "diamond": [
+        "Christian Pulisic",
+        "Weston McKennie"
+      ],
+      "gold": [
+        "Folarin Balogun",
+        "Giovanni Reyna",
+        "Tyler Adams"
+      ],
+      "common": [
+        "Brenden Aaronson",
+        "Haji Wright",
+        "Malik Tillman",
+        "Max Arfsten",
+        "Ricardo Pepi",
+        "Álex Zendejas"
+      ],
+      "unmatched": []
+    },
+    "Uruguay": {
+      "diamond": [
+        "Federico Valverde",
+        "Fernando Muslera"
+      ],
+      "gold": [
+        "Darwin Núñez",
+        "Manuel Ugarte",
+        "Ronald Araujo"
+      ],
+      "common": [
+        "Agustín Canobbio",
+        "Brian Rodríguez",
+        "Facundo Pellistri ",
+        "Federico Viñas",
+        "Giorgian de Arrascaeta",
+        "Rodrigo Aguirre"
+      ],
+      "unmatched": []
+    },
+    "Uzbekistan": {
+      "diamond": [
+        "Abdukodir Khusanov",
+        "Eldor Shomurodov"
+      ],
+      "gold": [
+        "Abbosbek Fayzullaev",
+        "Jaloliddin Masharipov",
+        "Otabek Shukurov"
+      ],
+      "common": [
+        "Aziz Ganiev",
+        "Azizbek Amanov",
+        "Dostonbek Khamdamov",
+        "Igor Sergeev",
+        "Odildzhon Khamrobekov",
+        "Oston Urunov"
+      ],
+      "unmatched": []
+    }
+  }
+}

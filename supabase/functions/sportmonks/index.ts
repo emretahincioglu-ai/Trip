@@ -125,7 +125,7 @@ const CURATED = {
   "Iraq": {diamond:["Ali Al-Hamadi","Zidane Iqbal"], gold:["Aymen Hussein","Mohanad Ali","Al-Ammari"]},
   "Ivory Coast": {diamond:["Amad Diallo","Singo"], gold:["Kessié","Adingra","Ndicka"]},
   "Japan": {diamond:["Kubo","Kamada"], gold:["Endo","Dōan","Tomiyasu"]},
-  "Jordan": {diamond:["Al-Taamari","Ali Olwan"], gold:["Al-Mardi","Yazan Al-Arab","Al-Rawabdeh"]},
+  "Jordan": {diamond:["Mousa Tamari","Ali Olwan"], gold:["Al-Mardi","Yazan Al-Arab","Al-Rawabdeh"]},
   "Mexico": {diamond:["Ochoa","Santiago Giménez"], gold:["Raúl Jiménez","Edson Álvarez","Mora"]},
   "Morocco": {diamond:["Hakimi","Brahim Díaz"], gold:["Mazraoui","Aguerd","El Khannouss"]},
   "Netherlands": {diamond:["Van Dijk","Frenkie de Jong"], gold:["Gakpo","Gravenberch","Reijnders"]},
@@ -139,12 +139,12 @@ const CURATED = {
   "Scotland": {diamond:["Robertson","McTominay"], gold:["McGinn","Tierney","Ferguson"]},
   "Senegal": {diamond:["Mané","Nicolas Jackson"], gold:["Ismaïla Sarr","Pape Matar Sarr","Iliman Ndiaye"]},
   "South Africa": {diamond:["Lyle Foster","Mokoena"], gold:["Ronwen Williams","Zwane","Mofokeng"]},
-  "South Korea": {diamond:["Son","Kim Min-jae"], gold:["Lee Kang-in","Hwang Hee-chan","Hwang In-beom"]},
+  "South Korea": {diamond:["Heung-min Son","Kim Min-jae"], gold:["Lee Kang-in","Hwang Hee-chan","Hwang In-beom"]},
   "Spain": {diamond:["Yamal","Pedri"], gold:["Rodri","Nico Williams","Gavi"]},
   "Sweden": {diamond:["Isak","Gyökeres"], gold:["Elanga","Bergvall","Lindelöf"]},
   "Switzerland": {diamond:["Xhaka","Akanji"], gold:["Ndoye","Kobel","Embolo"]},
   "Tunisia": {diamond:["Skhiri","Hannibal Mejbri"], gold:["Ben Slimane","Talbi","Tounekti"]},
-  "Turkey": {diamond:["Arda Güler","Kenan Yıldız"], gold:["Çalhanoğlu","Aktürkoğlu","Demiral"]},
+  "Turkey": {diamond:["Arda Güler","Kenan Yıldız"], gold:["Çalhanoğlu","Aktürkoğlu","Demiral","Barış Alper Yılmaz"]},
   "Uruguay": {diamond:["Valverde","Muslera"], gold:["Darwin Núñez","Ugarte","Araújo"]},
   "USA": {diamond:["Pulisic","McKennie"], gold:["Tyler Adams","Balogun","Gio Reyna"]},
   "Uzbekistan": {diamond:["Khusanov","Shomurodov"], gold:["Fayzullaev","Masharipov","Shukurov"]},
@@ -518,6 +518,20 @@ serve(async (req) => {
       const rows = await ctx.sb.get(`inventory?user_id=eq.${ctx.user.id}&select=count,card:cards(player_id,player_name,team,rarity,image_url,set_id)`);
       const items = (rows || []).map((r) => ({ count: r.count, ...(r.card || {}) }));
       return jres({ ok: true, rider_id: ctx.user.rider_id, total: items.length, items });
+    } catch (e) { return jres({ error: String(e) }, 502); }
+  }
+
+  // ---- Read-only catalog dump (service role) ----
+  if (api === "catalog") {
+    try {
+      const SB_URL = Deno.env.get("SUPABASE_URL");
+      const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!SB_URL || !SB_KEY) return jres({ error: "SUPABASE creds not available" }, 500);
+      const r = await fetch(`${SB_URL}/rest/v1/cards?select=id,player_id,player_name,team,rarity,image_url,set_id&active=is.true&limit=5000`,
+        { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } });
+      const rows = await r.json();
+      if (!r.ok) throw new Error(JSON.stringify(rows));
+      return jres({ ok: true, count: Array.isArray(rows) ? rows.length : 0, cards: rows });
     } catch (e) { return jres({ error: String(e) }, 502); }
   }
 
