@@ -233,10 +233,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 /* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
 .pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
 /* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
-/* onyx: darken only the card BACKGROUND (not the photo) so the player stays readable */
-.pcardmini.fin-diamond .cbg,.pcardmini.fin-diamond .lowerzone{filter:brightness(.34) saturate(.5);}
-.pcardmini.fin-diamond .nbanner{filter:brightness(.6) saturate(.6);}
-.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,transparent 34%,#b9c4d44d 50%,transparent 66%);background-size:260% 260%;animation:holodrift 7s ease-in-out infinite;}
+/* DIAMOND: silver/icy shiny wave (same treatment as gold, recolored) over the team-color card */
+.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#8aa0b833 0%,#dfe8f15e 26%,#9fb2c626 44%,#f4f8fc66 52%,#9fb2c626 60%,#dfe8f15e 74%,#8aa0b833 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 /* pack loading animation (covers the openPack fetch gap) */
 .packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -792,7 +790,7 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
 function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="spk s5"></div><div class="spk s6"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
