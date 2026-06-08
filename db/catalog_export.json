@@ -70,23 +70,18 @@
       ],
       "gold": [
         "Konrad Laimer",
-        "Marko Arnautovic"
+        "Marko Arnautovic",
+        "Michael Gregoritsch"
       ],
       "common": [
         "Alexander Prass",
         "Carney Chukwuemeka",
         "Florian Grillitsch",
-        "Michael Gregoritsch",
         "Patrick Wimmer",
         "Romano Schmid",
         "Sasa Kalajdzic"
       ],
-      "unmatched": [
-        {
-          "name": "Baumgartner",
-          "intended": "gold"
-        }
-      ]
+      "unmatched": []
     },
     "Belgium": {
       "diamond": [
@@ -275,6 +270,7 @@
       ],
       "gold": [
         "Juninho Bacuna",
+        "Jürgen Locadia",
         "Sontje Hansen"
       ],
       "common": [
@@ -283,7 +279,6 @@
         "Gervane Kastaneer",
         "Jearl Margaritha",
         "Jeremy Antonisse",
-        "Jürgen Locadia",
         "Kenji Gorré"
       ],
       "unmatched": []

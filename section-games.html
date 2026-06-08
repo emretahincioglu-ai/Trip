@@ -230,10 +230,11 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .wcrtag{position:absolute;bottom:9px;right:11px;z-index:5;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#fff;background:#00000059;padding:2px 6px;border-radius:5px;}
 .pcardmini .sheen{position:absolute;inset:0;border-radius:16px;z-index:3;background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;opacity:0;}
 /* ===== RARITY FINISHES (common = flat · gold · diamond) ===== */
-/* GOLD: static full-card gold foil (brushed metal + fine sparkle + warm tint), no streak */
-.pcardmini.fin-gold .sheen{opacity:1;animation:none;mix-blend-mode:normal;background-image:repeating-linear-gradient(118deg, rgba(255,241,200,.16) 0 1px, transparent 1px 4px),radial-gradient(circle, rgba(255,248,222,.55) 0 .6px, transparent 1.5px),linear-gradient(135deg, rgba(214,170,60,.30), rgba(255,226,150,.12) 50%, rgba(176,134,38,.32));background-size:6px 6px,9px 9px,auto;}
-/* DIAMOND: static silver/white holo foil (cross-hatch + sparkle + cool tint), no streak/rainbow */
-.pcardmini.fin-diamond .sheen{opacity:1;animation:none;mix-blend-mode:normal;background-image:repeating-linear-gradient(118deg, rgba(255,255,255,.18) 0 1px, transparent 1px 4px),repeating-linear-gradient(62deg, rgba(206,232,255,.12) 0 1px, transparent 1px 5px),radial-gradient(circle, rgba(255,255,255,.6) 0 .6px, transparent 1.5px),linear-gradient(135deg, rgba(212,236,255,.28), rgba(255,255,255,.16) 50%, rgba(184,212,242,.28));background-size:6px 6px,8px 8px,9px 9px,auto;}
+/* GOLD: gold/amber holographic shimmer drifting across the whole card (one smooth loop, no streak) */
+.pcardmini.fin-gold .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#d4af3733 0%,#fff2c25e 26%,#e9b84026 44%,#fff7da66 52%,#e9b84026 60%,#fff2c25e 74%,#d4af3733 100%);background-size:230% 230%;animation:holodrift 5.6s ease-in-out infinite;}
+/* DIAMOND: icy silver-blue prismatic shimmer drifting — clearly bluer than the common white */
+.pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:screen;background:linear-gradient(125deg,#a9d4ff3a 0%,#e6f3ff66 20%,#cfe0ff4d 36%,#ffffff70 50%,#d6c9ff4d 62%,#bfe6ff66 80%,#a9d4ff3a 100%);background-size:250% 250%;animation:holodrift 4.6s ease-in-out infinite;}
+@keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
 .pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #eaf6ff;box-shadow:inset 0 0 0 1.5px #ffffff,inset 0 0 20px #bfe6ff80;}
 .pcardmini .fintag{position:absolute;top:13px;right:46px;z-index:6;font-family:'Anton',sans-serif;font-size:9px;letter-spacing:.12em;padding:3px 7px;border-radius:5px;text-transform:uppercase;box-shadow:0 2px 6px #0008;}
@@ -1240,17 +1241,33 @@ function applySkin(){pack.classList.toggle('normal',packType==='normal');pack.cl
 function oddsRowHTML(type){const o=ODDS[type];return TIER_ORDER.map(t=>{const pct=o[t]*100;const s=pct<1?pct.toFixed(1):Math.round(pct);return `<span class="od"><i style="background:${RARITY_COL[t]}"></i>${RARITY_LABEL[t]} ${s}%</span>`;}).join('');}
 function renderOdds(){const n=document.getElementById('oddsNormal'),d=document.getElementById('oddsDeluxe');if(n)n.innerHTML=oddsRowHTML('normal');if(d)d.innerHTML=oddsRowHTML('deluxe');}
 document.querySelectorAll('#packs [data-type]').forEach(el=>el.onclick=()=>startPackOpen(el.dataset.type));
-async function startPackOpen(type){
+let packPromise=null;
+function startPackOpen(type){
  if(type!=='normal'&&type!=='deluxe')type='normal';packType=type;applySkin();
- let res;try{res=await sbPostPack(type);}catch(e){alert('Pack failed — check connection and try again');return;}
- if(!res||res.error){const m=(res&&res.error)||'Pack failed';alert(m==='insufficient coins'?('Not enough coins — need '+res.cost+', you have '+res.coins):m);return;}
- WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
- packCards=(res.cards||[]).map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
- if(!packCards.length){alert('No cards returned');return;}
- revealStep=0;fanned=false;
- scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');document.getElementById('pcards').classList.remove('fanned');}
+ packCards=[];revealStep=0;fanned=false;
+ // show the pack INSTANTLY — no awaiting the server
+ scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');document.getElementById('pcards').classList.remove('fanned');
+ // fire openPack in PARALLEL; resolves to the revealed cards (or throws). Coins/wallet update on arrival.
+ packPromise=sbPostPack(type).then(res=>{
+   if(!res||res.error){const e=new Error((res&&res.error)||'Pack failed');e.detail=res;throw e;}
+   WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
+   return (res.cards||[]).map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
+ });
+}
 document.getElementById('sclose').onclick=()=>scrim.classList.remove('on');
-pack.onclick=()=>{pack.classList.add('tearing');setTimeout(()=>{packStage.style.display='none';buildRevealStack();preveal.classList.add('on');showCard(0);},500);};
+pack.onclick=()=>{
+ if(pack.classList.contains('tearing'))return;
+ pack.classList.add('tearing');
+ setTimeout(async ()=>{
+   packStage.style.display='none';
+   let cards;
+   try{ cards=await packPromise; }
+   catch(e){ scrim.classList.remove('on'); const d=e&&e.detail; alert((d&&d.error==='insufficient coins')?('Not enough coins — need '+d.cost+', you have '+d.coins):((e&&e.message)||'Pack failed — try again')); return; }
+   packCards=cards||[];
+   if(!packCards.length){ scrim.classList.remove('on'); alert('No cards returned'); return; }
+   buildRevealStack();preveal.classList.add('on');showCard(0);
+ },500);
+};
 
 function miniHTML(c){const t=c.t||teamByCode(c.code);const i=(c.i!=null)?c.i:0;
  return `<div class="pcardmini ${cardClass(t,i)}" style="${cardStyle(t)}">${cardBody(t,i)}</div>`;}
