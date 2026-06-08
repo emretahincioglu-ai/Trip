@@ -275,27 +275,6 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .spk.s6{top:84%;left:40%;width:10px;height:10px;animation-delay:2.1s;}
 @keyframes cardfloat{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
 .lightbox .pcardmini.fin-diamond{animation:cardfloat 3.6s ease-in-out infinite;}
-/* ===== LEGENDS promo finish — retro 1989-Fleer (visual treatment only; preview-only for now) ===== */
-/* aged photo: sepia + desaturate + contrast on the PHOTO LAYER ONLY (.hd2) */
-.pcardmini.fin-legend .hd2{filter:sepia(.55) saturate(.66) contrast(1.09) brightness(1.0);}
-/* film grain over the photo region only */
-.pcardmini.fin-legend .hd2::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.4;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");background-size:130px 130px;}
-/* warm tone wash + warm vignette over the photo region only */
-.pcardmini.fin-legend .hd2::after{content:'';position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(118% 92% at 50% 36%, transparent 40%, rgba(70,44,16,.55) 100%),linear-gradient(0deg, rgba(122,86,38,.32), rgba(150,112,54,.12));}
-/* cream / aged card background */
-.pcardmini.fin-legend .cbg{background:#e9dec3;background-image:repeating-linear-gradient(0deg, rgba(90,70,40,.05) 0 1px, transparent 1px 5px),radial-gradient(circle at 32% 22%, rgba(255,250,235,.7), transparent 62%),radial-gradient(circle at 80% 85%, rgba(120,95,55,.14), transparent 60%);}
-/* tone the bright (made-for-dark) decorations so they don't clash on cream */
-.pcardmini.fin-legend .rays,.pcardmini.fin-legend .confetti,.pcardmini.fin-legend .starfield{opacity:.06;}
-.pcardmini.fin-legend .big26{color:#5a4a2512;-webkit-text-stroke:2px #5a4a2522;text-shadow:none;}
-.pcardmini.fin-legend .teamwm,.pcardmini.fin-legend .tickerwm{color:#6a532a1f;}
-.pcardmini.fin-legend .swoosh1{opacity:.5;}
-/* team-color nameplate behind the name */
-.pcardmini.fin-legend .nbanner{background:var(--c1);border-top:2px solid #ffffff8c;border-bottom:2px solid #00000033;}
-/* gray pinstripe border + thin team-color inner frame line + cream liner */
-.pcardmini.fin-legend::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:9px solid transparent;border-image:repeating-linear-gradient(90deg,#8b8b8b 0 3px,#efefef 3px 6px) 9;box-shadow:inset 0 0 0 2px var(--c1),inset 0 0 0 4px #efe7d2;}
-/* LEGENDS wordmark + foil PROMO stamp (rendered via finishExtras, legend only) */
-.pcardmini .legwm{position:absolute;top:6px;left:0;right:0;z-index:6;text-align:center;font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.22em;color:#6a4c1e;text-shadow:0 1px 0 #ffffffaa;text-transform:uppercase;pointer-events:none;}
-.pcardmini .promostamp{position:absolute;left:9px;top:47%;transform:translateY(-50%) rotate(-13deg);z-index:6;width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:8px;letter-spacing:.04em;color:#5a3d12;text-transform:uppercase;background:radial-gradient(circle at 34% 30%,#fff0bf,#dab74e 68%,#a87f2a);border:1.5px solid #fff3c2;box-shadow:0 2px 6px #0006,inset 0 0 6px #ffffff66;pointer-events:none;}
 /* reveal escalation */
 .pcardmini.diamondin.show{animation:dflip 1.1s cubic-bezier(.2,.9,.3,1) both;}
 @keyframes dflip{0%{transform:perspective(1000px) rotateY(90deg) scale(.82);opacity:0}55%{opacity:1}100%{transform:perspective(1000px) rotateY(0deg) scale(1);opacity:1}}
@@ -865,8 +844,8 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 /* ===================== CARD MARKUP (shared album + reveal) ===================== */
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
-function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='legend')return 'fin-legend';if(r==='diamond')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='legend')return '<div class="legwm">LEGENDS</div><div class="promostamp">PROMO</div>';if(r==='diamond')return '<div class="dchase"></div><div class="dsweep"></div><div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="dchase"></div><div class="dsweep"></div><div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
@@ -1401,15 +1380,5 @@ function fallbackDemo(){
 
 /* ===================== START ===================== */
 registerCodes(); buildPages(); renderHubStats(); renderOdds(); showScreen('gameshub');
-const PREVIEW=(new URLSearchParams(location.search).get('preview')||'').toLowerCase();
-if(['legend','gold','diamond','common'].includes(PREVIEW)){
-  // LOCAL PREVIEW HARNESS — render a hardcoded sample card in the enlarge view. No backend / no login needed.
-  const S={code:'POR',id:null,name:'PORTUGAL',fed:'Portugal',flag:'🇵🇹',crest:null,
-    c1:'#c8102e',c2:darken('#c8102e',0.78),c3:'#0a6b3b',accent2:'#0a6b3b',
-    players:['Cristiano Ronaldo'],photos:['https://cdn.sportmonks.com/images/soccer/players/4/580.png'],
-    ids:[580],rarity:[PREVIEW],pos:['Forwards'],dob:['1985-02-05'],ht:['1.87'],wt:['83'],club:['Al-Nassr'],jersey:[7],legends:[]};
-  openStickerLightbox(S,0);
-} else {
-  loadFromBackend();
-}
+loadFromBackend();
 </script>
