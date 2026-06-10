@@ -471,13 +471,13 @@ serve(async (req) => {
       const norm = (s) => ("" + (s || "")).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/gi, "").toLowerCase();
       const SUPER_ICONS = (cfg.super_icon_names || ["Messi", "Mbappé", "Cristiano Ronaldo", "Haaland", "Neymar"]).map(norm);
       const ICONS = (cfg.icon_names || ["Vinícius", "Bellingham", "Lamine Yamal", "Harry Kane", "Salah", "Heung-min Son", "De Bruyne", "Modrić", "Van Dijk", "Musiala", "Pedri", "Valverde", "Lautaro", "Bukayo Saka", "Rodri", "Wirtz", "Vitinha", "Gyökeres", "Isak", "Olise"]).map(norm);
-      // STICKER-BOOK gentle gradient (NOT FIFA-brutal): stars are only modestly rarer than filler
-      // so the base set — stars included — is realistically collectable over a 12-day trip.
-      // super-icon ~2.2x rarer than filler, icon ~1.4x. Dial pull_weight_super_icon DOWN (e.g. 20)
-      // for more chase, or UP toward 100 for fully flat. True scarcity is reserved for the promo sets.
+      // STICKER-BOOK gradient (NOT FIFA-brutal): stars rarer than filler but clearly PACKABLE —
+      // tuned so a moderately-engaged player packs their first icon ~day 2 and a few by day 3-4.
+      // super-icon ~4x rarer than filler, icon ~2.2x. Dial pull_weight_super_icon DOWN for more
+      // chase, UP toward 100 for flatter. Live-tunable via config; true scarcity is for the promos.
       const W_BASE = Number(cfg.pull_weight_base) || 100;
-      const W_ICON = Number(cfg.pull_weight_icon) || 70;
-      const W_SUPER = Number(cfg.pull_weight_super_icon) || 45;
+      const W_ICON = Number(cfg.pull_weight_icon) || 45;
+      const W_SUPER = Number(cfg.pull_weight_super_icon) || 25;
       const matchAny = (n, list) => list.some((k) => k && n.includes(k));
       const cardWeight = (c) => { const n = norm(c.player_name); if (matchAny(n, SUPER_ICONS)) return W_SUPER; if (matchAny(n, ICONS)) return W_ICON; return W_BASE; };
       const pickWeighted = (arr) => { if (!arr || !arr.length) return null; let tot = 0; for (const c of arr) tot += cardWeight(c); let r = Math.random() * tot; for (const c of arr) { r -= cardWeight(c); if (r <= 0) return c; } return arr[arr.length - 1]; };
