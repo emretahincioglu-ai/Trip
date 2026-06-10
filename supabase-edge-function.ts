@@ -464,7 +464,20 @@ serve(async (req) => {
       for (const c of catalog) { (pool[c.rarity] || (pool[c.rarity] = [])).push(c); }
       const isGood = (t) => t === "gold" || t === "diamond";
       const rollTier = () => { const r = Math.random(); let a = 0; for (const k of Object.keys(weights)) { a += Number(weights[k]) || 0; if (r < a) return k; } return "common"; };
-      const pickFrom = (tier) => { for (const t of [tier, "gold", "diamond", "common"]) { const arr = pool[t]; if (arr && arr.length) return arr[Math.floor(Math.random() * arr.length)]; } return null; };
+      // ---- FIFA-style WITHIN-tier weighting: stars are rarer than filler of the SAME rarity ----
+      // (a Diamond Mbappé pulls far less often than a Diamond Ochoa). Two icon bands + a base.
+      // All config-overridable (config keys: pull_weight_base / pull_weight_icon / pull_weight_super_icon,
+      // icon_names[], super_icon_names[]) so you can tune live via the DB with NO redeploy.
+      const norm = (s) => ("" + (s || "")).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/gi, "").toLowerCase();
+      const SUPER_ICONS = (cfg.super_icon_names || ["Messi", "Mbappé", "Cristiano Ronaldo", "Haaland", "Neymar"]).map(norm);
+      const ICONS = (cfg.icon_names || ["Vinícius", "Bellingham", "Lamine Yamal", "Harry Kane", "Salah", "Heung-min Son", "De Bruyne", "Modrić", "Van Dijk", "Musiala", "Pedri", "Valverde", "Lautaro", "Bukayo Saka", "Rodri", "Wirtz", "Vitinha", "Gyökeres", "Isak", "Olise"]).map(norm);
+      const W_BASE = Number(cfg.pull_weight_base) || 100;
+      const W_ICON = Number(cfg.pull_weight_icon) || 28;
+      const W_SUPER = Number(cfg.pull_weight_super_icon) || 9;
+      const matchAny = (n, list) => list.some((k) => k && n.includes(k));
+      const cardWeight = (c) => { const n = norm(c.player_name); if (matchAny(n, SUPER_ICONS)) return W_SUPER; if (matchAny(n, ICONS)) return W_ICON; return W_BASE; };
+      const pickWeighted = (arr) => { if (!arr || !arr.length) return null; let tot = 0; for (const c of arr) tot += cardWeight(c); let r = Math.random() * tot; for (const c of arr) { r -= cardWeight(c); if (r <= 0) return c; } return arr[arr.length - 1]; };
+      const pickFrom = (tier) => { for (const t of [tier, "gold", "diamond", "common"]) { const arr = pool[t]; if (arr && arr.length) return pickWeighted(arr); } return null; };
 
       // ---- roll pack_size cards (avoid exact dup within a pack when possible) ----
       const pulls = [];
@@ -479,7 +492,7 @@ serve(async (req) => {
       const pityDue = (w.packs_since_good || 0) >= (pityPacks - 1);
       if (pityDue && !pulls.some((c) => isGood(c.rarity)) && (pool.gold.length || pool.diamond.length)) {
         const src = pool.gold.length ? pool.gold : pool.diamond;
-        const g = src[Math.floor(Math.random() * src.length)];
+        const g = pickWeighted(src);
         if (g) pulls[Math.floor(Math.random() * pulls.length)] = g;
       }
       const packHasGood = pulls.some((c) => isGood(c.rarity));

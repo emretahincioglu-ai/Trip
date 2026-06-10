@@ -385,6 +385,11 @@ deno_version = 2
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
+# The app calls the function with no JWT (anon key empty), so JWT verification MUST stay off.
+# Without this block a CLI deploy defaults verify_jwt = true and every app call 401s.
+[functions.sportmonks]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327
