@@ -249,10 +249,39 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini.fin-diamond .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(125deg,#7a818c33 0%,#e6ecf36e 26%,#9aa2ac2e 44%,#ffffff8c 52%,#9aa2ac2e 60%,#e6ecf36e 74%,#7a818c33 100%);background-size:230% 230%;animation:holodrift 5.0s ease-in-out infinite;}
 @keyframes holodrift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 /* pack loading animation (covers the openPack fetch gap) */
-.packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
-.packloader .plring{width:54px;height:54px;border:5px solid #ffffff22;border-top-color:#ffd000;border-radius:50%;animation:plspin .8s linear infinite;}
-.packloader .pltext{font-family:'Anton',sans-serif;letter-spacing:.2em;font-size:13px;color:#ffd0e0;}
-@keyframes plspin{to{transform:rotate(360deg)}}
+.packloader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
+.packloader .plstage{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;}
+/* rotating sunburst behind the orb */
+.packloader .plrays{position:absolute;inset:-32%;border-radius:50%;mix-blend-mode:screen;opacity:.9;
+ background:conic-gradient(from 0deg,#ffd00000 0deg,#ffd00066 10deg,#ffd00000 22deg,#ff4d8d00 34deg,#ff4d8d66 46deg,#ff4d8d00 58deg,#ffd00000 70deg,#ffd00066 80deg,#ffd00000 92deg);
+ animation:plrayspin 5.5s linear infinite;}
+/* pulsing core glow */
+.packloader .plglow{position:absolute;width:168px;height:168px;border-radius:50%;filter:blur(2px);
+ background:radial-gradient(circle,#ffe89a 0%,#ffd00066 38%,transparent 70%);animation:plglowpulse 1.2s ease-in-out infinite;}
+/* central energy orb (anticipation shake) */
+.packloader .plorb{position:relative;z-index:3;width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at 50% 36%,#fff8e1,#ffd000 56%,#c98a00 100%);
+ box-shadow:0 0 30px #ffd000cc,0 0 64px #ff4d8d77,inset 0 0 22px #ffffff99;animation:plorbshake 1.5s ease-in-out infinite;}
+.packloader .plmark{width:60px;height:auto;filter:drop-shadow(0 2px 4px #0006);}
+/* expanding shockwave rings */
+.packloader .plring2,.packloader .plring2::after{position:absolute;z-index:2;width:104px;height:104px;border-radius:50%;border:2px solid #ffe89a;box-sizing:border-box;}
+.packloader .plring2{animation:plringout 1.3s ease-out infinite;}
+.packloader .plring2::after{content:'';inset:0;border-color:#ff8fbf;animation:plringout 1.3s ease-out .65s infinite;}
+/* flying sparks */
+.packloader .plspark{position:absolute;z-index:4;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 9px #ffe89a;opacity:0;}
+.packloader .plspark.sp1{--ang:18deg;animation:plspark 1.1s ease-out 0s infinite;}
+.packloader .plspark.sp2{--ang:74deg;animation:plspark 1.1s ease-out .18s infinite;}
+.packloader .plspark.sp3{--ang:131deg;animation:plspark 1.1s ease-out .36s infinite;}
+.packloader .plspark.sp4{--ang:198deg;animation:plspark 1.1s ease-out .54s infinite;}
+.packloader .plspark.sp5{--ang:262deg;animation:plspark 1.1s ease-out .72s infinite;}
+.packloader .plspark.sp6{--ang:319deg;animation:plspark 1.1s ease-out .9s infinite;}
+.packloader .pltext{font-family:'Anton',sans-serif;font-size:14px;color:#ffe6b0;text-shadow:0 0 12px #ffd00099;animation:pltextpulse 1.2s ease-in-out infinite;}
+@keyframes plrayspin{to{transform:rotate(360deg)}}
+@keyframes plglowpulse{0%,100%{transform:scale(.9);opacity:.7}50%{transform:scale(1.12);opacity:1}}
+@keyframes plorbshake{0%,100%{transform:translate(0,0) rotate(0) scale(1)}20%{transform:translate(-2px,1px) rotate(-3deg) scale(1.03)}40%{transform:translate(2px,-1px) rotate(3deg)}60%{transform:translate(-1px,1px) rotate(-2deg) scale(1.05)}80%{transform:translate(1px,-1px) rotate(2deg)}}
+@keyframes plringout{0%{transform:scale(.6);opacity:.95}100%{transform:scale(2.3);opacity:0}}
+@keyframes plspark{0%{opacity:0;transform:rotate(var(--ang)) translateX(20px) scale(.4)}25%{opacity:1}100%{opacity:0;transform:rotate(var(--ang)) translateX(122px) scale(1)}}
+@keyframes pltextpulse{0%,100%{opacity:.65;letter-spacing:.30em}50%{opacity:1;letter-spacing:.42em}}
 .pcardmini.fin-gold::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #e9c44f;box-shadow:inset 0 0 0 1.5px #fff0b8,inset 0 0 18px #e9c44f66;}
 .pcardmini.fin-diamond::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:4px solid #15181f;box-shadow:inset 0 0 0 1.5px #525b67,inset 0 0 18px #00000055;animation:diamondpulse 2.4s ease-in-out infinite;}
 @keyframes diamondpulse{0%,100%{box-shadow:inset 0 0 0 1.5px #4a5360,inset 0 0 16px #00000055,inset 0 0 6px #9fb0c733;}50%{box-shadow:inset 0 0 0 1.5px #9aa6b8,inset 0 0 16px #00000044,inset 0 0 26px #d4e6ffaa;}}
@@ -826,7 +855,7 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
       <div class="packlabel">RIP IT OPEN ✦</div>
       <div class="packcount">5 stickers inside</div>
     </div>
-    <div class="packloader" id="packLoader"><div class="plring"></div><div class="pltext">OPENING PACK…</div></div>
+    <div class="packloader" id="packLoader"><div class="plstage"><div class="plrays"></div><div class="plglow"></div><div class="plring2"></div><div class="plorb"><img src="assets/wc26-mark.svg" class="plmark" onerror="this.style.display='none'"></div><i class="plspark sp1"></i><i class="plspark sp2"></i><i class="plspark sp3"></i><i class="plspark sp4"></i><i class="plspark sp5"></i><i class="plspark sp6"></i></div><div class="pltext">OPENING…</div></div>
     <div class="preveal" id="preveal">
       <div class="pcards" id="pcards"></div>
       <div class="ptap" id="ptap">TAP FOR NEXT ›</div>
