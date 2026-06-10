@@ -707,7 +707,7 @@ function reloadTrip(){
  const fm=document.getElementById('fr-matchday');
  if(fm.src && fm.src!=='about:blank') setFrameURL(fm,'section-trip.html?rider='+ME.id+'&screen=gameday');
  const fg=document.getElementById('fr-games');
- if(fg){fg.dataset.src='section-games.html?rider='+ME.id; if(fg.src && fg.src!=='about:blank') setFrameURL(fg,'section-games.html?rider='+ME.id);}
+ if(fg){const gu='section-games.html?rider='+ME.id+'&v='+Date.now();fg.dataset.src=gu; if(fg.src && fg.src!=='about:blank') setFrameURL(fg,gu);}
 }
 const loaderEl=document.getElementById('loader');
 const IFRAME_KEYS=['trip','matchday','wc','games'];
@@ -736,6 +736,9 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
  showTab(id);
 });
 setFrameURL(document.getElementById('fr-trip'),'section-trip.html?rider=0');
+/* Cache-bust the Games section: it's an iframe that otherwise clings to a cached copy for the
+   whole session, so redeploys never reach the phone. Stamp the URL so each app load pulls fresh. */
+(function(){const fg=document.getElementById('fr-games');if(fg)fg.dataset.src='section-games.html?rider='+(ME&&ME.id!=null?ME.id:0)+'&v='+Date.now();})();
 syncRider();
 renderBudget();
 </script>
