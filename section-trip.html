@@ -666,6 +666,43 @@ const PLACES={
   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Palace_of_Fine_Arts_at_night_in_2014.jpg/1280px-Palace_of_Fine_Arts_at_night_in_2014.jpg",
   blurb:"Greco-Roman rotunda and lagoon left over from the 1915 Pan-Pacific Expo. Five minutes from the Wharf. Photogenic from every angle.",
   address:"3601 Lyon St, San Francisco, CA 94123",website:"https://palaceoffinearts.org",price:"Free",duration:"~30 min"},
+ /* ---- Monterey/Carmel (Sat) + Big Sur→SB (Sun) stops ---- */
+ "Carmel Beach":{type:"Beach",icon:"🏖️",
+  blurb:"White-sand crescent at the foot of Ocean Avenue, framed by cypress with Pebble Beach across the bay. Easy walk down, dogs off-leash, postcard sunsets.",
+  address:"Carmel Beach, Carmel-by-the-Sea, CA 93923",price:"Free",duration:"~45 min"},
+ "Carmel Beach — sunset":{type:"Beach · Golden Hour",icon:"🌅",
+  blurb:"The same crescent at day's end — post up on the sand for golden hour before the short drive back to the hotel.",
+  address:"Scenic Rd, Carmel-by-the-Sea, CA 93923",price:"Free",duration:"~45 min"},
+ "Point Lobos":{type:"State Natural Reserve",icon:"🌲",
+  blurb:"The \"crown jewel\" of California's state parks — turquoise coves, cypress groves, sea lions and otters. Whalers Cove, Cypress Grove, China Cove.",
+  address:"Point Lobos State Natural Reserve, CA-1, Carmel-by-the-Sea, CA 93923",website:"https://www.parks.ca.gov/?page_id=571",price:"$10 / car",duration:"1.5–3 hrs"},
+ "17-Mile Drive":{type:"Scenic Toll Road",icon:"🌊",
+  blurb:"Private toll road through Pebble Beach — Lone Cypress, Bird Rock, Spanish Bay. Enter at the Carmel gate and wind up the coast (~$12/car, refunded with a Pebble Beach restaurant receipt).",
+  address:"17-Mile Dr, Pebble Beach, CA 93953",price:"$12 / car",duration:"~1 hr"},
+ "Black Bear Diner":{type:"Breakfast · Diner",icon:"🐻",
+  blurb:"Big, hearty American breakfast to fuel the Big Sur run — pancakes, biscuits and gravy, bottomless coffee.",
+  address:"2149 N Fremont St, Monterey, CA 93940",price:"$$",duration:"~1 hr"},
+ "Bixby Bridge":{type:"Landmark · 1932",icon:"🌉",
+  blurb:"The iconic open-spandrel arch over Bixby Creek — the postcard shot of Big Sur. Pull-out on the north side for photos.",
+  address:"Bixby Creek Bridge, CA-1, Monterey County, CA 93920",price:"Free",duration:"~20 min"},
+ "Pfeiffer Big Sur SP":{type:"State Park · Redwoods",icon:"🌲",
+  blurb:"Redwood groves along the Big Sur River — a cuttable buffer stop. Duck in for the trees if you're ahead of schedule.",
+  address:"47225 CA-1, Big Sur, CA 93920",website:"https://www.parks.ca.gov/?page_id=570",price:"$10 / car",duration:"~45 min"},
+ "Nepenthe":{type:"Clifftop Cafe · View",icon:"☕",
+  blurb:"Legendary clifftop terrace 800 ft above the Pacific. Come for the view and a coffee or the Ambrosia burger — not a sit-down meal if you're short on time.",
+  address:"48510 CA-1, Big Sur, CA 93920",website:"https://www.nepenthe.com",price:"$$$",duration:"~45 min"},
+ "Henry Miller Library":{type:"Bookstore · Arts",icon:"📚",
+  blurb:"Quirky nonprofit bookshop and arts space tucked in the redwoods, honoring the Big Sur author. Opens 11am.",
+  address:"48603 CA-1, Big Sur, CA 93920",website:"https://www.henrymiller.org",price:"Free",duration:"~30 min"},
+ "McWay Falls":{type:"Waterfall · Overlook",icon:"💦",
+  blurb:"An 80-ft waterfall dropping onto the beach at Julia Pfeiffer Burns SP. Short walk from the lot to the overlook — one of the most photographed spots on the coast.",
+  address:"Julia Pfeiffer Burns SP, CA-1, Big Sur, CA 93920",website:"https://www.parks.ca.gov/?page_id=578",price:"$10 / car",duration:"~30 min"},
+ "Lunch — Ragged Point":{type:"Lunch · Clifftop",icon:"🍴",
+  blurb:"The last outpost on the southern Big Sur coast — clifftop restaurant with a view, plus gas and a place to stretch before the elephant seals.",
+  address:"19019 CA-1, Ragged Point, CA 93452",website:"https://www.raggedpointinn.com",price:"$$",duration:"~1 hr"},
+ "Elephant seals — Piedras Blancas":{type:"Wildlife Viewpoint",icon:"🦭",
+  blurb:"Boardwalk rookery where hundreds of elephant seals haul out year-round. Free, right off Highway 1 north of San Simeon.",
+  address:"Piedras Blancas Elephant Seal Rookery, CA-1, San Simeon, CA 93452",website:"https://www.elephantseal.org",price:"Free",duration:"~30 min"},
  "Breakfast near the Wharf":{type:"Breakfast",icon:"🥐",
   blurb:"Quick fuel before Pier 39. Boudin Bakery for sourdough, Buena Vista Cafe for the original Irish coffee, or any of the cafes on Beach St.",
   address:"Fisherman's Wharf, San Francisco, CA",duration:"~45 min",price:"$$"},
@@ -725,6 +762,72 @@ const WINDOW=30,START=new Date("2026-06-17T08:00:00-04:00"),KICK=new Date("2026-
 let ME=PEOPLE[0], curCity=0, paniniCollected=1;
 let fogMode=false; try{fogMode=localStorage.getItem('wcr_fog')==='1';}catch(e){}
 function setFog(on){fogMode=!!on;try{localStorage.setItem('wcr_fog',on?'1':'0');}catch(e){}openCity(curCity,true);}
+
+/* ---- Per-day toggles for Monterey/Carmel (n:03) + Big Sur (n:04) ----
+   Same pattern as setFog: persisted in localStorage, re-render via openCity. */
+let satDinner='carmel'; try{satDinner=localStorage.getItem('wcr_sat_dinner')||'carmel';}catch(e){}
+let satStart='early';   try{satStart=localStorage.getItem('wcr_sat_start')||'early';}catch(e){}
+let satLobos='full';    try{satLobos=localStorage.getItem('wcr_sat_lobos')||'full';}catch(e){}
+let sunBigsur='full';   try{sunBigsur=localStorage.getItem('wcr_sun_bigsur')||'full';}catch(e){}
+function setSatDinner(v){satDinner=v;try{localStorage.setItem('wcr_sat_dinner',v);}catch(e){}openCity(curCity,true);}
+function setSatStart(v){satStart=v;try{localStorage.setItem('wcr_sat_start',v);}catch(e){}openCity(curCity,true);}
+function setSatLobos(v){satLobos=v;try{localStorage.setItem('wcr_sat_lobos',v);}catch(e){}openCity(curCity,true);}
+function setSunBigsur(v){sunBigsur=v;try{localStorage.setItem('wcr_sun_bigsur',v);}catch(e){}openCity(curCity,true);}
+
+/* SATURDAY — Monterey/Carmel. Builds items[] from the 3 toggle states. Tuple [type,title,sub,time,coords?]. */
+function buildSatItems(){
+ const early=satStart==='early', carmel=satDinner==='carmel';
+ const CARMEL=[-121.9233,36.5547],BEACH=[-121.9290,36.5530],LOBOS=[-121.9430,36.5158],MILE=[-121.9656,36.5681];
+ const items=[];
+ items.push(["drive","Pick up 2× Jeep Wrangler","Santa Clara",early?"9:30a":"10:30a"]);
+ items.push(["place","Carmel-by-the-Sea","Ocean Ave · Scenic Road · lunch"+(satLobos==='skip'?" · + extra Carmel town time":""),early?"11:15a":"12:15p",CARMEL]);
+ if(!carmel)items.push(["place","Carmel Beach","Daytime walk on the sand",early?"2:15p":"3:00p",BEACH]);
+ if(satLobos==='full')items.push(["place","Point Lobos","Whalers Cove · Cypress Grove · China Cove/Gibson",early?"2:45p":"3:30p",LOBOS]);
+ else if(satLobos==='short')items.push(["place","Point Lobos","Cypress Grove · China Cove",early?"3:00p":"3:45p",LOBOS]);
+ if(carmel){
+   if(early)items.push(["place","17-Mile Drive","Pebble Beach · Lone Cypress","5:30p",MILE]);
+   else items.push(["place","17-Mile Drive (optional)","7pm dinner + sunset cut it close","5:30p",MILE]);
+ } else {
+   items.push(["place","17-Mile Drive","Enter Carmel gate → exit Pacific Grove gate",early?"4:30p":"5:00p",MILE]);
+ }
+ if(carmel){
+   items.push(["food","Dinner — Carmel","","7:00p"]);
+   items.push(["place","Carmel Beach — sunset","Golden hour on the sand","8:25p",BEACH]);
+   items.push(["bed","Back to Portola","~20 min","9:00p"]);
+ } else {
+   items.push(["bed","Check in — Portola Hotel","Monterey","6:30p"]);
+   items.push(["food","Dinner — Monterey","","8:00p"]);
+ }
+ return items;
+}
+/* SUNDAY — Big Sur → SB. One toggle: full | trimmed (trimmed omits Pfeiffer + slower morning). */
+function buildSunItems(){
+ const full=sunBigsur!=='trimmed';
+ const items=[
+  ["food","Breakfast — Black Bear Diner","Monterey",full?"8:00a":"8:45a",[-121.8543,36.6042]],
+  ["drive","Gas up in Monterey","Few stations south",full?"8:45a":"9:45a"],
+  ["place","Bixby Bridge","Iconic span",full?"9:50a":"10:40a",[-121.9018,36.3714]],
+ ];
+ if(full)items.push(["place","Pfeiffer Big Sur SP (optional)","Redwoods · cuttable buffer","10:35a",[-121.7870,36.2483]]);
+ items.push(
+  ["place","Nepenthe","View + coffee, not a meal","12:00p",[-121.7587,36.2208]],
+  ["place","Henry Miller Library","Opens 11am","12:40p",[-121.7548,36.2230]],
+  ["place","McWay Falls","Julia Pfeiffer Burns SP · ~$10","1:20p",[-121.6705,36.1577]],
+  ["food","Lunch — Ragged Point","","2:30p",[-121.3260,35.7836]],
+  ["place","Elephant seals — Piedras Blancas","","4:00p",[-121.2585,35.6620]],
+  ["bed","Santa Barbara overnight","Arrive ~6:30p","6:30p"]
+ );
+ return items;
+}
+function satToggleHTML(){
+ return `<div class="fogtog"><div class="fogq">Carmel dinner = beach at sunset (17-Mile only on early start). Monterey dinner = daytime beach, 17-Mile always fits, end at hotel.</div><div class="fogseg"><button type="button" class="${satDinner==='carmel'?'on':''}" onclick="setSatDinner('carmel')">🌅 Carmel dinner<small>Beach at sunset</small></button><button type="button" class="${satDinner==='monterey'?'on':''}" onclick="setSatDinner('monterey')">🏨 Monterey dinner<small>End at hotel</small></button></div></div>`
+  +`<div class="fogtog"><div class="fogq">Start time</div><div class="fogseg"><button type="button" class="${satStart==='early'?'on':''}" onclick="setSatStart('early')">⏰ Early<small>Pickup 9:30a</small></button><button type="button" class="${satStart==='easy'?'on':''}" onclick="setSatStart('easy')">😴 Easy<small>Pickup 10:30a</small></button></div></div>`
+  +`<div class="fogtog"><div class="fogq">Point Lobos</div><div class="fogseg"><button type="button" class="${satLobos==='full'?'on':''}" onclick="setSatLobos('full')">Full<small>~3 hrs</small></button><button type="button" class="${satLobos==='short'?'on':''}" onclick="setSatLobos('short')">Short<small>~1.5 hrs</small></button><button type="button" class="${satLobos==='skip'?'on':''}" onclick="setSatLobos('skip')">Skip<small>+ Carmel time</small></button></div></div>`;
+}
+function sunToggleHTML(){
+ const full=sunBigsur!=='trimmed';
+ return `<div class="fogtog"><div class="fogq">Leave by ~1 PM to clear the scenic stretch in daylight.</div><div class="fogseg"><button type="button" class="${full?'on':''}" onclick="setSunBigsur('full')">🌲 Full<small>+ Pfeiffer redwoods</small></button><button type="button" class="${!full?'on':''}" onclick="setSunBigsur('trimmed')">✂️ Trimmed<small>Skip Pfeiffer</small></button></div></div>`;
+}
 /* CRITICAL: bind ME to ?rider= URL param so the iframe shows the picked person, not Emre.
    Must run BEFORE any rendering (carousel, overview, topbar). */
 (function bindRiderFromURL(){
@@ -953,6 +1056,7 @@ window.WX_ICONS={
 };
 function openCity(i,skipPush){curCity=i;const c=CITIES[i];
  if(c.itemsFog){if(!c.itemsClear)c.itemsClear=c.items;c.items=fogMode?c.itemsFog:c.itemsClear;}
+ if(c.n==='03')c.items=buildSatItems(); else if(c.n==='04')c.items=buildSunItems();
  document.getElementById('cityBg').style.background=c.bg;bg.style.background=c.bg;
  const cityDates=(c.datesByRider&&c.datesByRider[ME.id])||c.dates;
  document.getElementById('cityHero').innerHTML=`<div class="hn">${c.name}</div><div class="hd">${cityDates} · ${c.day}</div><div class="hwx">${c.wx}</div>`;
@@ -968,6 +1072,7 @@ function openCity(i,skipPush){curCity=i;const c=CITIES[i];
   ${c.weatherDays?`<div class="wxrow">${c.weatherDays.map(w=>`<div class="wxchip wx-${w.ic||'sun'}"><div class="wxd">${w.d}</div><div class="wxicon">${(window.WX_ICONS||{})[w.ic]||(window.WX_ICONS||{}).sun||''}</div><div class="wxbig">${w.hi}°<span class="wxlo">/ ${w.lo}°</span></div><div class="wxc">${w.c}</div></div>`).join('')}</div>`:''}
   <div class="ith"><b>Itinerary</b><small>${c.day}</small></div>
   ${c.itemsFog?`<div class="fogtog"><div class="fogq">🌉 Check the Golden Gate <a href="https://www.golden-gate-bridge.org/bridge-tour-webcams" target="_blank" rel="noopener">live cam</a> the morning of — then pick:</div><div class="fogseg"><button type="button" class="${!fogMode?'on':''}" onclick="setFog(false)">☀️ Clear<small>Bridge first · 9:15a</small></button><button type="button" class="${fogMode?'on':''}" onclick="setFog(true)">🌫️ Foggy<small>Bridge later · 11a</small></button></div></div>`:''}
+  ${c.n==='03'?satToggleHTML():''}${c.n==='04'?sunToggleHTML():''}
   ${hasCoords?`<button class="maptoggle" id="mapToggle" type="button" onclick="toggleMap()"><span class="mti">🗺️</span><span class="mtl">View Stops on Map</span><span class="mtchev">›</span></button><div id="mapWrap" style="display:none;margin-top:10px"><div id="mapbox" class="mapbox"></div></div>`:''}
   <div id="itinList" style="margin-top:14px">
   ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const optM=it[1].match(/\((optional|alt)\)/i);const isOpt=!!optM;const optLabel=isOpt?optM[1].toUpperCase():'';const cleanName=isOpt?it[1].replace(/\s*\((optional|alt)\)/i,''):it[1];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ff3b30;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${isOpt?'opt':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${cleanName}${isOpt?`<span class="optbadge">${optLabel}</span>`:''}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
