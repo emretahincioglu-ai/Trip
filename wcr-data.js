@@ -48,6 +48,7 @@ const TEAM_COLORS = {
   // UEFA
   "England":       {c1:"#ffffff", c2:"#e0202c", fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
   "France":        {c1:"#1a3a8c", c2:"#e0202c", fl:"🇫🇷"},
+  "Italy":         {c1:"#0066b3", c2:"#ffffff", fl:"🇮🇹"},
   "Croatia":       {c1:"#e0202c", c2:"#1a3a8c", fl:"🇭🇷"},
   "Norway":        {c1:"#ba0c2f", c2:"#00205b", fl:"🇳🇴"},
   "Portugal":      {c1:"#006600", c2:"#e0202c", fl:"🇵🇹"},

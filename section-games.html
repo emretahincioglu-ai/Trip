@@ -275,6 +275,196 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 .pcardmini .spk.s6{top:84%;left:40%;width:10px;height:10px;animation-delay:2.1s;}
 @keyframes cardfloat{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
 .lightbox .pcardmini.fin-diamond{animation:cardfloat 3.6s ease-in-out infinite;}
+/* ===== LEGEND finish — TOP tier (a notch above diamond): full-bleed photo + metallic-gold frame + gold foil ===== */
+.pcardmini.fin-legend{background:#0c0c10;}
+/* full-bleed national-team photo (cover) */
+.pcardmini.fin-legend .legphoto{position:absolute;inset:0;z-index:2;background-size:cover;background-position:center 14%;}
+.pcardmini.fin-legend .legphoto.legph-ph{background:linear-gradient(160deg,#2b2b33,#141418);}
+/* veteran headshot cutout on a team-tinted dark backdrop (same chrome as the custom full-bleed legends) */
+.pcardmini.fin-legend .legbackdrop{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 85% at 50% 24%, var(--cd) 0%, #0a0a0e 72%);}
+.pcardmini.fin-legend .legphoto-head{background-size:contain;background-position:center 86%;}
+/* ===== LEGENDS album page (review gallery, grouped by position) ===== */
+.legendspage{position:absolute;inset:0;background:radial-gradient(circle at 50% 0%, #1a1330, #0c0a12 60%);overflow:hidden;}
+.legendspage .lg-scroll{position:absolute;inset:0;overflow-y:auto;padding:18px 16px 32px;}
+.legendspage .pg-kick{font-family:'Space Mono',monospace;letter-spacing:.22em;font-size:10px;color:#d4af37;}
+.legendspage .pg-h{font-family:'Archivo Black',sans-serif;font-size:31px;letter-spacing:.05em;color:#ffe9a8;text-shadow:0 0 14px #d4af3777;margin:1px 0 8px;}
+.legendspage .leg-grouplbl{font-family:'Anton',sans-serif;letter-spacing:.14em;font-size:13px;color:#cdb978;margin:15px 2px 8px;border-bottom:1px solid #d4af3733;padding-bottom:4px;}
+.legendspage .leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.legendspage .leg-grid .slot{position:relative;aspect-ratio:200/256.7;}
+.legendspage .leg-grid .filled{position:absolute;inset:0;border-radius:9px;overflow:visible;}
+/* depth: top vignette + strong bottom darken so the name bar reads */
+.pcardmini.fin-legend .legvig{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(120% 75% at 50% 26%, transparent 45%, rgba(0,0,0,.42) 100%),linear-gradient(180deg, rgba(0,0,0,.20) 0 13%, transparent 30% 50%, rgba(0,0,0,.92) 100%);}
+/* continuous gold foil sheen sweep (richer + slower than the gold finish) */
+.pcardmini.fin-legend .legsheen{position:absolute;inset:0;z-index:4;pointer-events:none;mix-blend-mode:overlay;background:linear-gradient(118deg,transparent 28%,#ffe7a04d 42%,#fff6d8b3 50%,#ffe7a04d 58%,transparent 72%);background-size:300% 100%;animation:legfoil 7.5s ease-in-out infinite;}
+@keyframes legfoil{0%{background-position:160% 0}100%{background-position:-60% 0}}
+/* polished metallic-gold frame + gold glow aura */
+.pcardmini.fin-legend::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:5px solid transparent;border-image:linear-gradient(135deg,#7a5a1e,#ffe9a8,#d4af37,#fff3c0,#9c742a,#ffe9a8,#7a5a1e) 5;box-shadow:inset 0 0 0 1.6px #241a06,inset 0 0 0 3px #f4d98a55,0 0 24px #d4af3766;}
+/* LEGEND = normal card theme + premium gold foil sheen; custom legends use a full-bleed photo */
+.pcardmini.fin-legend .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(118deg,transparent 30%,#ffe7a04d 43%,#fff6d8b3 50%,#ffe7a04d 57%,transparent 70%);background-size:300% 100%;animation:legfoil 7.5s ease-in-out infinite;}
+.pcardmini.fin-legend .hd2.fullbleed{left:0;right:0;top:0;height:100%;background-size:cover;background-position:center 14%;filter:none;}
+.pcardmini.fin-legend3 .hd2.fullbleed{left:0;right:0;top:0;height:100%;background-size:cover;background-position:center 14%;filter:none;}
+/* custom legends: framed portrait inset on the sunburst (matches the veteran sunburst design) */
+.pcardmini.fin-legend3 .hd2.legportrait{top:0;left:0;right:0;height:100%;background-size:cover;background-position:center 12%;filter:none;}
+/* custom legends: bigger portrait + name banner moved DOWN to the bottom (like the gold card), same sunburst theme */
+.pcardmini.fin-legend3.legcust .lowerzone{display:none;}
+.pcardmini.fin-legend3 .nbanner{padding-left:20px;}
+.pcardmini.fin-legend3.legcust .nbanner{top:auto;bottom:0;padding:8px 16px 16px 20px;}
+.pcardmini.fin-legend3 .wcrtag{display:none;}
+/* LEGEND jersey number — metallic gold, themed (not the plain white of regular cards) */
+.pcardmini.fin-legend3 .jnum{display:none;}
+/* legends: single country code (top-right), no duplicate flag chip */
+.pcardmini.fin-legend3 .flagchip{display:none;}
+.pcardmini.fin-legend3 .legcountry{position:absolute;top:60px;right:11px;z-index:6;font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.1em;color:#ffe9c0;background:#00000066;border:1px solid #ffe9a844;padding:2px 7px;border-radius:5px;box-shadow:0 2px 6px #0008;}
+
+/* ===================== FUTURE STARS finish (fin-future) — pitch: 3 directions ===================== */
+.pcardmini .futwm{position:absolute;top:9px;left:0;right:0;z-index:8;text-align:center;font-family:'Archivo Black',sans-serif;font-size:10px;letter-spacing:.32em;text-transform:uppercase;pointer-events:none;}
+.pcardmini .fintag-f{font-family:'Anton',sans-serif;}
+@keyframes futscan{0%{background-position:130% 0}100%{background-position:-130% 0}}
+/* STYLE 1 — NEON CYBER */
+.pcardmini.fin-future1{background:#080c16;}
+.pcardmini.fin-future1 .cbg{background:#080c16;background-image:linear-gradient(0deg,transparent 92%,#00e5ff22 93%,transparent 94%),linear-gradient(90deg,transparent 92%,#00e5ff18 93%,transparent 94%),radial-gradient(circle at 50% 32%, var(--c1) 0%, #080c16 72%);background-size:15px 15px,15px 15px,auto;}
+.pcardmini.fin-future1 .rays,.pcardmini.fin-future1 .confetti,.pcardmini.fin-future1 .starfield,.pcardmini.fin-future1 .big26,.pcardmini.fin-future1 .teamwm,.pcardmini.fin-future1 .tickerwm,.pcardmini.fin-future1 .swoosh1,.pcardmini.fin-future1 .vig{opacity:0;}
+.pcardmini.fin-future1 .lowerzone{background-color:#080c16e0;background-image:linear-gradient(180deg, transparent 0 40%, #000a 100%);}
+.pcardmini.fin-future1 .lowerzone::before{background:#00e5ff;opacity:.5;}
+.pcardmini.fin-future1 .nbanner{background:#0a1320e0;border-top:2px solid #00e5ff;border-bottom:2px solid #00e5ff44;}
+.pcardmini.fin-future1 .nbanner .nm{color:#e6fbff;text-shadow:0 0 8px #00e5ffcc;}
+.pcardmini.fin-future1::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:2px solid #18e9ff;box-shadow:inset 0 0 12px #00e5ff55,0 0 16px #00e5ff99;animation:futpulse 2.1s ease-in-out infinite;}
+@keyframes futpulse{0%,100%{box-shadow:inset 0 0 10px #00e5ff44,0 0 12px #00e5ff77}50%{box-shadow:inset 0 0 18px #00e5ff99,0 0 26px #00e5ffdd}}
+.pcardmini.fin-future1 .sheen{opacity:1;mix-blend-mode:screen;background:linear-gradient(115deg,transparent 42%,#00e5ff66 48%,#ff2fd066 52%,transparent 60%);background-size:320% 100%;animation:futscan 3.4s linear infinite;}
+.pcardmini.fin-future1 .futwm{color:#7df3ff;text-shadow:0 0 8px #00e5ffcc;}
+.pcardmini.fin-future1 .fintag-f{background:#06222b;color:#7df3ff;border:1px solid #00e5ff;box-shadow:0 0 8px #00e5ff88;}
+/* STYLE 2 — HOLOGRAPHIC PRISM */
+.pcardmini.fin-future2{background:#13152a;}
+.pcardmini.fin-future2 .cbg{background:#13152a;background-image:radial-gradient(circle at 50% 30%, var(--c1) 0%, #13152a 74%);}
+.pcardmini.fin-future2 .rays,.pcardmini.fin-future2 .confetti,.pcardmini.fin-future2 .starfield,.pcardmini.fin-future2 .big26,.pcardmini.fin-future2 .teamwm,.pcardmini.fin-future2 .tickerwm,.pcardmini.fin-future2 .swoosh1{opacity:0;}
+.pcardmini.fin-future2 .nbanner{background:#0e1024e6;border-top:2px solid #b98cff;border-bottom:2px solid #00e5ff66;}
+.pcardmini.fin-future2 .nbanner .nm{color:#fff;text-shadow:0 0 10px #b98cffaa;}
+.pcardmini.fin-future2::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:3px solid transparent;border-image:linear-gradient(125deg,#ff2fd0,#7a5cff,#00e5ff,#2fff8a,#ffe92f,#ff2fd0) 3;box-shadow:0 0 18px #b98cff88;}
+.pcardmini.fin-future2 .sheen{opacity:.5;mix-blend-mode:color-dodge;background:linear-gradient(125deg,#ff2fd0,#7a5cff,#00e5ff,#2fff8a,#ffe92f,#ff2fd0);background-size:300% 300%;animation:futholo 6s linear infinite;}
+@keyframes futholo{0%{background-position:0% 0%}100%{background-position:300% 300%}}
+.pcardmini.fin-future2 .futwm{color:#fff;text-shadow:0 0 8px #b98cffcc,0 0 14px #00e5ff88;}
+.pcardmini.fin-future2 .fintag-f{background:linear-gradient(120deg,#ff2fd0,#7a5cff,#00e5ff);color:#fff;border:1px solid #ffffff66;box-shadow:0 0 8px #b98cffaa;}
+/* STYLE 3 — LIQUID CHROME / HUD */
+.pcardmini.fin-future3{background:#0e131b;}
+.pcardmini.fin-future3 .cbg{background:linear-gradient(160deg,#33404e,#0e131b 78%);background-image:linear-gradient(0deg,transparent 96%,#ffffff12 97%,transparent 98%),linear-gradient(160deg,#33404e,#0e131b 78%);background-size:9px 9px,auto;}
+.pcardmini.fin-future3 .rays,.pcardmini.fin-future3 .confetti,.pcardmini.fin-future3 .starfield,.pcardmini.fin-future3 .big26,.pcardmini.fin-future3 .teamwm,.pcardmini.fin-future3 .tickerwm,.pcardmini.fin-future3 .swoosh1{opacity:0;}
+.pcardmini.fin-future3 .nbanner{background:#161d27e6;border-top:2px solid #cfd9e6;border-bottom:2px solid #6b7a8c;}
+.pcardmini.fin-future3 .nbanner .nm{color:#eef4fb;text-shadow:0 1px 2px #000;}
+.pcardmini.fin-future3::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:3px solid transparent;border-image:linear-gradient(150deg,#6b7a8c,#eef4fb,#9fb0c2,#ffffff,#5a6675,#cfd9e6) 3;box-shadow:inset 0 0 0 1px #ffffff22,0 0 12px #9fb0c266;}
+.pcardmini.fin-future3 .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(118deg,transparent 38%,#dfe9f5aa 48%,#ffffffcc 50%,#dfe9f5aa 52%,transparent 62%);background-size:300% 100%;animation:futscan 4s linear infinite;}
+.pcardmini.fin-future3 .futwm{color:#dfe9f5;letter-spacing:.38em;text-shadow:0 0 6px #9fb0c2aa;}
+.pcardmini.fin-future3 .fintag-f{background:linear-gradient(180deg,#eef4fb,#9fb0c2);color:#1a222c;border:1px solid #fff;box-shadow:0 1px 4px #0008;}
+/* FUTURE finish — regular card structure, teal-green + gold coloring + concentric rings */
+.pcardmini.fin-future4{background:#0a201a;}
+.pcardmini.fin-future4 .cbg{background:radial-gradient(125% 80% at 50% 30%, #245c4e 0%, #0e2a23 55%, #081813 100%);}
+.pcardmini.fin-future4 .rays,.pcardmini.fin-future4 .confetti,.pcardmini.fin-future4 .starfield,.pcardmini.fin-future4 .big26,.pcardmini.fin-future4 .teamwm,.pcardmini.fin-future4 .tickerwm,.pcardmini.fin-future4 .swoosh1,.pcardmini.fin-future4 .vig{opacity:0;}
+.pcardmini.fin-future4 .lowerzone{background:linear-gradient(180deg, transparent 0 38%, #07171199 72%, #061410 100%);}
+/* player cards: drop the border stripes; primary streak in the middle + secondary streak right underneath */
+.pcardmini.fin-future4 .futcolorbar{display:none;}
+.pcardmini.fin-future4 .lowerzone::before{background:var(--c1);opacity:.95;box-shadow:0 2px 10px #00000055;}
+.pcardmini.fin-future4 .lowerzone::after{content:'';position:absolute;left:-25%;right:-25%;top:56%;height:8%;background:var(--ca);opacity:.95;transform:rotate(-8deg);box-shadow:0 2px 9px #00000055;}
+.pcardmini.fin-future4 .nbanner{background:linear-gradient(180deg,#f3e6b6,#cda747);border-top:1.5px solid #fff6d6;border-bottom:1.5px solid #876818;}
+.pcardmini.fin-future4 .nbanner .nm{color:#241a06;text-shadow:0 1px 0 #ffffff7a;}
+.pcardmini.fin-future4::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:2px solid transparent;border-image:linear-gradient(135deg,#7a5e22,#e9d9a0,#caa23a,#fff0c0,#9c742a,#e9d9a0,#7a5e22) 2;box-shadow:inset 0 0 0 1px #00000033,0 0 14px #caa23a40;}
+.pcardmini.fin-future4.legcust::after{border:2.5px solid transparent;border-image:linear-gradient(135deg,#0e5a3a,#5fe6ab,#1c8f5e,#aaffd9,#0e5a3a) 2;box-shadow:inset 0 0 0 1px #00000033,0 0 13px #34c98a55;}
+.pcardmini.fin-future4 .sheen{opacity:.45;mix-blend-mode:overlay;background:linear-gradient(118deg,transparent 38%,#eafff855 49%,#ffffff80 50%,#eafff855 51%,transparent 62%);background-size:300% 100%;animation:futscan 7s linear infinite;}
+.pcardmini.fin-future4 .futwm{display:none;}
+.pcardmini.fin-future4 .fintag-f{background:linear-gradient(180deg,#f3e6b6,#cda747);color:#241a06;border:1px solid #fff6d6;box-shadow:0 2px 6px #0008;}
+.pcardmini.fin-future4 .statchips{background:linear-gradient(180deg,rgba(6,16,12,0.16) 0%,rgba(6,16,12,0.4) 100%);border:1px solid #caa23a40;}
+.pcardmini.fin-future4 .chip-club{display:none;}
+.pcardmini.fin-future4 .jnum{color:#f3e6b6;}
+.pcardmini.fin-future4 .flagchip{display:none;}
+.pcardmini.fin-future4.legcust .nbanner{top:auto;bottom:0;}
+/* team primary/secondary colours — bold side stripes (obvious per-nation identifier) */
+.pcardmini .futcolorbar{position:absolute;left:4px;right:4px;top:14%;bottom:14px;z-index:6;pointer-events:none;}
+.pcardmini .futcolorbar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:3px;background:var(--c1);box-shadow:0 0 8px var(--c1),0 1px 3px #0009;}
+.pcardmini .futcolorbar::after{content:'';position:absolute;right:0;top:0;bottom:0;width:5px;border-radius:3px;background:var(--ca);box-shadow:0 0 8px var(--ca),0 1px 3px #0009;}
+/* moving background behind the player (sits behind the photo cutout) */
+.pcardmini.fin-future4 .futbg{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+@property --futang{syntax:'<angle>';inherits:false;initial-value:0deg;}
+/* BG 1 — RADAR SWEEP (rotating green beam, like the veterans' sun but tech) */
+.pcardmini.futbg-1 .futbg{background:conic-gradient(from var(--futang,0deg) at 50% 38%, transparent 0 70%, #10ffa030 80%, #7dffc8aa 89%, #10ffa030 97%, transparent 100%);animation:futradar 6s linear infinite;}
+@keyframes futradar{to{--futang:360deg}}
+/* BG 2 — AURORA (soft green energy drifting) */
+.pcardmini.futbg-2 .futbg{background:radial-gradient(55% 42% at 30% 28%, #10ffa040, transparent 62%),radial-gradient(48% 34% at 72% 52%, #00e5c026, transparent 62%),radial-gradient(42% 30% at 50% 74%, #2bffae22, transparent 60%);background-size:185% 185%;animation:futaurora 9s ease-in-out infinite alternate;}
+@keyframes futaurora{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+/* BG 3 — LIGHTNING (periodic electric strike) */
+.pcardmini.futbg-3 .futbg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 150' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='%237dffc8' stroke-width='2.6'%3E%3Cpath d='M60 6 L45 58 L57 58 L41 124'/%3E%3Cpath d='M28 18 L22 52' stroke-width='1.4' opacity='0.6'/%3E%3Cpath d='M78 38 L72 80' stroke-width='1.4' opacity='0.6'/%3E%3C/g%3E%3C/svg%3E");background-size:cover;background-position:center;filter:drop-shadow(0 0 5px #10ffa0);animation:futbolt 3.8s steps(1,end) infinite;}
+@keyframes futbolt{0%,86%{opacity:.05}88%{opacity:.9}89%{opacity:.2}91%{opacity:.95}93%{opacity:.12}100%{opacity:.05}}
+/* BG 4 — GREEN RAYS (rotating sunburst, like the veterans' sun but green/tech) */
+.pcardmini.futbg-4 .futbg{background:repeating-conic-gradient(from var(--futang,0deg) at 50% 36%, #10ffa026 0deg 3.5deg, transparent 3.5deg 13deg);animation:futradar 11s linear infinite;}
+/* BG 5 — PULSE RINGS (concentric green rings emanating from behind the player) */
+.pcardmini.futbg-5 .futbg{background:repeating-radial-gradient(circle at 50% 36%, #10ffa03a 0 2px, transparent 2px 20px);transform-origin:50% 36%;animation:futrings 3.6s ease-out infinite;}
+@keyframes futrings{0%{transform:scale(.5);opacity:.85}100%{transform:scale(2.1);opacity:0}}
+/* BG 6 — CONCENTRIC RINGS (reference look: clean target rings behind the player, gentle breathe) */
+.pcardmini.futbg-6 .futbg::before,.pcardmini.futbg-6 .futbg::after{content:'';position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 37%, transparent 0 13px, #f4e3a6 13px 14.7px, transparent 14.7px 29px);transform-origin:50% 37%;animation:futsonar 4.6s ease-out infinite;}
+.pcardmini.futbg-6 .futbg::after{animation-delay:-2.3s;}
+@keyframes futsonar{0%{transform:scale(.4);opacity:.92}68%{opacity:.4}100%{transform:scale(2.15);opacity:0}}
+@keyframes futringpulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.95;transform:scale(1.045)}}
+/* FUTURE custom icons — full-bleed photo (no bg/no stat panel), name at bottom, green frame */
+.pcardmini.fin-future4 .hd2.legportrait{left:0;right:0;top:0;height:100%;background-size:cover;background-position:center 12%;filter:none;}
+.pcardmini.fin-future4.legcust .lowerzone{display:none;}
+.pcardmini.fin-future4.legcust .nbanner{top:auto;bottom:0;padding:8px 14px 16px;}
+.pcardmini .promostamp{position:absolute;left:9px;top:47%;transform:translateY(-50%) rotate(-13deg);z-index:8;width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:8px;letter-spacing:.04em;color:#5a3d12;text-transform:uppercase;background:radial-gradient(circle at 34% 30%,#fff0bf,#dab74e 68%,#a87f2a);border:1.5px solid #fff3c2;box-shadow:0 2px 6px #0006,inset 0 0 6px #ffffff66;pointer-events:none;}
+.pcardmini.fin-legend::before{inset:5px;border-radius:11px;border:1px solid #ffe9a833;z-index:6;}
+/* LEGENDS wordmark (top) */
+.pcardmini.fin-legend .legwm{position:absolute;top:9px;left:0;right:0;z-index:8;text-align:center;font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.36em;color:#ffe9a8;text-shadow:0 1px 3px #000c,0 0 9px #d4af3799;text-transform:uppercase;pointer-events:none;}
+/* LEGEND pill where the rarity tag normally sits */
+.pcardmini .fintag-l{background:linear-gradient(180deg,#ffefb8,#d8b346);color:#2a1d00;border:1px solid #fff3c0;box-shadow:0 2px 7px #000a;}
+/* gold corner foil seal */
+.pcardmini.fin-legend .legseal{position:absolute;left:11px;top:34px;z-index:8;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#3a2800;background:radial-gradient(circle at 34% 30%,#fff4cf,#e7c35a 60%,#a87f2a);border:1.5px solid #fff3c2;box-shadow:0 2px 7px #0008,inset 0 0 6px #fff7;}
+/* gold sparkles */
+.pcardmini.fin-legend .spk{filter:drop-shadow(0 0 5px #ffe6a0);background:radial-gradient(circle,#fff6d8 0 9%,transparent 42%),linear-gradient(0deg,transparent 45%,#ffe9a8 49%,#ffe9a8 51%,transparent 55%),linear-gradient(90deg,transparent 45%,#ffe9a8 49%,#ffe9a8 51%,transparent 55%);}
+/* black + gold name bar (bottom) */
+.pcardmini.fin-legend .legbar{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:9px 13px 11px;background:linear-gradient(180deg, transparent, #0a0a0c 36%, #050506);border-top:2px solid #d4af37;box-shadow:0 -6px 18px #000a;}
+.pcardmini.fin-legend .legname{font-family:'Anton',sans-serif;font-size:23px;line-height:1.02;letter-spacing:.01em;color:#ffe9a8;text-shadow:0 2px 6px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pcardmini.fin-legend .legsub{display:flex;align-items:center;justify-content:space-between;margin-top:5px;}
+.pcardmini.fin-legend .legpos{font-family:'Anton',sans-serif;font-size:11px;letter-spacing:.12em;color:#cdb978;text-transform:uppercase;}
+.pcardmini.fin-legend .legflag{font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.04em;color:#fff;display:flex;align-items:center;gap:6px;}
+.pcardmini.fin-legend .legflag .fl{font-size:15px;}
+#lbCard .pcardmini.fin-legend .legname{font-size:26px;}
+
+/* ===== LEGEND v2 — retro screenprint: bold team colours + halftone dots ===== */
+.pcardmini.fin-legend2 .hd2{filter:saturate(1.18) contrast(1.1) brightness(1.02);}
+.pcardmini.fin-legend2 .hd2::after{content:'';position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.5;background-image:radial-gradient(circle at center, rgba(0,0,0,.5) 0 1.1px, transparent 1.7px);background-size:5px 5px;}
+.pcardmini.fin-legend2 .cbg{background:var(--ca);background-image:radial-gradient(circle at center, rgba(255,255,255,.4) 0 2px, transparent 2.8px),linear-gradient(135deg, var(--c1) 0 48%, transparent 48%);background-size:10px 10px,auto;}
+.pcardmini.fin-legend2 .rays,.pcardmini.fin-legend2 .confetti,.pcardmini.fin-legend2 .starfield,.pcardmini.fin-legend2 .big26,.pcardmini.fin-legend2 .teamwm,.pcardmini.fin-legend2 .tickerwm,.pcardmini.fin-legend2 .swoosh1{opacity:0;}
+.pcardmini.fin-legend2 .nbanner{background:var(--c1);border-top:3px solid #fff;border-bottom:3px solid #0007;}
+.pcardmini.fin-legend2::after{content:'';position:absolute;inset:0;border-radius:16px;z-index:7;pointer-events:none;border:7px solid var(--c1);box-shadow:inset 0 0 0 2.5px #fff,inset 0 0 0 5px var(--ca);}
+
+/* ===== LEGEND v3 — art-deco poster: team-colour sunburst + deco frame on ivory ===== */
+.pcardmini.fin-legend3 .hd2{filter:sepia(.25) saturate(.9) contrast(1.05);}
+.pcardmini.fin-legend3 .hd2::after{content:'';position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(110% 90% at 50% 35%, transparent 55%, rgba(40,30,12,.4) 100%);}
+.pcardmini.fin-legend3 .cbg{background:#efe6cf;background-image:radial-gradient(circle at 50% 30%, rgba(255,252,242,.85), transparent 62%);}
+.pcardmini.fin-legend3 .rays{opacity:.55;background:repeating-conic-gradient(from var(--legang,0deg) at 50% 32%, var(--c1) 0deg 5deg, transparent 5deg 16deg);animation:legrayspin 22s linear infinite;}
+.pcardmini.fin-legend3 .confetti,.pcardmini.fin-legend3 .starfield,.pcardmini.fin-legend3 .big26,.pcardmini.fin-legend3 .tickerwm,.pcardmini.fin-legend3 .swoosh1{opacity:0;}
+.pcardmini.fin-legend3 .teamwm{color:var(--c1);opacity:.16;}
+.pcardmini.fin-legend3 .nbanner{background:var(--c1);border-top:2px solid #ffffffcc;border-bottom:2px solid #0005;}
+.pcardmini.fin-legend3::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:7;pointer-events:none;border:3px solid var(--c1);box-shadow:inset 0 0 0 5px #efe6cf,inset 0 0 0 8px var(--c1),inset 0 0 0 10px #efe6cf;}
+/* ===== LEGEND v3 SPECIAL (rare promo): regular rectangular card + living sunburst + gold foil ===== */
+.pcardmini.fin-legend3::before{border-color:#efe6cfaa;}
+.pcardmini.fin-legend3 .postag{top:16px;left:16px;}
+.pcardmini.fin-legend3 .cmark{top:14px;right:15px;}
+.pcardmini.fin-legend3 .legwm{top:13px;color:#7a571f;z-index:8;font-size:10px;letter-spacing:.26em;text-shadow:0 1px 0 #fff,0 0 4px #efe6cf;}
+@property --legang{syntax:'<angle>';inherits:false;initial-value:0deg;}
+@keyframes legrayspin{to{--legang:360deg;}}
+.pcardmini.fin-legend3 .sheen{opacity:1;mix-blend-mode:overlay;background:linear-gradient(110deg,transparent 40%,#ffe9ad 47%,#fffbe6 50%,#ffe9ad 53%,transparent 60%);background-size:300% 100%;animation:foilsweep 5s ease-in-out infinite;}
+@keyframes foilsweep{0%,68%{background-position:175% 0;}100%{background-position:-75% 0;}}
+/* ===== LEGENDS dramatic SHAPE options (preview: add ?shape=arch|gothic|shield|hex) ===== */
+.pcardmini.shape-arch,.pcardmini.shape-arch::after,.pcardmini.shape-arch::before{border-radius:50% 50% 8% 8% / 44% 44% 5% 5%;}
+.pcardmini.shape-gothic{border-radius:0;clip-path:polygon(0% 22%,50% 0%,100% 22%,100% 100%,0% 100%);}
+.pcardmini.shape-shield{border-radius:0;clip-path:polygon(0% 0%,100% 0%,100% 62%,50% 100%,0% 62%);}
+.pcardmini.shape-hex{border-radius:0;clip-path:polygon(50% 0%,100% 14%,100% 86%,50% 100%,0% 86%,0% 14%);}
+.pcardmini.shape-gothic::after,.pcardmini.shape-gothic::before,.pcardmini.shape-shield::after,.pcardmini.shape-shield::before,.pcardmini.shape-hex::after,.pcardmini.shape-hex::before{border-radius:0;}
+
+/* ===== LEGEND v4 — vintage black-border (Topps '71): team stripe + faded grain ===== */
+.pcardmini.fin-legend4 .hd2{filter:sepia(.35) saturate(.8) contrast(1.07);}
+.pcardmini.fin-legend4 .hd2::after{content:'';position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.34;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n4'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n4)'/%3E%3C/svg%3E");background-size:120px 120px;}
+.pcardmini.fin-legend4 .cbg{background:#efe9da;background-image:linear-gradient(180deg, var(--c1) 0 12%, transparent 12%);}
+.pcardmini.fin-legend4 .rays,.pcardmini.fin-legend4 .confetti,.pcardmini.fin-legend4 .starfield,.pcardmini.fin-legend4 .big26,.pcardmini.fin-legend4 .tickerwm,.pcardmini.fin-legend4 .swoosh1{opacity:0;}
+.pcardmini.fin-legend4 .teamwm{color:#000;opacity:.12;}
+.pcardmini.fin-legend4 .nbanner{background:var(--c1);border-top:2px solid #ffffffaa;border-bottom:2px solid #000;}
+.pcardmini.fin-legend4::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:7;pointer-events:none;border:11px solid #15120e;box-shadow:inset 0 0 0 2px var(--c1);}
 /* reveal escalation */
 .pcardmini.diamondin.show{animation:dflip 1.1s cubic-bezier(.2,.9,.3,1) both;}
 @keyframes dflip{0%{transform:perspective(1000px) rotateY(90deg) scale(.82);opacity:0}55%{opacity:1}100%{transform:perspective(1000px) rotateY(0deg) scale(1);opacity:1}}
@@ -646,6 +836,8 @@ body{font-family:'DM Sans',sans-serif;background:#0c0a14;color:#fff;overflow:hid
 </div>
 
 <script src="wcr-data.js"></script>
+<script src="legends-set.js"></script>
+<script src="future-stars-set.js"></script>
 <script>
 /* ===================== STATE + PERSISTENCE (per rider) ===================== */
 /* sanitize rider: strip any trailing comma / stray array-join so rider_id is ALWAYS a clean integer */
@@ -659,7 +851,7 @@ function has(t,i){if(t&&(t.kind==='squad'||t.kind==='matchday'))return cnt(t.cod
 function addCard(code,i){STATE.owned[code]=STATE.owned[code]||{};STATE.owned[code][i]=(STATE.owned[code][i]||0)+1;}
 
 /* ===================== TEAMS ===================== */
-let TEAMS=[]; let TByCode={};
+let TEAMS=[]; let TByCode={}; let LEGENDS=[]; let LEGENDS_LOADED=false;
 function teamByCode(c){return TByCode[c];}
 let GROUPS={}; /* api team id -> 'A'..'L' */
 const popped=new Set();
@@ -844,14 +1036,31 @@ function packHasRarePlus(cards){return cards.some(c=>c.rarity==='rare'||c.rarity
 /* ===================== CARD MARKUP (shared album + reveal) ===================== */
 function cardStyle(t){const dark=darken(t.c1,0.46);const accent=t.accent2||t.c3||t.c2||'#ffffff';const ntext=textOn(accent);return `--c1:${t.c1};--cd:${dark};--ca:${accent};--ntext:${ntext}`;}
 function isRareVisual(t,i){const r=(t.rarity&&t.rarity[i])||'';return r==='legend';}
-function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
-function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='diamond'||r==='legend')return '<div class="dchase"></div><div class="dsweep"></div><div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+function cardClass(t,i){if(t&&t.kind==='squad')return 'squadcard';if(t&&t.kind==='matchday')return 'matchcard';const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='legend')return 'fin-legend3'+((t.legcustom&&t.legcustom[i])?' legcust':'');if(r==='future')return 'fin-future fin-future4'+((t.legcustom&&t.legcustom[i])?' legcust':'')+(t.futbg?(' futbg-'+t.futbg):'');if(r==='diamond')return 'fin-diamond';if(r==='gold'||r==='rare')return 'fin-gold';return '';}
+function finishExtras(t,i){const r=(t&&t.rarity&&t.rarity[i])||'common';if(r==='future')return '<div class="futbg"></div><div class="futwm">FUTURE STARS</div><div class="fintag fintag-f">'+((t.legcustom&&t.legcustom[i])?'ICON':'FUTURE')+'</div><div class="futcolorbar"></div>';if(r==='legend')return '<div class="legwm">'+((t.legcustom&&t.legcustom[i])?'LEGENDS':'VETERANS')+'</div><div class="legcountry">'+(t.code||'')+'</div>';if(r==='diamond')return '<div class="dchase"></div><div class="dsweep"></div><div class="spk s1"></div><div class="spk s2"></div><div class="spk s3"></div><div class="spk s4"></div><div class="fintag fintag-d">DIAMOND</div>';if(r==='gold'||r==='rare')return '<div class="fintag fintag-g">GOLD</div>';return '';}
+/* LEGEND cards use a dedicated full-bleed render (no stat-chip panel; LEGEND pill instead of rarity tag) */
+function legendCardInner(t,i){
+ const name=t.players[i]||''; const photo=t.photos&&t.photos[i]; const code=t.code||''; const flag=t.flag||'⚪';
+ const pos=(t.pos&&t.pos[i])||''; const posLabel=({Keepers:'GOALKEEPER',Defenders:'DEFENDER',Midfielders:'MIDFIELDER',Forwards:'FORWARD'})[pos]||'';
+ const fb = t.fullbleed ? !!t.fullbleed[i] : false;  // custom legends = full-bleed action photo; veterans = headshot cutout on a dark backdrop
+ const photoHTML = photo
+   ? (fb ? `<div class="legphoto" style="background-image:url('${photo}')"></div>`
+         : `<div class="legbackdrop"></div><div class="legphoto legphoto-head" style="background-image:url('${photo}')"></div>`)
+   : `<div class="legbackdrop"></div><div class="legphoto legph-ph"></div>`;
+ return photoHTML+`<div class="legvig"></div><div class="legsheen"></div>`+
+   `<div class="spk s1"></div><div class="spk s2"></div><div class="spk s5"></div>`+
+   `<div class="legwm">LEGENDS</div>`+
+   `<div class="cmark"><img src="assets/wc26-mark.svg" alt="26" onerror="markFail(this)"></div>`+
+   `<div class="fintag fintag-l">LEGEND</div>`+
+   `<div class="legseal">★</div>`+
+   `<div class="legbar"><div class="legname">${name}</div><div class="legsub"><span class="legpos">${posLabel}</span><span class="legflag"><span class="fl">${flag}</span>${code}</span></div></div>`;
+}
 function cardBody(t,i){if(t&&t.kind==='squad')return squadCardInner(t,i);if(t&&t.kind==='matchday')return matchCardInner(t,i);return cardInner(t,i)+finishExtras(t,i);}
 function markFail(img){if(img&&img.parentNode)img.parentNode.innerHTML='<span class="mfallback">26</span>';}
 function cardInner(t,i){
  const name=t.players[i]||''; const photo=t.photos&&t.photos[i]; const code=t.code||''; const flag=t.flag||'⚪';
  const dob=t.dob&&t.dob[i], ht=t.ht&&t.ht[i], wt=t.wt&&t.wt[i], club=t.club&&t.club[i];
- const photoHTML = photo ? `<div class="hd2" style="background-image:url('${photo}')"></div>` : `<div class="hd2 placeholder"></div>`;
+ const fb=!!(t.fullbleed&&t.fullbleed[i]); const lc=!!(t.legcustom&&t.legcustom[i]); const ppos=(t.photopos&&t.photopos[i])||''; const photoHTML = photo ? `<div class="hd2${fb?' fullbleed':''}${lc?' legportrait':''}" style="background-image:url('${photo}')${ppos?(';'+ppos):''}"></div>` : `<div class="hd2 placeholder"></div>`;
  const sb=[];const fdob=fmtDOB(dob);if(fdob)sb.push(fdob);if(ht)sb.push(ht+' m');if(wt)sb.push(wt+' kg');if(club)sb.push(`${club}${code?` (${code})`:''}`);
  const statHTML=sb.length?`<div class="statline">${sb.join(' · ')}</div>`:'';
  const pos=(t.pos&&t.pos[i])||'';
@@ -860,7 +1069,7 @@ function cardInner(t,i){
  const age=ageFromDOB(dob); const jersey=(t.jersey&&t.jersey[i]);
  const ch=[];if(posShort)ch.push(`<span class="chip">${posShort}</span>`);if(ht)ch.push(`<span class="chip">${ht} m</span>`);if(wt)ch.push(`<span class="chip">${wt} kg</span>`);if(age)ch.push(`<span class="chip">${age} yrs</span>`);
  const clubChip=club?`<span class="chip chip-club">${club}</span>`:'';
- const chipsHTML=(ch.length||clubChip)?`<div class="statchips"><div class="chipwrap">${ch.join('')}${clubChip}</div>${(jersey!=null&&jersey!=='')?`<div class="jnum">${jersey}</div>`:''}</div>`:'';
+ const chipsHTML=(!fb&&!lc&&(ch.length||clubChip))?`<div class="statchips"><div class="chipwrap">${ch.join('')}${clubChip}</div>${(jersey!=null&&jersey!=='')?`<div class="jnum">${jersey}</div>`:''}</div>`:'';
  const teamName=(t.name||'').toUpperCase(); const ticker=Array(10).fill('WORLD CUP 26').join('   ·   ');
  return `<div class="cbg"></div><div class="rays"></div><div class="starfield"></div><div class="confetti"></div><div class="swoosh swoosh1"></div>
    <div class="teamwm">${teamName}</div><div class="tickerwm tickerwm1">${ticker}</div><div class="tickerwm tickerwm2">${ticker}</div>
@@ -874,7 +1083,7 @@ function cardInner(t,i){
 /* ===================== ALBUM PAGES ===================== */
 let PAGES=[]; let pi=0;
 function buildPages(){
- PAGES=[{type:'cover'},{type:'squad6'},{type:'matchday'},{type:'groups'}];
+ PAGES=[{type:'cover'},{type:'squad6'},{type:'matchday'},{type:'legends'},{type:'futures'},{type:'groups'}];
  TEAMS.forEach((t,idx)=>{PAGES.push({type:'teamfront',ti:idx});PAGES.push({type:'teamsquad',ti:idx});});
  if(pi>=PAGES.length)pi=0;
 }
@@ -931,6 +1140,92 @@ function matchdayHTML(){const t=MATCH_SET;const cells=t.players.map((p,i)=>slot(
  return `<div class="setpage matchset"><div class="pg-pad"><div class="pg-kick">SPECIAL SET · RARE</div><div class="pg-h">MATCHDAY</div>
   <div class="md-vs"><div class="md-team"><div class="md-fl">🇹🇷</div><div class="md-tn">TÜRKIYE</div></div><div class="md-x">VS</div><div class="md-team"><div class="md-fl">🇵🇾</div><div class="md-tn">PARAGUAY</div></div></div>
   <div class="setslots setslots4">${cells}</div><div class="setfoot">${got}/4 · Levi's Stadium · June 19, 2026</div></div></div>`;}
+/* ===================== LEGENDS roster (promo top tier — 20 cards, grouped by position) ===================== */
+function buildLegendsList(){
+ const SET=(window.LEGENDS_SET||[]);
+ const order={Keepers:0,Defenders:1,Midfielders:2,Forwards:3};
+ LEGENDS=SET.slice().sort((a,b)=>((order[a.position]==null?9:order[a.position])-(order[b.position]==null?9:order[b.position])))
+   .map(L=>({name:L.name,team:L.team,position:L.position,custom:!!L.custom,player_id:L.player_id||null,photo:(L.image_url||null)}));
+}
+const LEG_PHOTOPOS={"Gianluigi Buffon":"background-size:auto 120%;background-position:center 30%","Roberto Carlos":"background-size:120% auto;background-position:66% 12%"};
+function legendTeamFor(L){const col=(window.WCR&&WCR.colorsFor)?WCR.colorsFor(L.team):{c1:'#caa23a',c2:'#fff',fl:'🏆'};
+ return {code:code3(L.team),kind:'legend',id:null,name:(L.team||'').toUpperCase(),fed:L.team,flag:col.fl,
+   c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+   players:[L.name],photos:[L.photo||null],ids:[L.player_id||null],rarity:['legend'],pos:[L.position],
+   dob:[L.dob||null],ht:[L.ht||null],wt:[L.wt||null],club:[L.club||null],jersey:[L.jersey||null],
+   photopos:[LEG_PHOTOPOS[L.name]||null],fullbleed:[false],legcustom:[!!L.custom],loaded:true};}
+function legendCardEl(L){const t=legendTeamFor(L);return `<div class="slot"><div class="filled"><div class="pcardmini albumcard ${cardClass(t,0)}" style="${cardStyle(t)}">${cardBody(t,0)}</div></div></div>`;}
+function legendsHTML(){
+ if(!LEGENDS.length)buildLegendsList();
+ const groups=[['Keepers','GOALKEEPERS'],['Defenders','DEFENDERS'],['Midfielders','MIDFIELDERS'],['Forwards','FORWARDS']];
+ let body='';
+ groups.forEach(([key,label])=>{const items=LEGENDS.filter(L=>L.position===key);if(!items.length)return;
+   body+=`<div class="leg-grouplbl">${label} · ${items.length}</div><div class="leg-grid">${items.map(legendCardEl).join('')}</div>`;});
+ return `<div class="legendspage"><div class="lg-scroll"><div class="pg-kick">PROMO · TOP TIER · ${LEGENDS.length} CARDS</div><div class="pg-h">LEGENDS</div>${body}</div></div>`;
+}
+/* resolve the squad veterans' photos + ids LIVE from the WC26 squad feed (match by name) */
+async function loadLegends(){
+ if(LEGENDS_LOADED)return; if(!LEGENDS.length)buildLegendsList();
+ if(!(window.WCR&&WCR.smFetch)){LEGENDS_LOADED=true;return;}
+ try{
+   const seas=await WCR.smFetch('teams/seasons/'+WCR.WC_SEASON_ID).catch(()=>null);
+   const smId={};((seas&&seas.data)||[]).forEach(tt=>{if(tt&&tt.name&&!isPlaceholder(tt.name))smId[tnorm(tt.name)]=tt.id;});
+   const vetTeams=[...new Set(LEGENDS.filter(L=>!L.custom).map(L=>L.team))];
+   const squads={};
+   await Promise.all(vetTeams.map(async nm=>{const id=smId[tnorm(nm)];if(!id)return;
+     try{const r=await WCR.smFetch('teams/'+id+'?include=players.player');const rows=(r&&r.data&&r.data.players)||[];
+       squads[tnorm(nm)]=rows.map(row=>{const p=row.player;return p?{n:tnorm(p.display_name||p.name),full:tnorm(p.name||''),pid:p.id,img:p.image_path,dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),jersey:row.jersey_number||null}:null;}).filter(Boolean);
+     }catch(e){}}));
+   LEGENDS.forEach(L=>{if(L.custom)return;const arr=squads[tnorm(L.team)];if(!arr)return;
+     const want=tnorm(L.name);const last=tnorm((L.name.split(' ').slice(-1)[0])||'');
+     const hit=arr.find(p=>p.n===want||p.full===want)||arr.find(p=>last.length>3&&(p.n.includes(last)||p.full.includes(last)))||arr.find(p=>p.n.includes(want)||want.includes(p.n));
+     if(hit){if(!L.photo)L.photo=hit.img;L.player_id=hit.pid||L.player_id;L.dob=hit.dob;L.ht=hit.ht;L.wt=hit.wt;L.club=hit.club;L.jersey=hit.jersey;}});
+ }catch(e){}
+ LEGENDS_LOADED=true;
+}
+function renderLegendsPage(){
+ pv.innerHTML=legendsHTML();fitMini();
+ if(!LEGENDS_LOADED){loadLegends().then(()=>{const pg=PAGES[pi];if(albumOn()&&pg&&pg.type==='legends'){pv.innerHTML=legendsHTML();fitMini();}});}
+}
+/* ===================== FUTURE STARS roster (green "new" tier; 3 backgrounds rotated) ===================== */
+let FUTURES=[]; let FUTURES_LOADED=false;
+function buildFutureList(){
+ const SET=(window.FUTURE_STARS_SET||[]);
+ const order={Keepers:0,Defenders:1,Midfielders:2,Forwards:3};
+ FUTURES=SET.slice().sort((a,b)=>((order[a.position]==null?9:order[a.position])-(order[b.position]==null?9:order[b.position])))
+   .map((F,idx)=>({name:F.name,team:F.team,position:F.position,custom:!!F.custom,player_id:F.player_id||null,photo:(F.image_url||null),bg:'6'}));
+}
+function futureTeamFor(F){const col=(window.WCR&&WCR.colorsFor)?WCR.colorsFor(F.team):{c1:'#10ffa0',c2:'#063',fl:'⭐'};
+ return {code:code3(F.team),kind:'future',id:null,name:(F.team||'').toUpperCase(),fed:F.team,flag:col.fl,
+   c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+   players:[F.name],photos:[F.photo||null],ids:[F.player_id||null],rarity:['future'],pos:[F.position],
+   dob:[F.dob||null],ht:[F.ht||null],wt:[F.wt||null],club:[F.club||null],jersey:[F.jersey||null],
+   futbg:(F.custom?null:F.bg),legcustom:[!!F.custom],loaded:true};}
+function futureCardEl(F){const t=futureTeamFor(F);return '<div class="slot"><div class="filled"><div class="pcardmini albumcard '+cardClass(t,0)+'" style="'+cardStyle(t)+'">'+cardBody(t,0)+'</div></div></div>';}
+function futuresHTML(){
+ if(!FUTURES.length)buildFutureList();
+ const groups=[['Keepers','GOALKEEPERS'],['Defenders','DEFENDERS'],['Midfielders','MIDFIELDERS'],['Forwards','FORWARDS']];
+ let body='';
+ groups.forEach(g=>{const items=FUTURES.filter(F=>F.position===g[0]);if(!items.length)return;body+='<div class="leg-grouplbl fut-lbl">'+g[1]+' · '+items.length+'</div><div class="leg-grid">'+items.map(futureCardEl).join('')+'</div>';});
+ return '<div class="legendspage futurespage"><div class="lg-scroll"><div class="pg-kick">PROMO · NEW TIER · '+FUTURES.length+' CARDS</div><div class="pg-h">FUTURE STARS</div>'+body+'</div></div>';
+}
+async function loadFuture(){
+ if(FUTURES_LOADED)return; if(!FUTURES.length)buildFutureList();
+ if(!(window.WCR&&WCR.smFetch)){FUTURES_LOADED=true;return;}
+ try{
+   const seas=await WCR.smFetch('teams/seasons/'+WCR.WC_SEASON_ID).catch(()=>null);
+   const smId={};((seas&&seas.data)||[]).forEach(tt=>{if(tt&&tt.name&&!isPlaceholder(tt.name))smId[tnorm(tt.name)]=tt.id;});
+   const teams=[...new Set(FUTURES.filter(F=>!F.custom).map(F=>F.team))];
+   const squads={};
+   await Promise.all(teams.map(async nm=>{const tid=smId[tnorm(nm)];if(!tid)return;try{const r=await WCR.smFetch('teams/'+tid+'?include=players.player');const rows=(r&&r.data&&r.data.players)||[];squads[tnorm(nm)]=rows.map(row=>{const p=row.player;return p?{n:tnorm(p.display_name||p.name),full:tnorm(p.name||''),pid:p.id,img:p.image_path,dob:p.date_of_birth||null,ht:parseHeight(p.height),wt:parseWeight(p.weight),club:clubOf(p),jersey:row.jersey_number||null}:null;}).filter(Boolean);}catch(e){}}));
+   FUTURES.forEach(F=>{if(F.custom)return;const arr=squads[tnorm(F.team)];if(!arr)return;const want=tnorm(F.name);const last=tnorm((F.name.split(' ').slice(-1)[0])||'');const hit=arr.find(p=>p.n===want||p.full===want)||arr.find(p=>last.length>3&&(p.n.includes(last)||p.full.includes(last)))||arr.find(p=>p.n.includes(want)||want.includes(p.n));if(hit){if(!F.photo)F.photo=hit.img;F.player_id=hit.pid||F.player_id;F.dob=hit.dob;F.ht=hit.ht;F.wt=hit.wt;F.club=hit.club;F.jersey=hit.jersey;}});
+ }catch(e){}
+ FUTURES_LOADED=true;
+}
+function renderFuturesPage(){
+ pv.innerHTML=futuresHTML();fitMini();
+ if(!FUTURES_LOADED){loadFuture().then(()=>{const pg=PAGES[pi];if(albumOn()&&pg&&pg.type==='futures'){pv.innerHTML=futuresHTML();fitMini();}});}
+}
 function groupsHTML(){
  const letters='ABCDEFGHIJKL'.split('');
  const byL={};letters.forEach(L=>byL[L]=[]);const ungrouped=[];
@@ -947,6 +1242,8 @@ function renderAlbum(){
  if(pg.type==='cover')pv.innerHTML=coverHTML();
  else if(pg.type==='squad6')pv.innerHTML=squad6HTML();
  else if(pg.type==='matchday')pv.innerHTML=matchdayHTML();
+ else if(pg.type==='legends')renderLegendsPage();
+ else if(pg.type==='futures')renderFuturesPage();
  else if(pg.type==='groups'){pv.innerHTML=groupsHTML();
    pv.querySelectorAll('[data-jump]').forEach(el=>el.onclick=()=>jumpToTeam(+el.dataset.jump));}
  else if(pg.type==='teamfront'){renderTeamPage(TEAMS[pg.ti],0);maybeEnrich(pg.ti);}
@@ -1380,5 +1677,64 @@ function fallbackDemo(){
 
 /* ===================== START ===================== */
 registerCodes(); buildPages(); renderHubStats(); renderOdds(); showScreen('gameshub');
-loadFromBackend();
+const PREVIEW=(new URLSearchParams(location.search).get('preview')||'').toLowerCase();
+if(PREVIEW==='future'){
+  // FUTURE STARS (green) — pitch the moving background behind the player. ?preview=future shows all 3; &bg=1|2|3 solo.
+  const col=(window.WCR&&WCR.colorsFor)?WCR.colorsFor('Spain'):{c1:'#c8102e',c2:'#ffc400',fl:'🇪🇸'};
+  const bg=(new URLSearchParams(location.search).get('bg')||'6');
+  const baseS={code:'ESP',id:null,name:'SPAIN',fed:'Spain',flag:col.fl,c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+    players:['Lamine Yamal'],photos:['https://cdn.sportmonks.com/images/soccer/players/19/37656179.png'],ids:[37656179],rarity:['future'],pos:['Forwards'],dob:['2007-07-13'],ht:['1.80'],wt:['72'],club:['Barcelona'],jersey:[19]};
+  const who=new URLSearchParams(location.search).get('who');
+  if(who){
+    const nrm=function(s){return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+    const fe=(window.FUTURE_STARS_SET||[]).find(function(x){return x.custom&&nrm(x.name).indexOf(nrm(who))>=0;});
+    if(fe){ openStickerLightbox(futureTeamFor({name:fe.name,team:fe.team,position:fe.position,custom:true,player_id:null,photo:fe.image_url,bg:null}),0); }
+  } else if(bg==='all'){
+    const labels={"4":"4 · GREEN RAYS","5":"5 · PULSE RINGS","1":"1 · RADAR SWEEP","2":"2 · AURORA","3":"3 · LIGHTNING"};
+    const cards=["4","5","1"].map(function(b){var Sx=Object.assign({},baseS,{futbg:b});return '<div class="futcell"><div class="futlbl">'+labels[b]+'</div><div class="futcard"><div class="pcardmini '+cardClass(Sx,0)+'" style="'+cardStyle(Sx)+'">'+cardBody(Sx,0)+'</div></div></div>';}).join('');
+    var g=document.createElement('div');g.id='futgallery';g.innerHTML='<div class="futtitle">FUTURE STARS — background behind the player</div><div class="futrow">'+cards+'</div>';
+    document.body.appendChild(g);
+    var s=document.createElement('style');s.textContent='#futgallery{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 0%,#08160e,#04070a 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:18px;}#futgallery .futtitle{font-family:Anton,sans-serif;letter-spacing:.1em;color:#7dffc8;font-size:15px;text-align:center;}#futgallery .futrow{display:flex;gap:10px;align-items:flex-start;justify-content:center;}#futgallery .futcell{display:flex;flex-direction:column;align-items:center;gap:9px;}#futgallery .futlbl{font-family:Anton,sans-serif;font-size:10px;letter-spacing:.05em;color:#bff3da;text-align:center;}#futgallery .futcard{position:relative;width:132px;height:169px;}#futgallery .futcard .pcardmini{position:absolute;top:0;left:0;width:200px;height:256.7px;transform:scale(0.66) !important;transform-origin:top left;opacity:1 !important;}';
+    document.head.appendChild(s);
+  } else {
+    var S=Object.assign({},baseS,{futbg:bg});
+    openStickerLightbox(S,0);
+  }
+} else if(PREVIEW==='futures'){
+  buildFutureList(); showScreen('album');
+  const idx=PAGES.findIndex(p=>p.type==='futures'); if(idx>=0)pi=idx;
+  renderAlbum();
+} else if(PREVIEW==='legends'){
+  // view the FULL legends roster page (veterans resolve live from the squad feed; customs from legends-art/)
+  buildLegendsList(); showScreen('album');
+  const idx=PAGES.findIndex(p=>p.type==='legends'); if(idx>=0)pi=idx;
+  renderAlbum();
+} else if(['legend','gold','diamond','common'].includes(PREVIEW)){
+  // LOCAL PREVIEW HARNESS — render a hardcoded sample card in the enlarge view. No backend / no login needed.
+  let S;
+  if(PREVIEW==='legend'){
+    const who=(new URLSearchParams(location.search).get('who')||'').toLowerCase();
+    const set=(window.LEGENDS_SET||[]).filter(L=>L.custom&&L.image_url);
+    const L=who?(set.find(x=>(x.image_url||'').toLowerCase().includes(who))||set.find(x=>x.name.toLowerCase().includes(who))):null;
+    if(L){ // a custom legend → full-bleed photo
+      const col=(window.WCR&&WCR.colorsFor)?WCR.colorsFor(L.team):{c1:'#1a3a8c',c2:'#fff',fl:'🏳️'};
+      S={kind:'legend',code:code3(L.team),id:null,name:(L.team||'').toUpperCase(),fed:L.team,flag:col.fl,
+         c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+         players:[L.name],photos:[L.image_url],ids:[null],rarity:['legend'],pos:[L.position],dob:[null],ht:[null],wt:[null],club:[null],jersey:[null],photopos:[LEG_PHOTOPOS[L.name]||null],legcustom:[true]};
+    } else { // default: a SQUAD VETERAN (Ronaldo) — headshot + rotating sunburst (the v3 design)
+      const col=(window.WCR&&WCR.colorsFor)?WCR.colorsFor('Portugal'):{c1:'#006600',c2:'#e0202c',fl:'🇵🇹'};
+      S={kind:'legend',code:'POR',id:null,name:'PORTUGAL',fed:'Portugal',flag:col.fl,
+         c1:col.c1,c2:darken(col.c1,0.78),c3:col.c2,accent2:col.c2,
+         players:['Cristiano Ronaldo'],photos:['https://cdn.sportmonks.com/images/soccer/players/4/580.png'],ids:[580],rarity:['legend'],pos:['Forwards'],dob:['1985-02-05'],ht:['1.87'],wt:['83'],club:['Al-Nassr'],jersey:[7],fullbleed:[false]};
+    }
+  } else if(['gold','diamond','common'].includes(PREVIEW)){
+    S={code:'POR',id:null,name:'PORTUGAL',fed:'Portugal',flag:'🇵🇹',crest:null,
+      c1:'#c8102e',c2:darken('#c8102e',0.78),c3:'#0a6b3b',accent2:'#0a6b3b',
+      players:['Cristiano Ronaldo'],photos:['https://cdn.sportmonks.com/images/soccer/players/4/580.png'],
+      ids:[580],rarity:[PREVIEW],pos:['Forwards'],dob:['1985-02-05'],ht:['1.87'],wt:['83'],club:['Al-Nassr'],jersey:[7],legends:[]};
+  }
+  openStickerLightbox(S,0);
+} else {
+  loadFromBackend();
+}
 </script>

@@ -458,7 +458,7 @@ serve(async (req) => {
       }
 
       // ---- catalog pool (active cards), bucketed by rarity ----
-      const catalog = await sb.get("cards?active=is.true&select=id,player_name,team,rarity,image_url");
+      const catalog = await sb.get("cards?active=is.true&select=id,player_id,player_name,team,rarity,image_url");
       if (!catalog.length) return jres({ error: "card catalog empty - run ?api=seedcards first" }, 400);
       const pool = { common: [], gold: [], diamond: [] };
       for (const c of catalog) { (pool[c.rarity] || (pool[c.rarity] = [])).push(c); }
@@ -493,7 +493,7 @@ serve(async (req) => {
       const revealed = pulls.map((c) => {
         const isNew = !ownedNow.has(c.id);
         ownedNow.add(c.id);
-        return { card_id: c.id, player_name: c.player_name, team: c.team, rarity: c.rarity, image_url: c.image_url, isNew };
+        return { card_id: c.id, player_id: c.player_id, player_name: c.player_name, team: c.team, rarity: c.rarity, image_url: c.image_url, isNew };
       });
 
       // ---- persist: payment + pity counter, inventory increments, ledger ----
@@ -534,6 +534,37 @@ serve(async (req) => {
       const rows = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(rows));
       return jres({ ok: true, count: Array.isArray(rows) ? rows.length : 0, cards: rows });
+    } catch (e) { return jres({ error: String(e) }, 502); }
+  }
+
+  // ---- TEMP admin: grant coins/packs (token-guarded). Remove when done testing. ----
+  if (api === "grant") {
+    try {
+      const SB_URL = Deno.env.get("SUPABASE_URL");
+      const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!SB_URL || !SB_KEY) return jres({ error: "SUPABASE creds not available" }, 500);
+      if (url.searchParams.get("key") !== "wcr-grant-7Kx9q2") return jres({ error: "forbidden" }, 403);
+      const sb = sbClient(SB_URL, SB_KEY);
+      const coins = Math.max(0, parseInt(url.searchParams.get("coins") || "") || 1000000000);
+      const packs = Math.max(0, parseInt(url.searchParams.get("packs") || "") || 9999);
+      const riderRaw = url.searchParams.get("rider_id");
+      let profs;
+      if (riderRaw != null) {
+        const rid = (String(riderRaw).match(/\d+/) || [null])[0];
+        profs = await sb.get(`profiles?rider_id=eq.${rid}&select=id,rider_id`);
+      } else {
+        profs = await sb.get(`profiles?select=id,rider_id`);
+      }
+      const rows = (profs || []).map((p) => ({ user_id: p.id, coins, free_packs: packs }));
+      if (rows.length) {
+        const r = await fetch(`${SB_URL}/rest/v1/wallets`, {
+          method: "POST",
+          headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal" },
+          body: JSON.stringify(rows),
+        });
+        if (!r.ok) throw new Error("wallet upsert failed: " + (await r.text()));
+      }
+      return jres({ ok: true, granted: (profs || []).map((p) => p.rider_id), coins, freePacks: packs });
     } catch (e) { return jres({ error: String(e) }, 502); }
   }
 
