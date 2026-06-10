@@ -1605,13 +1605,15 @@ function startPackOpen(type){
  // show the pack INSTANTLY — no awaiting the server
  scrim.classList.add('on');packStage.style.display='block';preveal.classList.remove('on');pack.classList.remove('tearing');document.getElementById('pcards').classList.remove('fanned');
  // fire openPack in PARALLEL; resolves to the revealed cards (or throws). Coins/wallet update on arrival.
- packPromise=sbPostPack(type).then(async res=>{
+ packPromise=sbPostPack(type).then(res=>{
    if(!res||res.error){const e=new Error((res&&res.error)||'Pack failed');e.detail=res;throw e;}
    WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
    const cards=res.cards||[];
    const teams=[...new Set(cards.map(c=>c.team))].map(nm=>TEAMS.find(t=>t.fed===nm)).filter(Boolean);
-   await Promise.all(teams.map(t=>enrichTeamStats(t).catch(()=>{})));  // embed stats before reveal (loader covers it)
-   return cards.map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity}));
+   // Reveal INSTANTLY off the server pull — do NOT block on the SportMonks stats fetch.
+   // The stat chips (club/height/DOB) lazy-fill as each team resolves; most are already prefetched.
+   teams.forEach(t=>enrichTeamStats(t).then(()=>refreshPackStats(t&&t.fed)).catch(()=>{}));
+   return cards.map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity,raw:c}));
  });
 }
 document.getElementById('sclose').onclick=()=>scrim.classList.remove('on');
@@ -1634,6 +1636,19 @@ pack.onclick=()=>{
 
 function miniHTML(c){const t=c.t||teamByCode(c.code);const i=(c.i!=null)?c.i:0;
  return `<div class="pcardmini ${cardClass(t,i)}" style="${cardStyle(t)}">${cardBody(t,i)}</div>`;}
+/* Lazy stat-fill: when a team's SportMonks stats resolve AFTER reveal, rebuild that team's
+   revealed cards in place. Only innerHTML changes (chips populate) — the element's classes
+   (rarity finish + show/gone/diamondin reveal state) are left untouched, so the animation
+   and the card front never restart. No-op for cards whose stats were already prefetched. */
+function refreshPackStats(teamName){
+ if(!teamName||!Array.isArray(packCards)||!packCards.length)return;
+ const els=document.querySelectorAll('#pcards .pcardmini');
+ packCards.forEach((c,n)=>{
+  if(!c||!c.raw||c.raw.team!==teamName)return;
+  c.t=pseudoTeam(c.raw);
+  const el=els[n]; if(el)el.innerHTML=cardBody(c.t,(c.i!=null?c.i:0));
+ });
+}
 function buildRevealStack(){const host=document.getElementById('pcards');host.innerHTML="";host.classList.remove('fanned');
  packCards.forEach((c,n)=>{const wrap=document.createElement('div');wrap.innerHTML=miniHTML(c);const el=wrap.firstElementChild;el.style.zIndex=packCards.length-n;host.appendChild(el);});}
 function ensureRevFx(){let f=document.getElementById('revflash');if(!f){f=document.createElement('div');f.id='revflash';f.className='revflash';document.body.appendChild(f);}let g=document.getElementById('revflourish');if(!g){g=document.createElement('div');g.id='revflourish';g.className='revflourish';document.body.appendChild(g);}return {f,g};}
