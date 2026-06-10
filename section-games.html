@@ -1598,7 +1598,7 @@ function applySkin(){pack.classList.toggle('normal',packType==='normal');pack.cl
 function oddsRowHTML(type){const o=ODDS[type];return TIER_ORDER.map(t=>{const pct=o[t]*100;const s=pct<1?pct.toFixed(1):Math.round(pct);return `<span class="od"><i style="background:${RARITY_COL[t]}"></i>${RARITY_LABEL[t]} ${s}%</span>`;}).join('');}
 function renderOdds(){const n=document.getElementById('oddsNormal'),d=document.getElementById('oddsDeluxe');if(n)n.innerHTML=oddsRowHTML('normal');if(d)d.innerHTML=oddsRowHTML('deluxe');}
 document.querySelectorAll('#packs [data-type]').forEach(el=>el.onclick=()=>startPackOpen(el.dataset.type));
-let packPromise=null;
+let packPromise=null, packStatsPromise=null;
 function startPackOpen(type){
  if(type!=='normal'&&type!=='deluxe')type='normal';packType=type;applySkin();
  packCards=[];revealStep=0;fanned=false;
@@ -1610,9 +1610,9 @@ function startPackOpen(type){
    WALLET.coins=res.coins;WALLET.freePacks=res.freePacks;updateWallet();
    const cards=res.cards||[];
    const teams=[...new Set(cards.map(c=>c.team))].map(nm=>TEAMS.find(t=>t.fed===nm)).filter(Boolean);
-   // Reveal INSTANTLY off the server pull — do NOT block on the SportMonks stats fetch.
-   // The stat chips (club/height/DOB) lazy-fill as each team resolves; most are already prefetched.
-   teams.forEach(t=>enrichTeamStats(t).then(()=>refreshPackStats(t&&t.fed)).catch(()=>{}));
+   // Kick the SportMonks stat fetch in the BACKGROUND. The opening animation (in pack.onclick)
+   // holds for a minimum duration so this lands before reveal; stragglers lazy-fill via refreshPackStats.
+   packStatsPromise=Promise.all(teams.map(t=>enrichTeamStats(t).then(()=>refreshPackStats(t&&t.fed)).catch(()=>{})));
    return cards.map(c=>({t:pseudoTeam(c),i:0,rarity:c.rarity,raw:c}));
  });
 }
@@ -1621,12 +1621,19 @@ pack.onclick=()=>{
  if(pack.classList.contains('tearing'))return;
  pack.classList.add('tearing');
  const loader=document.getElementById('packLoader');
+ const MIN_OPEN=2300;     // hold the opening animation at least this long (masks the background fetch)
+ const STATS_CAP=1400;    // ...but never wait on stats past this; stragglers lazy-fill after reveal
+ const openStart=Date.now();
  setTimeout(async ()=>{
    packStage.style.display='none';
-   if(loader)loader.style.display='flex';            // cover the openPack fetch gap
+   if(loader)loader.style.display='flex';            // animated "OPENING PACK…" — masks the fetch
    let cards;
    try{ cards=await packPromise; }
    catch(e){ if(loader)loader.style.display='none'; scrim.classList.remove('on'); const d=e&&e.detail; alert((d&&d.error==='insufficient coins')?('Not enough coins — need '+d.cost+', you have '+d.coins):((e&&e.message)||'Pack failed — try again')); return; }
+   // let stats land (capped), then hold the opening for the minimum duration so it feels like a real pack tear
+   await Promise.race([packStatsPromise||Promise.resolve(), new Promise(r=>setTimeout(r,STATS_CAP))]);
+   const elapsed=Date.now()-openStart;
+   if(elapsed<MIN_OPEN)await new Promise(r=>setTimeout(r,MIN_OPEN-elapsed));
    if(loader)loader.style.display='none';
    packCards=cards||[];
    if(!packCards.length){ scrim.classList.remove('on'); alert('No cards returned'); return; }
