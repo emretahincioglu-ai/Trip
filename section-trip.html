@@ -386,6 +386,50 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .gdrow b{font-weight:600;text-align:right;}
 .gdcoming p{color:#ffffffa8;font-size:13px;line-height:1.55;}
 #gameday .back{background:linear-gradient(180deg,#000000aa,transparent);}
+
+/* ===== Group picks / voting ===== */
+.vsec{margin-top:4px;}
+.vday{font-size:11px;letter-spacing:.14em;color:#ff8a93;font-weight:800;margin:16px 2px 9px;text-transform:uppercase;}
+.vday:first-child{margin-top:4px;}
+.vpoll{background:#28141a;border:1px solid #ffffff14;border-radius:16px;padding:14px;margin-bottom:12px;transition:box-shadow .3s,border-color .3s;}
+.vpoll.vflash{border-color:#e30a17aa;box-shadow:0 0 0 2px #e30a1755,0 8px 24px #e30a1733;}
+.vph{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.vph b{font-size:15px;font-weight:700;}
+.vph .vmeta{font-family:'Space Mono',monospace;font-size:10.5px;color:#ffffff80;letter-spacing:.04em;flex:none;}
+.vpoll .vsub{font-size:11px;color:#ffffff70;margin:1px 0 12px;}
+.vopt{position:relative;display:flex;align-items:center;gap:11px;min-height:54px;padding:9px 13px;margin-bottom:8px;border-radius:13px;background:#0000001f;border:1px solid #ffffff14;cursor:pointer;overflow:hidden;transition:border-color .18s,background .18s;-webkit-tap-highlight-color:transparent;}
+.vopt:last-of-type{margin-bottom:0;}
+.vopt:active{transform:scale(.992);}
+.vopt .vfill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#e30a1730,#e30a1710);transition:width .6s cubic-bezier(.22,1,.36,1);z-index:0;}
+.vopt.mine{border-color:#e30a1788;background:#e30a1714;}
+.vopt.mine .vfill{background:linear-gradient(90deg,#e30a1758,#e30a1722);}
+.vopt.lead:not(.mine) .vfill{background:linear-gradient(90deg,#ffd16622,#ffd1660a);}
+.vopt>*{position:relative;z-index:1;}
+.vradio{width:20px;height:20px;border-radius:50%;border:2px solid #ffffff44;flex:none;display:flex;align-items:center;justify-content:center;transition:.18s;}
+.vopt.mine .vradio{border-color:#e30a17;background:#e30a17;}
+.vopt.mine .vradio::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff;}
+.vmid{flex:1;min-width:0;}
+.vname{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;line-height:1.2;}
+.lean{font-size:9.5px;font-weight:800;letter-spacing:.03em;color:#ffd166;background:#ffd16618;border:1px solid #ffd16640;border-radius:999px;padding:2px 7px;white-space:nowrap;}
+.vavs{display:flex;align-items:center;margin-top:6px;min-height:19px;}
+.vav{width:19px;height:19px;border-radius:50%;font-size:8.5px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;margin-right:-5px;border:1.5px solid #28141a;}
+.vopt.mine .vav{border-color:#2c0f15;}
+.vempty{display:block;font-size:11px;color:#ffffff55;margin-top:6px;}
+.vlinks{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.vlink{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#ffd9dc;background:#e30a1718;border:1px solid #e30a1740;border-radius:999px;padding:8px 11px;min-height:34px;text-decoration:none;}
+.vright{flex:none;}
+.vpct{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#fff;}
+.vchange{font-size:10.5px;color:#ffffff66;margin-top:10px;}
+/* app-level hub on Home */
+.vhubcard{display:flex;align-items:center;gap:12px;background:#28141a;border:1px solid #ffffff14;border-radius:14px;padding:11px 14px;margin-bottom:10px;cursor:pointer;min-height:58px;-webkit-tap-highlight-color:transparent;transition:border-color .18s;}
+.vhubcard:active{border-color:#e30a1788;}
+.vhi{width:42px;height:42px;border-radius:12px;background:#e30a1718;border:1px solid #e30a1740;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none;}
+.vhmid{flex:1;min-width:0;}
+.vhmid b{font-size:14px;font-weight:700;display:block;line-height:1.25;}
+.vhmid small{font-size:11.5px;color:#ffffff90;}
+.vhlead{font-size:11px;color:#ffd166;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.vhright{font-family:'Space Mono',monospace;font-size:10.5px;color:#ffffff80;text-align:right;flex:none;}
+.vhchev{color:#e30a17;font-weight:700;font-size:17px;flex:none;}
 </style>
 
 <div id="bg"></div>
@@ -413,6 +457,8 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
         </div>
         <div class="clabel" style="margin-top:32px"><b>Overview</b><small>everything in one place</small></div>
         <div id="viewOver"></div>
+        <div class="clabel" id="pollsLabel" style="margin-top:32px;display:none"><b>Group picks</b><small>vote · change anytime</small></div>
+        <div id="viewPolls"></div>
       </div>
     </div>
   </div>
@@ -1007,6 +1053,168 @@ function renderOverview(){
      <div class="ovtop"><span class="ovic">${t.ic}</span><span class="ovcount">${t.count}</span></div>
      <div class="ovbot"><div class="ovname">${t.name}</div><div class="ovsub">${t.sub}</div></div></div>`).join("")+`</div>`;
 }
+/* ============================================================
+   GROUP PICKS — fluid one-pick-per-day voting (meals / activities)
+   - Surfaces: in-city (below itinerary) + app-level hub (Home).
+   - Backend: Supabase edge fn `sportmonks`, routed ?api=votes&path=...
+   - Optimistic UI; falls back to local seed when the API is down.
+   - A poll = one (city + date + meal). Option sets are defined ONCE
+     per (city, meal) and reused for every date's poll.
+   ============================================================ */
+const VOTE_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmonks";
+const VOTE_CITIES={ sf:{idx:2,label:"San Francisco"} }; // slug -> CITIES index (extend: carmel/sb/la later)
+const MEAL_EMOJI={breakfast:'🍳',lunch:'🍴',dinner:'🍷',snack:'🍪',activity:'🎟️'};
+const MEAL_ORDER={breakfast:0,lunch:1,snack:2,dinner:3,activity:4};
+/* option set defined ONCE per (city|meal), reused across that city's dates */
+const OPTION_SETS={
+ "sf|breakfast":[
+  {option_id:"sf-bk-early-to-rise",name:"Early to Rise",youtube:"https://youtu.be/vdXGvD7dt5w?t=49"},
+  {option_id:"sf-bk-alt-tbd",name:"Alt breakfast (TBD)",youtube:"https://youtu.be/zUjAvVlFEoQ?t=30"},
+ ],
+ "sf|lunch":[
+  {option_id:"sf-ln-golden-boy",name:"Golden Boy Pizza",gmaps:"https://maps.google.com/?q=Golden+Boy+Pizza+San+Francisco"},
+  {option_id:"sf-ln-good-mong-kok",name:"Good Mong Kok · Chinatown",gmaps:"https://maps.google.com/?q=Good+Mong+Kok+Bakery+San+Francisco"},
+ ],
+};
+/* which (city,meal) run on which dates → one poll instance per date */
+const POLL_PLAN=[
+ {city:"sf",meal:"breakfast",title:"Breakfast",dates:["2026-06-18","2026-06-19"]},
+ {city:"sf",meal:"lunch",title:"Lunch",dates:["2026-06-17","2026-06-18","2026-06-19"]},
+];
+function buildSeedPolls(){
+ const out=[];
+ POLL_PLAN.forEach(pl=>{const opts=OPTION_SETS[pl.city+'|'+pl.meal]||[];
+  pl.dates.forEach(d=>out.push({poll_id:`${pl.city}-${d}-${pl.meal}`,city:pl.city,date:d,meal:pl.meal,title:pl.title,options:opts}));});
+ return out;
+}
+const SEED_POLLS=buildSeedPolls();
+
+/* my picks: persisted per rider; backend is truth for everyone else */
+function vKey(){return 'wcr_votes_'+ME.id;}
+let myVotes={}; try{myVotes=JSON.parse(localStorage.getItem(vKey())||'{}')||{};}catch(e){myVotes={};}
+function saveMyVotes(){try{localStorage.setItem(vKey(),JSON.stringify(myVotes));}catch(e){}}
+const voteState={}; // poll_id -> {option_id:[riderIds]} from backend
+let pendingPollScroll=null,_voteFetching=false;
+
+function fmtPollDate(d){try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}catch(e){return d;}}
+function slugForIdx(idx){for(const s in VOTE_CITIES)if(VOTE_CITIES[s].idx===idx)return s;return null;}
+function idxForSlug(s){return VOTE_CITIES[s]?VOTE_CITIES[s].idx:-1;}
+function cityLabel(slug){return VOTE_CITIES[slug]?VOTE_CITIES[slug].label:slug;}
+function pollsForCityIdx(idx){const s=slugForIdx(idx);if(!s)return[];return SEED_POLLS.filter(p=>p.city===s);}
+function pollById(id){return SEED_POLLS.find(p=>p.poll_id===id);}
+
+/* backend voters minus me everywhere, plus my local pick → always reflects where I am */
+function tallyFor(poll){
+ const back=voteState[poll.poll_id]||{};
+ const voters={};
+ poll.options.forEach(o=>{voters[o.option_id]=(back[o.option_id]||[]).filter(r=>r!==ME.id);});
+ const mine=myVotes[poll.poll_id];
+ if(mine)voters[mine]=(voters[mine]||[]).concat([ME.id]);
+ let total=0;poll.options.forEach(o=>total+=voters[o.option_id].length);
+ return {voters,total};
+}
+function voterAvatars(ids){return ids.map(id=>{const p=PEOPLE[id];return p?`<span class="vav" style="background:${ACC[id%6]}">${inits(p.name)}</span>`:'';}).join('');}
+
+function pollCardHTML(poll){
+ const {voters,total}=tallyFor(poll);
+ const mine=myVotes[poll.poll_id];
+ let leadId=null,leadN=-1;
+ poll.options.forEach(o=>{const n=voters[o.option_id].length;if(n>leadN){leadN=n;leadId=o.option_id;}});
+ const opts=poll.options.map(o=>{
+  const ids=voters[o.option_id],n=ids.length,pct=total?Math.round(n/total*100):0;
+  const isMine=mine===o.option_id,isLead=total>0&&o.option_id===leadId&&n>0;
+  const links=[];
+  if(o.gmaps)links.push(`<a class="vlink" href="${o.gmaps}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Map</a>`);
+  if(o.menu)links.push(`<a class="vlink" href="${o.menu}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📋 Menu</a>`);
+  if(o.youtube)links.push(`<a class="vlink" href="${o.youtube}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Watch</a>`);
+  return `<div class="vopt ${isMine?'mine':''} ${isLead?'lead':''}" onclick="castVote('${poll.poll_id}','${o.option_id}')">
+    <span class="vfill" data-pct="${pct}"></span><span class="vradio"></span>
+    <span class="vmid"><span class="vname">${o.name}${isLead?'<span class="lean">leaning 🔥</span>':''}</span>
+     ${n?`<span class="vavs">${voterAvatars(ids)}</span>`:'<span class="vempty">No picks yet</span>'}
+     ${links.length?`<span class="vlinks">${links.join('')}</span>`:''}</span>
+    <span class="vright"><span class="vpct">${pct}%</span></span></div>`;
+ }).join('');
+ return `<div class="vpoll" id="vp-${poll.poll_id}">
+   <div class="vph"><b>${MEAL_EMOJI[poll.meal]||''} ${poll.title}</b><span class="vmeta">${total} pick${total!==1?'s':''}</span></div>
+   <div class="vsub">${cityLabel(poll.city)} · ${fmtPollDate(poll.date)}</div>
+   ${opts}
+   <div class="vchange">${mine?'↻ Tap your pick again to remove · nothing is final':'Pick one · change whenever'}</div></div>`;
+}
+function votingInnerHTML(cityIdx){
+ const polls=pollsForCityIdx(cityIdx).slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:MEAL_ORDER[a.meal]-MEAL_ORDER[b.meal]);
+ if(!polls.length)return'';
+ const byDate={};polls.forEach(p=>{(byDate[p.date]||(byDate[p.date]=[])).push(p);});
+ return Object.keys(byDate).sort().map(d=>`<div class="vday">${fmtPollDate(d)}</div>`+byDate[d].map(pollCardHTML).join('')).join('');
+}
+function votingSectionHTML(cityIdx){
+ if(!pollsForCityIdx(cityIdx).length)return'';
+ return `<div class="ith" style="margin-top:18px"><b>Group picks</b><small>tap to vote · changes anytime</small></div>
+  <div class="vsec" id="cityVoting">${votingInnerHTML(cityIdx)}</div>`;
+}
+function renderPollsHub(){
+ const host=document.getElementById('viewPolls');if(!host)return;
+ const lbl=document.getElementById('pollsLabel');
+ if(!SEED_POLLS.length){host.innerHTML='';if(lbl)lbl.style.display='none';return;}
+ if(lbl)lbl.style.display='';
+ const sorted=SEED_POLLS.slice().sort((a,b)=>a.city<b.city?-1:a.city>b.city?1:a.date<b.date?-1:a.date>b.date?1:MEAL_ORDER[a.meal]-MEAL_ORDER[b.meal]);
+ host.innerHTML=sorted.map(poll=>{
+  const {voters,total}=tallyFor(poll);
+  let leadId=null,leadN=-1;poll.options.forEach(o=>{const n=voters[o.option_id].length;if(n>leadN){leadN=n;leadId=o.option_id;}});
+  const lead=poll.options.find(o=>o.option_id===leadId);
+  const leadTxt=total?`🔥 Leaning: ${lead?lead.name:'—'}`:'No picks yet · be first';
+  return `<div class="vhubcard" onclick="openPollInCity('${poll.poll_id}')">
+    <span class="vhi">${MEAL_EMOJI[poll.meal]||'🗳️'}</span>
+    <span class="vhmid"><b>${cityLabel(poll.city)} · ${poll.title}</b><small>${fmtPollDate(poll.date)}</small>
+     <div class="vhlead">${leadTxt}</div></span>
+    <span class="vhright">${total} pick${total!==1?'s':''}</span><span class="vhchev">›</span></div>`;
+ }).join('');
+}
+
+/* ---- API (optimistic; fire-and-forget, re-sync on success) ---- */
+function votesGet(){return fetch(`${VOTE_PROXY}?api=votes&path=polls`).then(r=>r.ok?r.json():Promise.reject(r.status));}
+function votesPost(poll_id,option_id){return fetch(`${VOTE_PROXY}?api=votes&path=vote`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({poll_id,option_id,rider_id:ME.id})});}
+function votesDelete(poll_id){return fetch(`${VOTE_PROXY}?api=votes&path=vote&poll_id=${encodeURIComponent(poll_id)}&rider_id=${ME.id}`,{method:'DELETE'});}
+
+window.castVote=function(poll_id,option_id){
+ const cur=myVotes[poll_id];
+ if(cur===option_id){ // tapping your current pick clears it — never locked
+  delete myVotes[poll_id];saveMyVotes();rerenderVotingSurfaces();
+  votesDelete(poll_id).then(()=>setTimeout(refreshVotes,900)).catch(()=>{});
+ }else{ // single-select: moves your vote off the old option
+  myVotes[poll_id]=option_id;saveMyVotes();rerenderVotingSurfaces();
+  votesPost(poll_id,option_id).then(()=>setTimeout(refreshVotes,900)).catch(()=>{});
+ }
+};
+window.openPollInCity=function(poll_id){
+ const poll=pollById(poll_id);if(!poll)return;
+ const idx=idxForSlug(poll.city);if(idx<0)return;
+ pendingPollScroll=poll_id;openCity(idx);
+};
+function animateVoteBars(root){if(!root)return;root.querySelectorAll('.vfill').forEach(el=>{const pct=el.getAttribute('data-pct')||0;el.style.width='0%';requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.width=pct+'%';}));});}
+function rerenderVotingSurfaces(){
+ const cv=document.getElementById('cityVoting');
+ if(cv){cv.innerHTML=votingInnerHTML(curCity);animateVoteBars(cv);}
+ renderPollsHub();
+}
+function votingOnCityOpen(i){
+ const cv=document.getElementById('cityVoting');if(cv)animateVoteBars(cv);
+ if(pendingPollScroll){
+  const id='vp-'+pendingPollScroll;pendingPollScroll=null;
+  setTimeout(()=>{const el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('vflash');setTimeout(()=>el.classList.remove('vflash'),1700);}},260);
+ }
+ refreshVotes();
+}
+function refreshVotes(){
+ if(_voteFetching)return Promise.resolve();
+ _voteFetching=true;
+ return votesGet().then(data=>{
+  if(data&&Array.isArray(data.polls)){data.polls.forEach(p=>{voteState[p.poll_id]=p.votes||{};});rerenderVotingSurfaces();}
+ }).catch(()=>{/* API down → keep seed + my local picks; never break the page */}).finally(()=>{_voteFetching=false;});
+}
+renderPollsHub();
+refreshVotes();
+setInterval(()=>{if(document.visibilityState==='visible'&&(document.getElementById('cityVoting')||document.getElementById('viewPolls')))refreshVotes();},30000);
+
 let _showAllFlights=false;
 function openOverview(which){
  if(which==='overFlights'){_showAllFlights=true;return openS('flight');}
@@ -1078,11 +1286,13 @@ function openCity(i,skipPush){curCity=i;const c=CITIES[i];
   ${c.items.map((it,ix)=>{const g=G[it[0]];const has=stopMap[ix]!==undefined;const sidx=stopMap[ix];const optM=it[1].match(/\((optional|alt)\)/i);const isOpt=!!optM;const optLabel=isOpt?optM[1].toUpperCase():'';const cleanName=isOpt?it[1].replace(/\s*\((optional|alt)\)/i,''):it[1];const rowAttr=has?`data-stopidx="${sidx}" onclick="navToStop(${sidx})"`:'';const chev=has?`<span style="color:#ff3b30;font-size:14px;align-self:center;padding-left:6px;font-weight:700">›</span>`:'';return `<div class="it ${it[0]==='match'?'match':''} ${isOpt?'opt':''} ${has?'clickable':''}" ${rowAttr}><span class="g" style="background:${g[0]}">${g[1]}</span><div class="mid"><b>${cleanName}${isOpt?`<span class="optbadge">${optLabel}</span>`:''}</b>${it[2]?`<small>${it[2]}</small>`:""}</div><span class="tm">${it[3]||""}</span>${chev}</div>`}).join("")}
   <div class="viewall">View all days ›</div>
   </div>
+  ${votingSectionHTML(i)}
   <div class="ith" style="margin-top:8px"><b>Your costs here</b></div>
   <div class="exp hidden" id="exp"><div class="eh"><b>${ME.name}'s share</b><button class="eye" id="eye">👁️</button></div>
    ${costRows.length?costRows.map(e=>`<div class="erow"><span>${e[0]}</span><span class="ev">${e[1]}</span></div>`).join(""):'<div class="erow"><span>No costs for you here</span><span class="ev">$0</span></div>'}</div>`;
  document.getElementById('eye').onclick=()=>document.getElementById('exp').classList.toggle('hidden');
  document.getElementById('city').classList.add('on');
+ try{votingOnCityOpen(i);}catch(e){}
  if(!skipPush){try{history.pushState({sub:'city'},'',location.href);}catch(e){}}
  // reset map state for the new city (map is opt-in via toggle)
  mapInstance=null;mapOpened=false;activeIdx=-1;cancelOrbit&&cancelOrbit();

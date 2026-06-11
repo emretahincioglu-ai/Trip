@@ -21,6 +21,9 @@
 //   ?api=claimDaily&rider_id=N             -> grant daily coins+packs once/day
 //   ?api=openPack&rider_id=N (POST {type}) -> open a normal/deluxe pack
 //   ?api=getInventory&rider_id=N           -> owned cards (details + count)
+//   ?api=votes&path=polls[&city=&date=]    -> polls + per-option voter rider_ids (GET)
+//   ?api=votes&path=vote (POST {poll_id,option_id,rider_id})  -> upsert one pick/rider
+//   ?api=votes&path=vote (DELETE {poll_id,rider_id})          -> clear my pick
 // All economy numbers come from the `config` table (never hardcoded).
 // ============================================================
 
@@ -34,7 +37,7 @@ const SEED_BATCH = 12;
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, content-type",
 };
 
@@ -582,6 +585,73 @@ serve(async (req) => {
         if (!r.ok) throw new Error("wallet upsert failed: " + (await r.text()));
       }
       return jres({ ok: true, granted: (profs || []).map((p) => p.rider_id), coins, freePacks: packs });
+    } catch (e) { return jres({ error: String(e) }, 502); }
+  }
+
+  // ---- Voting: meal/activity polls (?api=votes&path=polls|vote) ----
+  // polls table: poll_id PK, city, date, meal, title, options jsonb
+  // votes_cast:  PK (poll_id, rider_id) -> upsert = one pick per rider per poll
+  if (api === "votes") {
+    try {
+      const SB_URL = Deno.env.get("SUPABASE_URL");
+      const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!SB_URL || !SB_KEY) return jres({ error: "SUPABASE creds not available" }, 500);
+      const sb = sbClient(SB_URL, SB_KEY);
+      const vpath = (url.searchParams.get("path") || "").toLowerCase();
+      const cleanRider = (v) => (v == null ? null : ((String(v).match(/\d+/) || [null])[0]));
+
+      // GET /polls?city=&date=  -> polls + per-option voter rider_ids
+      if (vpath === "polls" && req.method === "GET") {
+        let q = "polls?select=poll_id,city,date,meal,title,options&order=date.asc";
+        const city = url.searchParams.get("city");
+        const date = url.searchParams.get("date");
+        if (city) q += `&city=eq.${encodeURIComponent(city)}`;
+        if (date) q += `&date=eq.${encodeURIComponent(date)}`;
+        const polls = await sb.get(q);
+        const ids = (polls || []).map((p) => p.poll_id);
+        let votes = [];
+        if (ids.length) {
+          const inList = ids.map((id) => `"${String(id).replace(/"/g, "")}"`).join(",");
+          votes = await sb.get(`votes_cast?poll_id=in.(${inList})&select=poll_id,rider_id,option_id`);
+        }
+        const tally = {}; // poll_id -> { option_id: [rider_id...] }
+        for (const v of (votes || [])) {
+          (tally[v.poll_id] || (tally[v.poll_id] = {}));
+          (tally[v.poll_id][v.option_id] || (tally[v.poll_id][v.option_id] = [])).push(v.rider_id);
+        }
+        const out = (polls || []).map((p) => ({ ...p, votes: tally[p.poll_id] || {} }));
+        return jres({ ok: true, polls: out });
+      }
+
+      // POST /vote {poll_id, option_id, rider_id} -> upsert (replaces prior pick)
+      if (vpath === "vote" && req.method === "POST") {
+        let body = {};
+        try { body = await req.json(); } catch (_e) {}
+        const poll_id = body.poll_id;
+        const option_id = body.option_id;
+        const rider_id = cleanRider(body.rider_id);
+        if (!poll_id || !option_id || rider_id == null) return jres({ error: "poll_id, option_id, rider_id required" }, 400);
+        const r = await fetch(`${SB_URL}/rest/v1/votes_cast`, {
+          method: "POST",
+          headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal" },
+          body: JSON.stringify({ poll_id, rider_id: Number(rider_id), option_id, updated_at: new Date().toISOString() }),
+        });
+        if (!r.ok) throw new Error("vote upsert failed: " + (await r.text()));
+        return jres({ ok: true, poll_id, option_id, rider_id: Number(rider_id) });
+      }
+
+      // DELETE /vote {poll_id, rider_id} (query or body) -> clear my pick
+      if (vpath === "vote" && req.method === "DELETE") {
+        let body = {};
+        try { body = await req.json(); } catch (_e) {}
+        const poll_id = body.poll_id || url.searchParams.get("poll_id");
+        const rider_id = cleanRider(body.rider_id != null ? body.rider_id : url.searchParams.get("rider_id"));
+        if (!poll_id || rider_id == null) return jres({ error: "poll_id, rider_id required" }, 400);
+        await sb.del(`votes_cast?poll_id=eq.${encodeURIComponent(poll_id)}&rider_id=eq.${rider_id}`);
+        return jres({ ok: true, cleared: true, poll_id, rider_id: Number(rider_id) });
+      }
+
+      return jres({ error: "unknown votes path/method" }, 400);
     } catch (e) { return jres({ error: String(e) }, 502); }
   }
 
