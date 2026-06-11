@@ -430,6 +430,34 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 .vhlead{font-size:11px;color:#ffd166;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .vhright{font-family:'Space Mono',monospace;font-size:10.5px;color:#ffffff80;text-align:right;flex:none;}
 .vhchev{color:#e30a17;font-weight:700;font-size:17px;flex:none;}
+/* rich Google-style restaurant option cards */
+.vopt{align-items:flex-start;padding:10px 12px;gap:12px;}
+.vthumb{width:58px;height:58px;border-radius:12px;background:#3a0e16 center/cover no-repeat;flex:none;display:flex;align-items:center;justify-content:center;font-size:25px;border:1px solid #ffffff14;}
+.vthumb.noimg{background:#e30a1714;}
+.vmeta2{display:block;font-size:11.5px;color:#ffffffb0;margin-top:3px;line-height:1.35;}
+.vstars{color:#ffd166;font-weight:700;}
+.vrev{color:#ffffff80;}
+.vcount{font-size:10.5px;color:#ffffff78;margin-left:7px;font-weight:600;white-space:nowrap;}
+.vavs{flex-wrap:wrap;}
+.vright{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px;flex:none;align-self:stretch;}
+.vright .vradio{margin:0;}
+/* HOME nudge — the "go vote" warning card (overview-style) */
+.vnudge{position:relative;display:flex;align-items:center;gap:13px;overflow:hidden;background:#28141a;border:1px solid #ffffff14;border-radius:16px;padding:15px 16px;cursor:pointer;min-height:68px;-webkit-tap-highlight-color:transparent;transition:border-color .2s,transform .1s;}
+.vnudge:active{transform:scale(.99);}
+.vnudge.alert{border-color:#e30a1766;}
+.vng{position:absolute;inset:0;background:linear-gradient(135deg,#e30a1722,#3a0e1600 62%);z-index:0;}
+.vnudge>*{position:relative;z-index:1;}
+.vnic{position:relative;width:46px;height:46px;border-radius:13px;background:#e30a1720;border:1px solid #e30a1745;display:flex;align-items:center;justify-content:center;font-size:23px;flex:none;}
+.vndot{position:absolute;top:-3px;right:-3px;width:13px;height:13px;border-radius:50%;background:#e30a17;border:2px solid #28141a;animation:vpulse 1.8s infinite;}
+@keyframes vpulse{0%{box-shadow:0 0 0 0 #e30a1799;}70%{box-shadow:0 0 0 9px #e30a1700;}100%{box-shadow:0 0 0 0 #e30a1700;}}
+.vnmid{flex:1;min-width:0;}
+.vnmid b{display:block;font-size:16px;font-weight:800;font-family:'Inter',-apple-system,system-ui,sans-serif;letter-spacing:-.01em;}
+.vnmid small{display:block;font-size:12px;color:#ffffffa8;margin-top:2px;}
+.vncta{flex:none;font-size:13px;font-weight:800;color:#ff5b66;letter-spacing:.02em;}
+/* DETAIL PAGE city header */
+.vcityhdr{font-family:'Inter',-apple-system,system-ui,sans-serif;font-weight:800;font-size:15px;letter-spacing:.02em;color:#fff;margin:20px 2px 11px;display:flex;align-items:center;gap:9px;}
+.vcityhdr:first-child{margin-top:2px;}
+.vcityhdr::before{content:'';width:4px;height:16px;border-radius:2px;background:#e30a17;}
 </style>
 
 <div id="bg"></div>
@@ -457,8 +485,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
         </div>
         <div class="clabel" style="margin-top:32px"><b>Overview</b><small>everything in one place</small></div>
         <div id="viewOver"></div>
-        <div class="clabel" id="pollsLabel" style="margin-top:32px;display:none"><b>Group picks</b><small>vote · change anytime</small></div>
-        <div id="viewPolls"></div>
+        <div id="viewPolls" style="margin-top:18px"></div>
       </div>
     </div>
   </div>
@@ -521,6 +548,7 @@ body{font-family:'DM Sans',sans-serif;background:#25060e;color:#fff;overflow:hid
 <div class="screen sub2" id="lodging"><div class="inner"><div class="scroll" id="lodgingScroll"></div></div></div>
 <div class="screen sub2" id="cars"><div class="inner"><div class="scroll" id="carsScroll"></div></div></div>
 <div class="screen sub2" id="res"><div class="inner"><div class="scroll" id="resScroll"></div></div></div>
+<div class="screen sub2" id="votes"><div class="inner"><div class="scroll" id="votesScroll"></div></div></div>
 <div class="screen sub2" id="places"><div class="inner"><div class="scroll"><div class="back" onclick="closeS('places')">‹ Back</div><div class="ph"><b>Places</b>Spots to see & eat near you — photo, distance, category.</div></div></div></div>
 <div class="screen sub2" id="panini"><div class="inner"><div class="scroll" id="paniniScroll"></div></div></div>
 <div class="screen sub2" id="gameday">
@@ -1065,15 +1093,23 @@ const VOTE_PROXY="https://soszhnqkxsbamqnqlkgt.supabase.co/functions/v1/sportmon
 const VOTE_CITIES={ sf:{idx:2,label:"San Francisco"} }; // slug -> CITIES index (extend: carmel/sb/la later)
 const MEAL_EMOJI={breakfast:'🍳',lunch:'🍴',dinner:'🍷',snack:'🍪',activity:'🎟️'};
 const MEAL_ORDER={breakfast:0,lunch:1,snack:2,dinner:3,activity:4};
-/* option set defined ONCE per (city|meal), reused across that city's dates */
+/* option set defined ONCE per (city|meal), reused across that city's dates.
+   Rich fields (photo/type/rating/reviews/price/area/website) drive the
+   Google-style restaurant card; any missing field just doesn't render. */
 const OPTION_SETS={
  "sf|breakfast":[
-  {option_id:"sf-bk-early-to-rise",name:"Early to Rise",youtube:"https://youtu.be/vdXGvD7dt5w?t=49"},
-  {option_id:"sf-bk-alt-tbd",name:"Alt breakfast (TBD)",youtube:"https://youtu.be/zUjAvVlFEoQ?t=30"},
+  {option_id:"sf-bk-early-to-rise",name:"Early to Rise",type:"Breakfast & Brunch",rating:4.6,reviews:412,price:"$$",area:"Alamo Square",
+   photo:"https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=70&auto=format",
+   website:"https://www.earlytorisesf.com",gmaps:"https://maps.google.com/?q=Early+to+Rise+San+Francisco",youtube:"https://youtu.be/vdXGvD7dt5w?t=49"},
+  {option_id:"sf-bk-alt-tbd",name:"Alt breakfast (TBD)",type:"Breakfast",youtube:"https://youtu.be/zUjAvVlFEoQ?t=30"},
  ],
  "sf|lunch":[
-  {option_id:"sf-ln-golden-boy",name:"Golden Boy Pizza",gmaps:"https://maps.google.com/?q=Golden+Boy+Pizza+San+Francisco"},
-  {option_id:"sf-ln-good-mong-kok",name:"Good Mong Kok · Chinatown",gmaps:"https://maps.google.com/?q=Good+Mong+Kok+Bakery+San+Francisco"},
+  {option_id:"sf-ln-golden-boy",name:"Golden Boy Pizza",type:"Pizza",rating:4.6,reviews:2100,price:"$",area:"North Beach",
+   photo:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=70&auto=format",
+   website:"https://www.goldenboypizza.com",gmaps:"https://maps.google.com/?q=Golden+Boy+Pizza+San+Francisco"},
+  {option_id:"sf-ln-good-mong-kok",name:"Good Mong Kok",type:"Dim sum",rating:4.3,reviews:1480,price:"$",area:"Chinatown",
+   photo:"https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&q=70&auto=format",
+   gmaps:"https://maps.google.com/?q=Good+Mong+Kok+Bakery+San+Francisco"},
  ],
 };
 /* which (city,meal) run on which dates → one poll instance per date */
@@ -1115,25 +1151,45 @@ function tallyFor(poll){
 }
 function voterAvatars(ids){return ids.map(id=>{const p=PEOPLE[id];return p?`<span class="vav" style="background:${ACC[id%6]}">${inits(p.name)}</span>`:'';}).join('');}
 
+function fmtReviews(n){return n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n);}
+function optMetaLine(o){
+ const bits=[];
+ if(o.rating)bits.push(`<span class="vstars">★ ${Number(o.rating).toFixed(1)}</span>${o.reviews?` <span class="vrev">(${fmtReviews(o.reviews)})</span>`:''}`);
+ if(o.type)bits.push(o.type);
+ if(o.price)bits.push(o.price);
+ if(o.area)bits.push(o.area);
+ return bits.length?`<span class="vmeta2">${bits.join(' · ')}</span>`:'';
+}
+/* one option rendered as a Google-style restaurant result + the vote affordance */
+function optCardHTML(poll,o,voters,total,mine,leadId){
+ const ids=voters[o.option_id]||[],n=ids.length,pct=total?Math.round(n/total*100):0;
+ const isMine=mine===o.option_id,isLead=total>0&&o.option_id===leadId&&n>0;
+ const thumb=o.photo
+  ?`<span class="vthumb" style="background-image:url('${o.photo}')"></span>`
+  :`<span class="vthumb noimg">${MEAL_EMOJI[poll.meal]||'🍽️'}</span>`;
+ const links=[];
+ if(o.gmaps)links.push(`<a class="vlink" href="${o.gmaps}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Directions</a>`);
+ if(o.menu)links.push(`<a class="vlink" href="${o.menu}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📋 Menu</a>`);
+ if(o.website)links.push(`<a class="vlink" href="${o.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🌐 Site</a>`);
+ if(o.youtube)links.push(`<a class="vlink" href="${o.youtube}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Watch</a>`);
+ return `<div class="vopt ${isMine?'mine':''} ${isLead?'lead':''}" onclick="castVote('${poll.poll_id}','${o.option_id}')">
+   <span class="vfill" data-pct="${pct}"></span>
+   ${thumb}
+   <span class="vmid">
+     <span class="vname">${o.name}${isLead?'<span class="lean">leaning 🔥</span>':''}</span>
+     ${optMetaLine(o)}
+     ${n?`<span class="vavs">${voterAvatars(ids)}<span class="vcount">${n} ${n===1?'pick':'picks'}</span></span>`:'<span class="vempty">Be the first to pick</span>'}
+     ${links.length?`<span class="vlinks">${links.join('')}</span>`:''}
+   </span>
+   <span class="vright"><span class="vpct">${pct}%</span><span class="vradio"></span></span>
+ </div>`;
+}
 function pollCardHTML(poll){
  const {voters,total}=tallyFor(poll);
  const mine=myVotes[poll.poll_id];
  let leadId=null,leadN=-1;
  poll.options.forEach(o=>{const n=voters[o.option_id].length;if(n>leadN){leadN=n;leadId=o.option_id;}});
- const opts=poll.options.map(o=>{
-  const ids=voters[o.option_id],n=ids.length,pct=total?Math.round(n/total*100):0;
-  const isMine=mine===o.option_id,isLead=total>0&&o.option_id===leadId&&n>0;
-  const links=[];
-  if(o.gmaps)links.push(`<a class="vlink" href="${o.gmaps}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Map</a>`);
-  if(o.menu)links.push(`<a class="vlink" href="${o.menu}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📋 Menu</a>`);
-  if(o.youtube)links.push(`<a class="vlink" href="${o.youtube}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ Watch</a>`);
-  return `<div class="vopt ${isMine?'mine':''} ${isLead?'lead':''}" onclick="castVote('${poll.poll_id}','${o.option_id}')">
-    <span class="vfill" data-pct="${pct}"></span><span class="vradio"></span>
-    <span class="vmid"><span class="vname">${o.name}${isLead?'<span class="lean">leaning 🔥</span>':''}</span>
-     ${n?`<span class="vavs">${voterAvatars(ids)}</span>`:'<span class="vempty">No picks yet</span>'}
-     ${links.length?`<span class="vlinks">${links.join('')}</span>`:''}</span>
-    <span class="vright"><span class="vpct">${pct}%</span></span></div>`;
- }).join('');
+ const opts=poll.options.map(o=>optCardHTML(poll,o,voters,total,mine,leadId)).join('');
  return `<div class="vpoll" id="vp-${poll.poll_id}">
    <div class="vph"><b>${MEAL_EMOJI[poll.meal]||''} ${poll.title}</b><span class="vmeta">${total} pick${total!==1?'s':''}</span></div>
    <div class="vsub">${cityLabel(poll.city)} · ${fmtPollDate(poll.date)}</div>
@@ -1151,24 +1207,34 @@ function votingSectionHTML(cityIdx){
  return `<div class="ith" style="margin-top:18px"><b>Group picks</b><small>tap to vote · changes anytime</small></div>
   <div class="vsec" id="cityVoting">${votingInnerHTML(cityIdx)}</div>`;
 }
+/* HOME: a single attention-grabbing nudge (not a list) → opens the detail page */
 function renderPollsHub(){
  const host=document.getElementById('viewPolls');if(!host)return;
- const lbl=document.getElementById('pollsLabel');
- if(!SEED_POLLS.length){host.innerHTML='';if(lbl)lbl.style.display='none';return;}
- if(lbl)lbl.style.display='';
- const sorted=SEED_POLLS.slice().sort((a,b)=>a.city<b.city?-1:a.city>b.city?1:a.date<b.date?-1:a.date>b.date?1:MEAL_ORDER[a.meal]-MEAL_ORDER[b.meal]);
- host.innerHTML=sorted.map(poll=>{
-  const {voters,total}=tallyFor(poll);
-  let leadId=null,leadN=-1;poll.options.forEach(o=>{const n=voters[o.option_id].length;if(n>leadN){leadN=n;leadId=o.option_id;}});
-  const lead=poll.options.find(o=>o.option_id===leadId);
-  const leadTxt=total?`🔥 Leaning: ${lead?lead.name:'—'}`:'No picks yet · be first';
-  return `<div class="vhubcard" onclick="openPollInCity('${poll.poll_id}')">
-    <span class="vhi">${MEAL_EMOJI[poll.meal]||'🗳️'}</span>
-    <span class="vhmid"><b>${cityLabel(poll.city)} · ${poll.title}</b><small>${fmtPollDate(poll.date)}</small>
-     <div class="vhlead">${leadTxt}</div></span>
-    <span class="vhright">${total} pick${total!==1?'s':''}</span><span class="vhchev">›</span></div>`;
- }).join('');
+ if(!SEED_POLLS.length){host.innerHTML='';return;}
+ const total=SEED_POLLS.length;
+ const undecided=SEED_POLLS.filter(p=>!myVotes[p.poll_id]).length;
+ const sub=undecided?`${undecided} of ${total} still need your pick`:'All picked · tap to change anytime';
+ host.innerHTML=`<div class="vnudge ${undecided?'alert':''}" onclick="openS('votes')">
+   <span class="vng"></span>
+   <span class="vnic">🗳️${undecided?'<span class="vndot"></span>':''}</span>
+   <span class="vnmid"><b>Group Picks</b><small>${sub}</small></span>
+   <span class="vncta">${undecided?'Vote ›':'View ›'}</span></div>`;
 }
+/* DETAIL PAGE: every poll across the trip, grouped by city → day */
+function votesBodyHTML(){
+ let body='',any=false;
+ Object.keys(VOTE_CITIES).forEach(slug=>{const idx=VOTE_CITIES[slug].idx;const inner=votingInnerHTML(idx);if(inner){any=true;body+=`<div class="vcityhdr">${VOTE_CITIES[slug].label}</div>${inner}`;}});
+ return any?body:`<div class="ph"><b>No polls yet</b>Group picks will show up here as we add them.</div>`;
+}
+function buildVotesScreen(){
+ const host=document.getElementById('votesScroll');if(!host)return;
+ host.innerHTML=`<div class="back" onclick="closeS('votes')">‹ Trip</div>
+   <div class="fhero" style="padding-bottom:6px"><div class="hf">🗳️</div><div class="hn" style="font-size:38px">Group Picks</div><div class="hd">Where the squad's leaning · change anytime</div></div>
+   <div style="padding:6px 16px 60px" id="votesBody">${votesBodyHTML()}</div>`;
+ requestAnimationFrame(()=>animateVoteBars(host));
+ refreshVotes();
+}
+window.buildVotesScreen=buildVotesScreen;
 
 /* ---- API (optimistic; fire-and-forget, re-sync on success) ---- */
 function votesGet(){return fetch(`${VOTE_PROXY}?api=votes&path=polls`).then(r=>r.ok?r.json():Promise.reject(r.status));}
@@ -1194,6 +1260,8 @@ function animateVoteBars(root){if(!root)return;root.querySelectorAll('.vfill').f
 function rerenderVotingSurfaces(){
  const cv=document.getElementById('cityVoting');
  if(cv){cv.innerHTML=votingInnerHTML(curCity);animateVoteBars(cv);}
+ const vs=document.getElementById('votes'),vb=document.getElementById('votesBody');
+ if(vs&&vs.classList.contains('on')&&vb){vb.innerHTML=votesBodyHTML();animateVoteBars(vb);}
  renderPollsHub();
 }
 function votingOnCityOpen(i){
@@ -1664,6 +1732,7 @@ function openS(id){
  if(id==='lodging')buildLodging();
  if(id==='cars')buildCars();
  if(id==='res')buildReservations();
+ if(id==='votes')buildVotesScreen();
  document.getElementById(id).classList.add('on');
  try{history.pushState({sub:id},'',location.href);}catch(e){}
 }
